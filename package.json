@@ -13,7 +13,7 @@
     "studio": "pnpm --filter=db studio",
     "db-push": "pnpm --filter=db db-push",
     "move": "pnpm --filter=mover move",
-    "shadcnadd": "cd apps/web && pnpm dlx shadcn-ui@latest add"
+    "shadcnadd": "cd apps/web && pnpm dlx shadcn@latest add"
   },
   "devDependencies": {
     "prettier": "^3.2.5",

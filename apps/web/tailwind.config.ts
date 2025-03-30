@@ -9,7 +9,6 @@ const config = {
 		"./src/**/*.{ts,tsx}",
 		"./@/**/*.{ts,tsx}",
 	],
-
 	prefix: "",
 	theme: {
 		container: {
@@ -20,11 +19,20 @@ const config = {
 			},
 		},
 		extend: {
+			fontFamily: {
+				chillax: ["var(--font-chillax)"],
+				calsans: ["var(--font-calsans)"],
+				inter: ["var(--font-inter)"],
+			},
 			screens: {
 				"3xl": "1600px",
 				monitor: "1920px",
 			},
 			colors: {
+				acm: {
+					"light-blue": "#179BD5",
+					"darker-blue": "#266BE8",
+				},
 				border: "hsl(var(--border))",
 				input: "hsl(var(--input))",
 				ring: "hsl(var(--ring))",
@@ -93,6 +101,7 @@ const config = {
 		},
 	},
 	plugins: [
+		require("tailwindcss-motion"),
 		require("tailwindcss-animate"),
 		// @ts-ignore it was mad at the type of addUtilities, but this is from the Tailwind docs https://tailwindcss.com/docs/plugins#adding-utilities
 		function ({ addUtilities }) {
