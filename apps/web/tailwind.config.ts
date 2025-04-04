@@ -32,6 +32,8 @@ const config = {
 				acm: {
 					"light-blue": "#179BD5",
 					"darker-blue": "#266BE8",
+					"tinted-black":
+						"color-mix(in srgb, black 60%, #266BE8 40%)",
 				},
 				border: "hsl(var(--border))",
 				input: "hsl(var(--input))",

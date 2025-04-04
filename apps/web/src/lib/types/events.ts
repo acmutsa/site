@@ -92,3 +92,11 @@ export type NewEventFormProps = {
 	categoryOptions: { [key: string]: string };
 	semesterOptions: Semester[];
 };
+
+export type EventWithCatagoryType = EventType & {
+	category: {
+		id: string;
+		name: string;
+		color: string;
+	};
+};

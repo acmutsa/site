@@ -1,5 +1,5 @@
 const c = {
-	clubName: "ClubKit",
+	clubName: "ACM UTSA",
 	universityName: "UTSA",
 	universityID: {
 		name: "ABC123",

@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 import { defaultTheme } from "config";
 import localFont from "next/font/local";
 import { Inter } from "next/font/google";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 // export const metadata: Metadata = {
 //   title: "Create Next App",
@@ -37,7 +38,7 @@ export default function RootLayout({
 				className={`${chillax.variable} ${calsans.variable} ${inter.variable}`}
 			>
 				<body className={`${theme === "dark" ? "dark" : ""}`}>
-					{children}
+					<NuqsAdapter>{children}</NuqsAdapter>
 				</body>
 			</html>
 		</ClerkProvider>
