@@ -6,7 +6,7 @@ import {
 } from "nuqs/server";
 
 export const eventsParams = {
-	query: parseAsString,
+	query: parseAsString.withDefault(""),
 	categories: parseAsArrayOf(parseAsString).withDefault([]),
 	past: parseAsBoolean.withDefault(false),
 };

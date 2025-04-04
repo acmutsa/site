@@ -24,7 +24,7 @@ interface EventToolBarProps {
 export function EventsToolBar({ availableCategories }: EventToolBarProps) {
 	const [params, setParams] = useQueryStates(eventsParams, {
 		shallow: false,
-		throttleMs: 100,
+		throttleMs: 200,
 	});
 	const cats = use(availableCategories);
 
@@ -34,6 +34,12 @@ export function EventsToolBar({ availableCategories }: EventToolBarProps) {
 				<Input
 					placeholder="Search"
 					className="h-10 rounded border border-b-2 border-r-2 border-acm-darker-blue bg-white"
+					onChange={(e) =>
+						setParams({
+							query: e.target.value,
+						})
+					}
+					defaultValue={params.query}
 				/>
 			</div>
 			<div className="flex items-center justify-end gap-x-2">

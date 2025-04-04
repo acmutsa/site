@@ -53,6 +53,15 @@ export default async function EventsPage(props: {
 					});
 				});
 			}
+
+			// Apply fuzzy search if query exists
+			if (params.query) {
+				const searchQuery = params.query.toLowerCase();
+				return events.filter((event) => {
+					return event.name.toLowerCase().includes(searchQuery);
+				});
+			}
+
 			return events;
 		});
 
@@ -70,7 +79,13 @@ export default async function EventsPage(props: {
 				<div className="mx-auto min-h-[90vh] w-full max-w-screen-xl px-10 pt-10">
 					<EventsToolBar availableCategories={categories} />
 					<Suspense>
-						<CardEventsView eventsQuery={allEvents} />
+						<CardEventsView
+							eventsQuery={allEvents}
+							hadFilters={
+								params.categories.length > 0 ||
+								params.query !== ""
+							}
+						/>
 					</Suspense>
 				</div>
 			</div>
@@ -81,10 +96,25 @@ export default async function EventsPage(props: {
 
 async function CardEventsView({
 	eventsQuery,
+	hadFilters,
 }: {
 	eventsQuery: Promise<EventAndCategoriesType[]>;
+	hadFilters: boolean;
 }) {
 	const events = await eventsQuery;
+
+	if (events.length === 0) {
+		return (
+			<div className="flex h-full min-h-[60vh] w-full items-center justify-center pt-10">
+				<h1 className="font-calsans text-2xl font-bold text-acm-darker-blue">
+					{hadFilters
+						? "No events found with the given filters. Please try again with different filters."
+						: "We have no events scheduled at the moment. Stay tuned!"}
+				</h1>
+			</div>
+		);
+	}
+
 	const timeZone = getClientTimeZone(getRequestContext().cf.timezone);
 
 	const cards = events.map((event) => (

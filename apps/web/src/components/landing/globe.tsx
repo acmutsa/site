@@ -54,6 +54,7 @@ function CircleDots({
 	dotColor = "white",
 	className,
 }: CircleDotsProps) {
+	const [mounted, setMounted] = useState(false);
 	const [angle, setAngle] = useState(0);
 
 	// Use a fixed viewBox size
@@ -64,8 +65,9 @@ function CircleDots({
 	// Scale the circle radius to fit within the viewBox
 	const scaledRadius = Math.min(circleRadius, maxRadius);
 
-	// Animation loop
+	// Only start animation after component is mounted
 	useEffect(() => {
+		setMounted(true);
 		const animationFrame = requestAnimationFrame(function animate() {
 			setAngle((prevAngle) => (prevAngle + speed) % (Math.PI * 2));
 			requestAnimationFrame(animate);
@@ -105,16 +107,17 @@ function CircleDots({
 						strokeOpacity="1"
 					/>
 
-					{/* Animated dots */}
-					{dots.map((dot) => (
-						<circle
-							key={dot.id}
-							cx={dot.x}
-							cy={dot.y}
-							r={dotSize}
-							fill={dotColor}
-						/>
-					))}
+					{/* Animated dots - only render on client side */}
+					{mounted &&
+						dots.map((dot) => (
+							<circle
+								key={dot.id}
+								cx={dot.x}
+								cy={dot.y}
+								r={dotSize}
+								fill={dotColor}
+							/>
+						))}
 				</svg>
 			</div>
 		</div>

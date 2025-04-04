@@ -214,18 +214,22 @@ export function HeroNav() {
 				<NavLink href="/resources">Resources</NavLink>
 			</div>
 			<div className="flex items-center justify-end gap-x-3">
-				<Button
-					variant={"styleized-white-blue-text"}
-					className="font-bold"
-				>
-					Sign-in
-				</Button>
-				<Button
-					variant={"styleized-white-blue-text"}
-					className="font-bold"
-				>
-					Register
-				</Button>
+				<Link href={"/sign-in"}>
+					<Button
+						variant={"styleized-white-blue-text"}
+						className="font-bold"
+					>
+						Sign-in
+					</Button>
+				</Link>
+				<Link href={"/sign-up"}>
+					<Button
+						variant={"styleized-white-blue-text"}
+						className="font-bold"
+					>
+						Register
+					</Button>
+				</Link>
 			</div>
 		</div>
 	);
