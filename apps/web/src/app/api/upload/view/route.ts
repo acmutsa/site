@@ -6,7 +6,7 @@ import { headers } from "next/headers";
 
 export async function GET(request: Request) {
 	const { userId } = await auth();
-	const referPath = headers().get("referer") ?? "";
+	const referPath = (await headers()).get("referer") ?? "";
 	if (!userId && !referPath.includes("events")) {
 		return new Response("You must be logged in to access this resource", {
 			status: 401,

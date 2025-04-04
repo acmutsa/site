@@ -290,12 +290,12 @@ function Pill({
 	children: React.ReactNode;
 }) {
 	return (
-		<Fragment>
-			{" "}
-			<span className="inline-flex h-10 items-center rounded-full bg-acm-darker-blue/10 px-4 text-acm-darker-blue">
-				{cloneElement(icon as React.ReactElement, { size: 20 })}
+        <Fragment>
+            {" "}
+            <span className="inline-flex h-10 items-center rounded-full bg-acm-darker-blue/10 px-4 text-acm-darker-blue">
+				{cloneElement(icon as React.ReactElement<any>, { size: 20 })}
 				<span className="ml-2">{children}</span>
 			</span>{" "}
-		</Fragment>
-	);
+        </Fragment>
+    );
 }

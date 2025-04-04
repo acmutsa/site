@@ -3,29 +3,30 @@ import { notFound } from "next/navigation";
 import { getAdminUser, getUser } from "@/lib/queries/users";
 import MemberPage from "@/components/dash/admin/members/MemberPage";
 
-export default async function Page({ params }: { params: { slug: string } }) {
-	const { userId } = await auth();
+export default async function Page(props: { params: Promise<{ slug: string }> }) {
+    const params = await props.params;
+    const { userId } = await auth();
 
-	if (!userId) return notFound();
+    if (!userId) return notFound();
 
-	const admin = await getAdminUser(userId);
-	if (!admin) return notFound();
+    const admin = await getAdminUser(userId);
+    if (!admin) return notFound();
 
-	const user = await getUser(params.slug);
+    const user = await getUser(params.slug);
 
-	if (!user) {
+    if (!user) {
 		return <p className="text-center font-bold">User Not Found</p>;
 	}
 
-	let clerkUser = undefined;
-	let imageUrl: string | undefined = undefined;
-	if (user.clerkID) {
+    let clerkUser = undefined;
+    let imageUrl: string | undefined = undefined;
+    if (user.clerkID) {
 		const client = await clerkClient();
 		clerkUser = await client.users.getUser(user.clerkID);
 	}
-	if (clerkUser) imageUrl = clerkUser.imageUrl;
+    if (clerkUser) imageUrl = clerkUser.imageUrl;
 
-	return (
+    return (
 		<main className="mx-auto max-w-5xl pt-44">
 			<MemberPage user={user} clerkUserImage={imageUrl} />
 		</main>

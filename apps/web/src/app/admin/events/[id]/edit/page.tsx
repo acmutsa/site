@@ -9,16 +9,22 @@ import { IDParamProp } from "@/lib/types/shared";
 import FullScreenMessage from "@/components/shared/fullscreen-message";
 import c from "config";
 import { getAllSemestersDesc } from "@/lib/queries/semesters";
-export default async function Page({ params: { id } }: IDParamProp) {
-	const categoryOptionsAsync = getAllCategoriesKeyValue();
-	const oldValuesAsync = getEventWithCategoriesById(id);
-	const getAllSemestersDescAsync = getAllSemestersDesc();
-	const [categoryOptions, oldValues, semesterOptions] = await Promise.all([
+export default async function Page(props: IDParamProp) {
+    const params = await props.params;
+
+    const {
+        id
+    } = params;
+
+    const categoryOptionsAsync = getAllCategoriesKeyValue();
+    const oldValuesAsync = getEventWithCategoriesById(id);
+    const getAllSemestersDescAsync = getAllSemestersDesc();
+    const [categoryOptions, oldValues, semesterOptions] = await Promise.all([
 		categoryOptionsAsync,
 		oldValuesAsync,
 		getAllSemestersDescAsync,
 	]);
-	if (oldValues === undefined) {
+    if (oldValues === undefined) {
 		return (
 			<FullScreenMessage
 				title="Event Not Found!"
@@ -26,7 +32,7 @@ export default async function Page({ params: { id } }: IDParamProp) {
 			/>
 		);
 	}
-	return (
+    return (
 		<div className="mx-auto max-w-6xl pt-4 text-foreground">
 			<div className="grid grid-cols-2 px-5">
 				<h1 className="font-foreground mb-2 text-3xl font-bold tracking-tight">

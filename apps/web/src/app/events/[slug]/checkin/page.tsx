@@ -7,13 +7,14 @@ import { Suspense } from "react";
 import { getUserCheckin } from "@/lib/queries/users";
 import { getUTCDate } from "@/lib/utils";
 
-export default async function Page({ params }: { params: { slug: string } }) {
-	const { userId: clerkId } = await auth();
-	if (!clerkId) {
+export default async function Page(props: { params: Promise<{ slug: string }> }) {
+    const params = await props.params;
+    const { userId: clerkId } = await auth();
+    if (!clerkId) {
 		redirect("/sign-in");
 	}
 
-	if (!params?.slug) {
+    if (!params?.slug) {
 		return (
 			<PageError
 				message="How did you even access this without a slug???"
@@ -22,9 +23,9 @@ export default async function Page({ params }: { params: { slug: string } }) {
 		);
 	}
 
-	const currentDateUTC = getUTCDate();
+    const currentDateUTC = getUTCDate();
 
-	return (
+    return (
 		<div className="flex h-[100dvh] w-full flex-col">
 			<Navbar />{" "}
 			<Suspense fallback={<h1>Grabbing the event. One sec...</h1>}>

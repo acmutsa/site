@@ -3,15 +3,16 @@ import Navbar from "@/components/shared/navbar";
 import { Suspense } from "react";
 import { headers } from "next/headers";
 
-export default function Page({ params }: { params: { slug: string } }) {
-	const userAgent = headers().get("user-agent")?.toLowerCase();
-	const isBroswerSafari =
+export default async function Page(props: { params: Promise<{ slug: string }> }) {
+    const params = await props.params;
+    const userAgent = (await headers()).get("user-agent")?.toLowerCase();
+    const isBroswerSafari =
 		(userAgent?.includes("safari") &&
 			!userAgent?.includes("crios") &&
 			!userAgent.includes("chrome")) ||
 		false;
 
-	return (
+    return (
 		<div className="flex min-h-[100dvh] w-full flex-col">
 			<Navbar showBorder />
 			<Suspense fallback={<h1>Grabbing the event. One sec...</h1>}>

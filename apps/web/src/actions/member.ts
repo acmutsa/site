@@ -15,7 +15,7 @@ export const updateMemberRole = executiveAction
 		}),
 	)
 	.action(async ({ parsedInput }) => {
-		const link = headers().get("referer") ?? "";
+		const link = (await headers()).get("referer") ?? "";
 		const { userID, role } = parsedInput;
 		await db
 			.update(users)

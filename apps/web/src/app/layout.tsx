@@ -25,12 +25,14 @@ const calsans = localFont({
 	variable: "--font-calsans",
 });
 
-export default function RootLayout({
-	children,
-}: Readonly<{
-	children: React.ReactNode;
-}>) {
-	const theme = cookies().get("ck_theme")?.value || defaultTheme;
+export default async function RootLayout(
+    {
+        children,
+    }: Readonly<{
+        children: React.ReactNode;
+    }>
+) {
+	const theme = (await cookies()).get("ck_theme")?.value || defaultTheme;
 	return (
 		<ClerkProvider>
 			<html

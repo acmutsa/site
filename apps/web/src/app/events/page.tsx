@@ -20,11 +20,10 @@ import { Badge } from "@/components/ui/badge";
 import Footer from "@/components/shared/footer";
 import Link from "next/link";
 
-export default async function EventsPage({
-	searchParams,
-}: {
+export default async function EventsPage(props: {
 	searchParams: Promise<SearchParams>;
 }) {
+	const searchParams = await props.searchParams;
 	const categories = getAllCategories();
 	const params = await loadSearchParams(searchParams);
 
@@ -143,6 +142,7 @@ function EventCard({
 									style={{
 										backgroundColor: cat.category.color,
 									}}
+									key={cat.category.name}
 								>
 									{cat.category.name}
 								</Badge>

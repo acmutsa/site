@@ -38,7 +38,7 @@ export const adminCheckin = adminAction
 		const { universityIDs, eventID } = parsedInput;
 		const { userID: adminID } = ctx;
 		try {
-			const currentPath = headers().get("referer") ?? "";
+			const currentPath = (await headers()).get("referer") ?? "";
 
 			const idList = universityIDSplitter.parse(universityIDs);
 			const failedIDs = await checkInUserList(eventID, idList, adminID);
