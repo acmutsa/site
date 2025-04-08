@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 
 export default function Globe() {
 	return (
-		<div className="relative aspect-square w-[50vw] overflow-hidden rounded-full border-8 border-white">
+		<div className="relative aspect-square w-full max-w-[min(900px,80vh)] overflow-hidden rounded-full border-8 border-white">
 			<CircleDots
 				className="absolute translate-x-[50%] translate-y-[15%]"
 				circleRadius={200}
@@ -68,10 +68,20 @@ function CircleDots({
 	// Only start animation after component is mounted
 	useEffect(() => {
 		setMounted(true);
-		const animationFrame = requestAnimationFrame(function animate() {
-			setAngle((prevAngle) => (prevAngle + speed) % (Math.PI * 2));
-			requestAnimationFrame(animate);
-		});
+		let lastTime = performance.now();
+
+		const animationFrame = requestAnimationFrame(
+			function animate(currentTime) {
+				const deltaTime = (currentTime - lastTime) / 1000; // Convert to seconds
+				lastTime = currentTime;
+
+				setAngle(
+					(prevAngle) =>
+						(prevAngle + speed * deltaTime * 120) % (Math.PI * 2),
+				); // Normalize to 60fps
+				requestAnimationFrame(animate);
+			},
+		);
 
 		return () => cancelAnimationFrame(animationFrame);
 	}, [speed]);

@@ -1,16 +1,12 @@
-import EventsTitle from "@/components/events/EventsTitle";
-import EventsOptionsBar from "@/components/events/filters/EventsOptionsBar";
-import EventsView from "@/components/events/EventsView";
 import { Suspense } from "react";
 import { HeroNav } from "@/components/shared/navbar";
 import type { SearchParams } from "nuqs/server";
 import { EventsToolBar } from "./client";
 import { getAllCategories } from "@/lib/queries/categories";
 import { createLoader } from "nuqs/server";
-import { eventsParams, loadSearchParams } from "./params";
+import { loadSearchParams } from "./params";
 import { events } from "db/schema";
 import { db } from "db";
-import { eq, and } from "db/drizzle";
 import { EventAndCategoriesType } from "@/lib/types/events";
 import { getClientTimeZone, getUTCDate } from "@/lib/utils";
 import { getRequestContext } from "@cloudflare/next-on-pages";
@@ -54,7 +50,8 @@ export default async function EventsPage(props: {
 				});
 			}
 
-			// Apply fuzzy search if query exists
+			// TODO: implement fuzzy search on sql query
+
 			if (params.query) {
 				const searchQuery = params.query.toLowerCase();
 				return events.filter((event) => {
@@ -76,7 +73,7 @@ export default async function EventsPage(props: {
 						</h1>
 					</div>
 				</div>
-				<div className="mx-auto min-h-[90vh] w-full max-w-screen-xl px-10 pt-10">
+				<div className="mx-auto min-h-[1000px] w-full max-w-screen-xl px-10 pt-10">
 					<EventsToolBar availableCategories={categories} />
 					<Suspense>
 						<CardEventsView
@@ -185,28 +182,5 @@ function EventCard({
 		</Link>
 	);
 }
-
-// export default function EventsPage({
-// 	searchParams,
-// }: {
-// 	searchParams: SearchParams;
-// }) {
-// 	return (
-// 		<div className="flex h-[100dvh] w-screen flex-col items-center no-scrollbar">
-// 			<Navbar showBorder />
-// 			<EventsTitle />
-// 			<EventsOptionsBar params={searchParams} />
-// 			<Suspense
-// 				fallback={
-// 					<h1 className="pt-[15%] text-center text-2xl font-bold md:text-3xl lg:text-4xl">
-// 						Grabbing Events. One sec...
-// 					</h1>
-// 				}
-// 			>
-// 				<EventsView params={searchParams} />
-// 			</Suspense>
-// 		</div>
-// 	);
-// }
 
 export const runtime = "edge";

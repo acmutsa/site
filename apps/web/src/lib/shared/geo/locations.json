@@ -1,0 +1,157 @@
+{
+    "$schema": "https://geo.acmutsa.dev/v1/schema.json",
+    "main-campus": [
+      {
+        "name": "Applied Engineering and Technology Building",
+        "abbrev": "AET",
+        "latitude": 29.581314591886215,
+        "longitude": -98.61789207509422
+      },
+      {
+        "name": "Arts Building",
+        "abbrev": "ART",
+        "latitude": 29.58313488872436,
+        "longitude": -98.61753852314855
+      },
+      {
+        "name": "Biosciences Building",
+        "abbrev": "BSB",
+        "latitude": 29.582094352211097,
+        "longitude": -98.6184293118681
+      },
+      {
+        "name": "Biotechnology Sciences & Engineering Building",
+        "abbrev": "BSE",
+        "latitude": 29.58165551545301,
+        "longitude": -98.61747523737341
+      },
+      {
+        "name": "Business Building",
+        "abbrev": "BB",
+        "latitude": 29.585089637066588,
+        "longitude": -98.61814372451673
+      },
+      {
+        "name": "Engineering Building",
+        "abbrev": "EB",
+        "latitude": 29.582280396699208,
+        "longitude": -98.6179365209746
+      },
+      {
+        "name": "Graduate School & Research Building",
+        "abbrev": "GSR",
+        "latitude": 29.585503451306362,
+        "longitude": -98.6203121903135
+      },
+      {
+        "name": "Margaret Batts Tobin Laboratories",
+        "abbrev": "MBT",
+        "latitude": 29.584237589224806,
+        "longitude": -98.62967060820779
+      },
+      {
+        "name": "McKinney Humanities Building",
+        "abbrev": "MHB",
+        "latitude": 29.584448654153178,
+        "longitude": -98.6192257475936
+      },
+      {
+        "name": "Multidisciplinary Studies Building",
+        "abbrev": "MS",
+        "latitude": 29.58351919698173,
+        "longitude": -98.61905751784259
+      },
+      {
+        "name": "North Paseo Building",
+        "abbrev": "NPB",
+        "latitude": 29.58588126940056,
+        "longitude": -98.61969106984233
+      },
+      {
+        "name": "Peter T. Flawn Sciences Building",
+        "abbrev": "FLN",
+        "latitude": 29.582879087200652,
+        "longitude": -98.61836647167328
+      },
+      {
+        "name": "Science and Engineering Building",
+        "abbrev": "SEB",
+        "latitude": 29.5818888318109,
+        "longitude": -98.616700706261
+      },
+      {
+        "name": "Science Research Laboratories",
+        "abbrev": "SRL",
+        "latitude": 29.58382786722482,
+        "longitude": -98.62919557355936
+      },
+      {
+        "name": "Student Success Center",
+        "abbrev": "SSC",
+        "latitude": 29.585081801617157,
+        "longitude": -98.61953939242773
+      },
+      {
+        "name": "Bauerle Road Garage",
+        "abbrev": "BRG",
+        "latitude": 29.58606626682363,
+        "longitude": -98.61690197981
+      },
+      {
+        "name": "Tobin Avenue Garage",
+        "abbrev": "TAG",
+        "latitude": 29.58665480817254,
+        "longitude": -98.62073155424427
+      },
+      {
+        "name": "Ximenes Avenue Garage",
+        "abbrev": "XAG",
+        "latitude": 29.582163948376746,
+        "longitude": -98.61911126939593
+      },
+      {
+        "name": "Bosque Street Building",
+        "abbrev": "BOS",
+        "latitude": 29.585063450820495,
+        "longitude": -98.62123815631463
+      },
+      {
+        "name": "Central Receiving & Warehouse",
+        "abbrev": "CRW",
+        "latitude": 29.583155236914454,
+        "longitude": -98.6302864697027
+      },
+      {
+        "name": "H-E-B Student Union",
+        "abbrev": "HSU",
+        "latitude": 29.58305117878825,
+        "longitude": -98.62029885464122,
+        "nicknames": ["HEB Student Union"]
+      },
+      {
+        "name": "Intercollegiate Athletics Building",
+        "abbrev": "IAB",
+        "latitude": 29.58312420140861,
+        "longitude": -98.62164895185929
+      },
+      {
+        "name": "Main Building",
+        "abbrev": "MB",
+        "latitude": 29.58456428607247,
+        "longitude": -98.61672999053695
+      },
+      {
+        "name": "Student Union",
+        "abbrev": "SU",
+        "latitude": 29.58404993304287,
+        "longitude": -98.6201789505338,
+        "nicknames": ["The Retama"]
+      },
+      {
+        "name": "John Peace Library",
+        "abbrev": "JPL",
+        "latitude": 29.584425201627337,
+        "longitude": -98.61760231337813
+      }
+    ]
+  }

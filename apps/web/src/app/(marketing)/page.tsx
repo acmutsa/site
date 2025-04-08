@@ -30,7 +30,7 @@ export default function Page() {
 			<main className="bg-fit relative flex h-full min-h-[calc(100vh-100px)] w-full flex-col items-center justify-center overflow-hidden bg-acm-darker-blue bg-[url('/img/landing/noise.png')] bg-center text-white">
 				<HeroNav />
 				<div className="flex h-full w-full flex-col items-center justify-start">
-					<h1 className="font-chillax text-9xl font-black">
+					<h1 className="text-center font-chillax text-9xl font-black">
 						acm utsa
 					</h1>
 					<h2 className="text-md max-w-[600px] text-center font-mono font-semibold">
@@ -38,17 +38,13 @@ export default function Page() {
 						computer science and technology at UTSA
 					</h2>
 				</div>
-				<div className="absolute bottom-0 left-0 right-0 flex translate-y-[60%] items-center justify-center">
+
+				<div className="absolute bottom-0 left-0 right-0 flex translate-y-[60%] scale-100 items-center justify-center ">
 					<Globe />
 				</div>
 			</main>
 			<section className="min-h-screen w-full bg-background pb-36">
 				<div className="mx-auto flex max-w-screen-xl flex-col px-10 pt-36">
-					{/* <div className="relative py-36">
-						<h1 className="absolute font-chillax text-7xl font-black tracking-tighter text-acm-darker-blue">
-							what is acm?
-						</h1>
-					</div> */}
 					<div className=" grid grid-cols-4 border border-acm-darker-blue/50">
 						<div className="col-span-2 row-span-2 flex flex-col border border-acm-darker-blue/50 p-10">
 							<h1 className="text-left font-calsans text-5xl font-bold leading-tight tracking-wide text-acm-darker-blue">
@@ -290,12 +286,12 @@ function Pill({
 	children: React.ReactNode;
 }) {
 	return (
-        <Fragment>
-            {" "}
-            <span className="inline-flex h-10 items-center rounded-full bg-acm-darker-blue/10 px-4 text-acm-darker-blue">
+		<Fragment>
+			{" "}
+			<span className="inline-flex h-10 items-center rounded-full bg-acm-darker-blue/10 px-4 text-acm-darker-blue">
 				{cloneElement(icon as React.ReactElement<any>, { size: 20 })}
 				<span className="ml-2">{children}</span>
 			</span>{" "}
-        </Fragment>
-    );
+		</Fragment>
+	);
 }

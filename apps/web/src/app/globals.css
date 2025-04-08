@@ -110,6 +110,10 @@
 	@apply hidden;
 }
 
+.mapboxgl-ctrl-attrib {
+	display: none;
+}
+
 .live-glow::after {
 	@apply rounded-md;
 	content: "";

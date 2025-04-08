@@ -5,18 +5,13 @@ import { db } from "db";
 import { users } from "db/schema";
 import { eq } from "db/drizzle";
 import ProfileButton from "@/components/shared/profile-button";
-import { Button } from "@/components/ui/button";
-import {
-	Sheet,
-	SheetContent,
-	SheetDescription,
-	SheetHeader,
-	SheetTitle,
-	SheetTrigger,
-} from "@/components/ui/sheet";
+import { Button, buttonVariants, variantItems } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 import c from "config";
 import { Menu } from "lucide-react";
+import { Suspense } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 type NavbarProps = {
 	siteRegion?: string;
@@ -190,10 +185,36 @@ export default async function Navbar({ siteRegion, showBorder }: NavbarProps) {
 	);
 }
 
-export function HeroNav() {
+interface HeroVariant {
+	wrapper: string;
+	buttonVariant: keyof typeof variantItems;
+	link: string;
+	dashButton: string;
+}
+
+const variant: Record<string, HeroVariant> = {
+	default: {
+		wrapper: "",
+		buttonVariant: "styleized-white-blue-text",
+		link: "text-white",
+		dashButton: "text-white",
+	},
+	blueForeground: {
+		wrapper: "bg-white",
+		buttonVariant: "styleized-blue-darker",
+		link: "text-acm-darker-blue",
+		dashButton: "hover:text-acm-darker-blue",
+	},
+};
+
+export function HeroNav({
+	navVariant = "default",
+}: {
+	navVariant?: keyof typeof variant;
+}) {
 	return (
 		<div
-			className={`absolute left-1/2 top-0 z-50 grid h-24 w-full max-w-screen-xl -translate-x-1/2 grid-cols-4 rounded-lg px-10 py-4 transition-all duration-300`}
+			className={`absolute left-1/2 top-0 z-50 grid h-24 w-full max-w-screen-xl -translate-x-1/2 grid-cols-4 rounded-lg px-10 py-4 transition-all duration-300 ${variant[navVariant].wrapper}`}
 		>
 			<div className="col-span-3 flex items-center gap-x-5">
 				<Link href="/">
@@ -205,18 +226,53 @@ export function HeroNav() {
 						className="mr-5"
 					/>
 				</Link>
-				<NavLink href="/events">Events</NavLink>
-				<NavLink href="/team">Team</NavLink>
-				<NavLink href="/suborgs">Sub-orgs</NavLink>
-				<NavLink href="/sponsor">Sponsor</NavLink>
-				<NavLink href="/donate">Donate</NavLink>
-				<NavLink href="/contact">Contact</NavLink>
-				<NavLink href="/resources">Resources</NavLink>
+				<NavLink linkStyles={variant[navVariant].link} href="/events">
+					Events
+				</NavLink>
+				<NavLink linkStyles={variant[navVariant].link} href="/team">
+					Team
+				</NavLink>
+				<NavLink linkStyles={variant[navVariant].link} href="/suborgs">
+					Sub-orgs
+				</NavLink>
+				<NavLink linkStyles={variant[navVariant].link} href="/sponsor">
+					Sponsor
+				</NavLink>
+				<NavLink linkStyles={variant[navVariant].link} href="/donate">
+					Donate
+				</NavLink>
+				<NavLink linkStyles={variant[navVariant].link} href="/contact">
+					Contact
+				</NavLink>
+				<NavLink
+					linkStyles={variant[navVariant].link}
+					href="/resources"
+				>
+					Resources
+				</NavLink>
 			</div>
 			<div className="flex items-center justify-end gap-x-3">
+				<Suspense>
+					<AccountBubble navVariant={navVariant} />
+				</Suspense>
+			</div>
+		</div>
+	);
+}
+
+async function AccountBubble({
+	navVariant,
+}: {
+	navVariant: keyof typeof variant;
+}) {
+	const user = await currentUser();
+
+	if (!user) {
+		return (
+			<>
 				<Link href={"/sign-in"}>
 					<Button
-						variant={"styleized-white-blue-text"}
+						variant={variant[navVariant].buttonVariant}
 						className="font-bold"
 					>
 						Sign-in
@@ -224,28 +280,47 @@ export function HeroNav() {
 				</Link>
 				<Link href={"/sign-up"}>
 					<Button
-						variant={"styleized-white-blue-text"}
+						variant={variant[navVariant].buttonVariant}
 						className="font-bold"
 					>
 						Register
 					</Button>
 				</Link>
-			</div>
-		</div>
+			</>
+		);
+	}
+
+	return (
+		<>
+			<Link href={"/dash"}>
+				<Button
+					variant={"link"}
+					className={variant[navVariant].dashButton}
+				>
+					My Dashboard
+				</Button>
+			</Link>
+			<Avatar className="size-10">
+				<AvatarImage src={user.imageUrl} alt="@shadcn" />
+				<AvatarFallback>{`${user.firstName?.charAt(0)} ${user.lastName?.charAt(0)}`}</AvatarFallback>
+			</Avatar>
+		</>
 	);
 }
 
 function NavLink({
 	href,
 	children,
+	linkStyles,
 }: {
 	href: string;
 	children: React.ReactNode;
+	linkStyles: string;
 }) {
 	return (
 		<Link
 			href={href}
-			className="text-md font-semibold text-white hover:underline"
+			className={`text-md font-semibold hover:underline ${linkStyles}`}
 		>
 			{children}
 		</Link>

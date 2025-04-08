@@ -49,7 +49,7 @@ const monthList = [
 	"December",
 ];
 
-async function MonthlyRegistrationChart({ registrations }: Props) {
+function MonthlyRegistrationChart({ registrations }: Props) {
 	return (
 		<Card>
 			<CardHeader>
