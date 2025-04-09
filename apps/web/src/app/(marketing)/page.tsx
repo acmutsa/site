@@ -278,6 +278,30 @@ export default function Page() {
 					<Suspense>
 						<UpcomingEvents />
 					</Suspense>
+					<div className="h-10 w-full border-0 border-acm-darker-blue/50" />
+					<div className="grid grid-cols-4 grid-rows-2 border-2 border-acm-darker-blue/50">
+						<div className="relative col-span-4 flex flex-col items-center justify-center p-10">
+							<h1 className="text-center font-calsans text-8xl font-bold leading-none tracking-wide text-acm-darker-blue">
+								Sponsors
+							</h1>
+							<h2 className="text-md max-w-[600px] text-balance pt-10 text-center font-mono font-semibold text-acm-darker-blue">
+								We are able to operate at no cost to our members
+								through the generous support of our sponsors
+							</h2>
+						</div>
+						<div className="flex aspect-square flex-col items-center justify-center border-t-2 border-acm-darker-blue/50 p-10">
+							{/* Sponsor logo placeholder */}
+						</div>
+						<div className="flex aspect-square flex-col items-center justify-center border-l-2 border-t-2 border-acm-darker-blue/50 p-10">
+							{/* Sponsor logo placeholder */}
+						</div>
+						<div className="flex aspect-square flex-col items-center justify-center border-l-2 border-t-2 border-acm-darker-blue/50 p-10">
+							{/* Sponsor logo placeholder */}
+						</div>
+						<div className="flex aspect-square flex-col items-center justify-center border-l-2 border-t-2 border-acm-darker-blue/50 p-10">
+							{/* Sponsor logo placeholder */}
+						</div>
+					</div>
 				</div>
 			</section>
 			<Footer />
