@@ -19,10 +19,13 @@ import {
 	Network as NetworkIcon,
 	Building as BuildingIcon,
 	Map as MapIcon,
+	MapPin,
+	Calendar,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Footer from "@/components/shared/footer";
+import { getNextEvent, getUpcomingEvents } from "@/lib/queries/events";
 
 export default function Page() {
 	return (
@@ -271,10 +274,80 @@ export default function Page() {
 							/>
 						</div>
 					</div>
+					<div className="h-10 w-full border-0 border-acm-darker-blue/50" />
+					<Suspense>
+						<UpcomingEvents />
+					</Suspense>
 				</div>
 			</section>
 			<Footer />
 		</>
+	);
+}
+
+async function UpcomingEvents() {
+	const event = await getNextEvent(true);
+	const timezone = "America/Chicago";
+
+	if (!event) {
+		return (
+			<div className="flex h-96 items-start justify-center bg-acm-darker-blue text-white">
+				<h1>There Was An Error Fetching Events</h1>
+			</div>
+		);
+	}
+
+	return (
+		<div className="flex h-96 items-start justify-center bg-acm-darker-blue text-white">
+			<div className="flex h-full min-w-[min(100vw,500px)] flex-col items-start justify-center border-r-2 border-dashed border-white p-10">
+				<h1 className="p-5 text-left font-calsans text-8xl font-bold leading-none tracking-wide text-white">
+					{event.type === "future" ? "Up Next" : "Recently"}
+					<br />@ ACM
+				</h1>
+			</div>
+			<div className="flex h-full w-full flex-col items-start justify-center p-10">
+				<div className="flex h-[45px] w-[45px] items-center justify-center pb-5">
+					<Image
+						src={event.event.thumbnailUrl}
+						alt={event.event.name}
+						width={45}
+						height={45}
+						className="rounded-lg"
+					/>
+				</div>
+				<h1 className="pb-2 font-calsans text-4xl font-bold">
+					{event.event.name}
+				</h1>
+				<div>
+					<p className="flex items-center gap-x-1 font-calsans text-sm text-white">
+						<Calendar strokeWidth={2.5} size={15} />
+						{`${event.event.start.toLocaleString("en-US", {
+							timeZone: timezone,
+							month: "short",
+							day: "numeric",
+							hour: "numeric",
+							minute: "numeric",
+						})} CT`}
+					</p>
+					<p className="flex items-center gap-x-1 font-calsans text-sm text-white">
+						<MapPin strokeWidth={2.5} size={15} />
+						{event.event.location}
+					</p>
+				</div>
+				<div className="flex items-center gap-x-1 pt-10">
+					<Link href={`/events/${event.event.id}`}>
+						<Button variant={"styleized-white-blue-text"}>
+							View Event
+						</Button>
+					</Link>
+					<Link href={`/events`}>
+						<Button className="text-white" variant={"link"}>
+							Explore Other Events {">"}
+						</Button>
+					</Link>
+				</div>
+			</div>
+		</div>
 	);
 }
 

@@ -1,4 +1,4 @@
-import { count, db, desc, eq, sql } from "db";
+import { count, db, desc, eq, gt, lt, sql } from "db";
 import {
 	checkins,
 	eventCategories,
@@ -125,3 +125,45 @@ export const getEventList = async () => {
 		orderBy: desc(events.start),
 	});
 };
+
+export async function getUpcomingEvents() {
+	return await db.query.events.findMany({
+		where: (events, { gt }) => gt(events.start, new Date()),
+		orderBy: desc(events.start),
+		limit: 3,
+	});
+}
+
+export async function getNextEvent(fallbackToRecent = false) {
+	const [futureEvent] = await db
+		.select()
+		.from(events)
+		.where(gt(events.start, new Date()))
+		.orderBy(desc(events.start))
+		.limit(1);
+
+	if (futureEvent) {
+		return {
+			type: "future" as const,
+			event: futureEvent,
+		};
+	}
+
+	if (fallbackToRecent) {
+		const [pastEvent] = await db
+			.select()
+			.from(events)
+			.where(lt(events.start, new Date()))
+			.orderBy(desc(events.start))
+			.limit(1);
+
+		if (pastEvent) {
+			return {
+				type: "past" as const,
+				event: pastEvent,
+			};
+		}
+	}
+
+	return null;
+}
