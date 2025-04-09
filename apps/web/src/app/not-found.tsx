@@ -2,8 +2,6 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
 
-// TODO: make this look better
-
 export default function NotFound() {
 	return (
 		<div className="flex min-h-screen w-full items-center justify-center bg-acm-darker-blue bg-[url('/img/landing/noise.png')] bg-center px-5">
