@@ -118,7 +118,11 @@ async function CardEventsView({
 		<EventCard key={event.id} event={event} timezone={timeZone} />
 	));
 
-	return <div className="grid grid-cols-3 gap-10 pt-10">{cards}</div>;
+	return (
+		<div className="grid grid-cols-1 gap-10 pt-10 sm:grid-cols-2 lg:grid-cols-3">
+			{cards}
+		</div>
+	);
 }
 
 function EventCard({
