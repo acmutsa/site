@@ -1,6 +1,5 @@
-import EventDetails from "@/components/events/id/EventDetails";
-import Navbar, { HeroNav } from "@/components/shared/navbar";
-import { Suspense } from "react";
+import { HeroNav } from "@/components/shared/navbar";
+import { cloneElement, Fragment, Suspense } from "react";
 import { headers } from "next/headers";
 import { eq } from "db/drizzle";
 import { db } from "db";
@@ -14,6 +13,8 @@ import {
 	ArrowUpRight,
 	CalendarDays as CalendarDaysIcon,
 	Trophy as TrophyIcon,
+	Youtube as YoutubeIcon,
+	Twitch as TwitchIcon,
 } from "lucide-react";
 import { isAfter } from "date-fns";
 import Footer from "@/components/shared/footer";
@@ -21,6 +22,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import EventLocationMap from "./client";
 import { fuzzyFindLocation } from "@/lib/shared/geo";
+import { Badge } from "@/components/ui/badge";
 
 export default async function Page(props: {
 	params: Promise<{ slug: string }>;
@@ -35,6 +37,14 @@ export default async function Page(props: {
 
 	const event = await db.query.events.findFirst({
 		where: eq(events.id, params.slug),
+		// TODO: re-add this once we are properly indexing the eventsToCategories table
+		// with: {
+		// 	eventsToCategories: {
+		// 		with: {
+		// 			category: true,
+		// 		},
+		// 	},
+		// },
 	});
 
 	if (!event) {
@@ -56,6 +66,50 @@ export default async function Page(props: {
 								width={330}
 								height={330}
 							/>
+						</div>
+						<div className="mt-5 flex w-full flex-col gap-y-2 text-acm-darker-blue">
+							<div>
+								<p className="mb-3 border-b border-acm-darker-blue/40 py-2 font-calsans text-sm">
+									Presented By
+								</p>
+								{/* TODO: re-add this once we are properly indexing the eventsToCategories table */}
+								{/* {event.eventsToCategories
+										.map((c) => c.category.name)
+										.join(", ")
+										.replace(/,(?=[^,]*$)/, " &")} */}
+								<Badge className="bg-acm-darker-blue text-sm text-white">
+									ACM
+								</Badge>
+							</div>
+							<div>
+								<p className="mb-3 border-b border-acm-darker-blue/40 py-2 font-calsans text-sm">
+									Virtual Options
+								</p>
+								<Link
+									href={"https://go.acmutsa.org/youtube"}
+									target="_blank"
+								>
+									<Button
+										variant={"styleized-blue-darker"}
+										className="w-full "
+									>
+										<YoutubeIcon size={20} />
+										Watch on YouTube
+									</Button>
+								</Link>
+								<Link
+									href={"https://go.acmutsa.org/twitch"}
+									target="_blank"
+								>
+									<Button
+										variant={"styleized-blue-darker"}
+										className="mt-2 w-full"
+									>
+										<TwitchIcon size={20} />
+										Watch on Twitch
+									</Button>
+								</Link>
+							</div>
 						</div>
 					</div>
 					<div className="flex flex-col gap-y-5">
@@ -180,6 +234,23 @@ function LocationWidget({ location }: { location: string }) {
 				</p>
 			</div>
 		</div>
+	);
+}
+
+function Pill({
+	// icon,
+	children,
+}: {
+	// icon: React.ReactNode;
+	children: React.ReactNode;
+}) {
+	return (
+		<Fragment>
+			<span className="inline-flex h-10 items-center rounded-full bg-acm-darker-blue/10 px-4 text-acm-darker-blue">
+				{/* {cloneElement(icon as React.ReactElement<any>, { size: 20 })} */}
+				<span>{children}</span>
+			</span>
+		</Fragment>
 	);
 }
 

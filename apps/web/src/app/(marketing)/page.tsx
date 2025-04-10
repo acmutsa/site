@@ -323,7 +323,7 @@ async function UpcomingEvents() {
 
 	return (
 		<div className="flex h-96 items-start justify-center bg-acm-darker-blue text-white">
-			<div className="flex h-full min-w-[min(100vw,500px)] flex-col items-start justify-center border-r-2 border-dashed border-white p-10">
+			<div className="flex h-full min-w-[min(100vw,550px)] flex-col items-start justify-center border-r-2 border-dashed border-white p-10">
 				<h1 className="p-5 text-left font-calsans text-8xl font-bold leading-none tracking-wide text-white">
 					{event.type === "future" ? "Up Next" : "Recently"}
 					<br />@ ACM
