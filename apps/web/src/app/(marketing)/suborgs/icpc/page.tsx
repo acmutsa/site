@@ -50,7 +50,7 @@ export default function Page() {
 						<h2 className="text-2xl font-bold">
 							Interested in Joining?
 						</h2>
-						<div className="flex items-center gap-x-4 border-2 border-acm-darker-blue px-4">
+						<div className="flex items-center gap-x-4 border-2 border-acm-darker-blue p-2 px-4">
 							<div className="w-12">
 								<svg
 									viewBox="0 0 256 199"
@@ -65,39 +65,33 @@ export default function Page() {
 							</div>
 							<div>
 								<h3 className="text-lg font-bold">Join</h3>
-								<p>Our Discord</p>
+								<p className="text-sm">Our Discord</p>
 							</div>
 						</div>
-						<div className="flex items-center gap-x-4 border-2 border-acm-darker-blue px-4">
+						<div className="flex items-center gap-x-4 border-2 border-acm-darker-blue p-2 px-4">
 							<div className="w-12">
 								<svg
-									viewBox="0 0 256 199"
 									xmlns="http://www.w3.org/2000/svg"
-									preserveAspectRatio="xMidYMid"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									strokeWidth="2"
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									className="lucide lucide-megaphone-icon lucide-megaphone"
 								>
-									<svg
-										xmlns="http://www.w3.org/2000/svg"
-										viewBox="0 0 24 24"
-										fill="none"
-										stroke="currentColor"
-										strokeWidth="2"
-										strokeLinecap="round"
-										strokeLinejoin="round"
-										className="lucide lucide-user-round-icon lucide-user-round"
-									>
-										<circle cx="12" cy="8" r="5" />
-										<path d="M20 21a8 8 0 0 0-16 0" />
-									</svg>
+									<path d="m3 11 18-5v12L3 14v-3z" />
+									<path d="M11.6 16.8a3 3 0 1 1-5.8-1.6" />
 								</svg>
 							</div>
 							<div>
-								<h3 className="text-lg font-bold">
-									Membership
-								</h3>
-								<p>Sign up to be a member here!</p>
+								<h3 className="text-lg font-bold">Events</h3>
+								<p className="text-sm">
+									Find upcoming events here!
+								</p>
 							</div>
 						</div>
-						<div className="flex items-center gap-x-4 border-2 border-acm-darker-blue px-4">
+						<div className="flex items-center gap-x-4 border-2 border-acm-darker-blue p-2 px-4">
 							<div className="w-12">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
@@ -121,7 +115,9 @@ export default function Page() {
 							</div>
 							<div>
 								<h3 className="text-lg font-bold">Contact</h3>
-								<p>The Director at icpcdirector@acmutsa.org</p>
+								<p className="text-sm">
+									The Director at icpcdirector@acmutsa.org
+								</p>
 							</div>
 						</div>
 					</div>
