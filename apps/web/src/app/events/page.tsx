@@ -7,6 +7,7 @@ import { createLoader } from "nuqs/server";
 import { loadSearchParams } from "./params";
 import { events } from "db/schema";
 import { db } from "db";
+import { gt, asc, desc } from "db/drizzle";
 import { EventAndCategoriesType } from "@/lib/types/events";
 import { getClientTimeZone, getUTCDate } from "@/lib/utils";
 import { getRequestContext } from "@cloudflare/next-on-pages";
@@ -37,7 +38,10 @@ export default async function EventsPage(props: {
 					},
 				},
 			},
-			orderBy: events.start,
+			where: params.past
+				? undefined
+				: gt(events.start, new Date(Date.now() - 12 * 60 * 60 * 1000)),
+			orderBy: params.past ? desc(events.start) : asc(events.start),
 		})
 		.then((events) => {
 			if (params.categories.length > 0) {
