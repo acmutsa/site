@@ -21,11 +21,13 @@ import {
 	Map as MapIcon,
 	MapPin,
 	Calendar,
+	HeartHandshake,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Footer from "@/components/shared/footer";
 import { getNextEvent, getUpcomingEvents } from "@/lib/queries/events";
+import { SPONSORS } from "@/site.config";
 
 export default function Page() {
 	return (
@@ -289,18 +291,39 @@ export default function Page() {
 								through the generous support of our sponsors
 							</h2>
 						</div>
-						<div className="flex aspect-square flex-col items-center justify-center border-t-2 border-acm-darker-blue/50 p-10">
-							{/* Sponsor logo placeholder */}
-						</div>
-						<div className="flex aspect-square flex-col items-center justify-center border-l-2 border-t-2 border-acm-darker-blue/50 p-10">
-							{/* Sponsor logo placeholder */}
-						</div>
-						<div className="flex aspect-square flex-col items-center justify-center border-l-2 border-t-2 border-acm-darker-blue/50 p-10">
-							{/* Sponsor logo placeholder */}
-						</div>
-						<div className="flex aspect-square flex-col items-center justify-center border-l-2 border-t-2 border-acm-darker-blue/50 p-10">
-							{/* Sponsor logo placeholder */}
-						</div>
+						{SPONSORS.map((sponsor, index) => (
+							<Link
+								key={sponsor.name}
+								href={sponsor.link}
+								target="_blank"
+								rel="noopener noreferrer"
+								className={`flex aspect-square flex-col items-center justify-center border-t-2 border-acm-darker-blue/50 p-10 transition-all hover:bg-acm-darker-blue/5 ${
+									index > 0 ? "border-l-2" : ""
+								}`}
+							>
+								<Image
+									src={sponsor.logo}
+									alt={`${sponsor.name} Logo`}
+									width={150}
+									height={150}
+									className="object-contain"
+								/>
+							</Link>
+						))}
+						<Link
+							href="/sponsor-us"
+							className="flex aspect-square flex-col items-center justify-center border-l-2 border-t-2 border-acm-darker-blue/50 p-10 transition-all hover:bg-acm-darker-blue/10"
+						>
+							<div className="flex flex-col items-center justify-center gap-4">
+								<HeartHandshake
+									className="text-acm-darker-blue"
+									size={75}
+								/>
+								<span className="text-center font-calsans text-xl font-bold text-acm-darker-blue">
+									Become a Sponsor
+								</span>
+							</div>
+						</Link>
 					</div>
 				</div>
 			</section>

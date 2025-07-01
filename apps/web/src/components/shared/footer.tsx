@@ -80,7 +80,7 @@ export default function Footer() {
 						/>
 						<FooterLink
 							text="LinkedIn"
-							href="https://www.linkedin.com/company/association-for-computing-machinery"
+							href="https://www.linkedin.com/company/acmutsa"
 							target="_blank"
 						/>
 						<FooterLink
