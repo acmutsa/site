@@ -192,7 +192,7 @@ interface HeroVariant {
 	dashButton: string;
 }
 
-const variant: Record<string, HeroVariant> = {
+const variant = {
 	default: {
 		wrapper: "",
 		buttonVariant: "styleized-white-blue-text",
@@ -205,13 +205,18 @@ const variant: Record<string, HeroVariant> = {
 		link: "text-acm-darker-blue",
 		dashButton: "hover:text-acm-darker-blue",
 	},
-};
+} as const;
 
 export function HeroNav({
 	navVariant = "default",
+	customColor,
 }: {
 	navVariant?: keyof typeof variant;
+	customColor?: string;
 }) {
+	const linkStyles = customColor || variant[navVariant].link;
+	const dashButtonStyles = customColor || variant[navVariant].dashButton;
+
 	return (
 		<div
 			className={`absolute left-1/2 top-0 z-50 grid h-24 w-full max-w-screen-xl -translate-x-1/2 grid-cols-4 rounded-lg px-10 py-4 transition-all duration-300 ${variant[navVariant].wrapper}`}
@@ -226,34 +231,34 @@ export function HeroNav({
 						className="mr-5"
 					/>
 				</Link>
-				<NavLink linkStyles={variant[navVariant].link} href="/events">
+				<NavLink linkStyles={linkStyles} href="/events">
 					Events
 				</NavLink>
-				<NavLink linkStyles={variant[navVariant].link} href="/team">
+				<NavLink linkStyles={linkStyles} href="/team">
 					Team
 				</NavLink>
-				<NavLink linkStyles={variant[navVariant].link} href="/suborgs">
+				<NavLink linkStyles={linkStyles} href="/suborgs">
 					Sub-orgs
 				</NavLink>
-				<NavLink linkStyles={variant[navVariant].link} href="/sponsor">
+				<NavLink linkStyles={linkStyles} href="/sponsor">
 					Sponsor
 				</NavLink>
-				<NavLink linkStyles={variant[navVariant].link} href="/donate">
+				<NavLink linkStyles={linkStyles} href="/donate">
 					Donate
 				</NavLink>
-				<NavLink linkStyles={variant[navVariant].link} href="/contact">
+				<NavLink linkStyles={linkStyles} href="/contact">
 					Contact
 				</NavLink>
-				<NavLink
-					linkStyles={variant[navVariant].link}
-					href="/resources"
-				>
+				<NavLink linkStyles={linkStyles} href="/resources">
 					Resources
 				</NavLink>
 			</div>
 			<div className="flex items-center justify-end gap-x-3">
 				<Suspense>
-					<AccountBubble navVariant={navVariant} />
+					<AccountBubble
+						navVariant={navVariant}
+						customColor={customColor}
+					/>
 				</Suspense>
 			</div>
 		</div>
@@ -262,10 +267,13 @@ export function HeroNav({
 
 async function AccountBubble({
 	navVariant,
+	customColor,
 }: {
 	navVariant: keyof typeof variant;
+	customColor?: string;
 }) {
 	const user = await currentUser();
+	const dashButtonStyles = customColor || variant[navVariant].dashButton;
 
 	if (!user) {
 		return (
@@ -274,6 +282,11 @@ async function AccountBubble({
 					<Button
 						variant={variant[navVariant].buttonVariant}
 						className="font-bold"
+						style={
+							customColor
+								? { backgroundColor: customColor }
+								: undefined
+						}
 					>
 						Sign-in
 					</Button>
@@ -282,6 +295,11 @@ async function AccountBubble({
 					<Button
 						variant={variant[navVariant].buttonVariant}
 						className="font-bold"
+						style={
+							customColor
+								? { backgroundColor: customColor }
+								: undefined
+						}
 					>
 						Register
 					</Button>
@@ -295,7 +313,12 @@ async function AccountBubble({
 			<Link href={"/dash"}>
 				<Button
 					variant={"link"}
-					className={variant[navVariant].dashButton}
+					className={dashButtonStyles}
+					style={
+						customColor
+							? { backgroundColor: customColor }
+							: undefined
+					}
 				>
 					My Dashboard
 				</Button>
@@ -317,10 +340,17 @@ function NavLink({
 	children: React.ReactNode;
 	linkStyles: string;
 }) {
+	// Check if linkStyles is a custom color (starts with rgb, hex, etc.)
+	const isCustomColor =
+		linkStyles.startsWith("rgb") ||
+		linkStyles.startsWith("#") ||
+		linkStyles.startsWith("hsl");
+
 	return (
 		<Link
 			href={href}
-			className={`text-md font-semibold hover:underline ${linkStyles}`}
+			className={`text-md font-semibold hover:underline ${isCustomColor ? "" : linkStyles}`}
+			style={isCustomColor ? { color: linkStyles } : undefined}
 		>
 			{children}
 		</Link>

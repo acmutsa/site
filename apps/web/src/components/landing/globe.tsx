@@ -69,21 +69,23 @@ function CircleDots({
 	useEffect(() => {
 		setMounted(true);
 		let lastTime = performance.now();
+		let frameId: number;
 
-		const animationFrame = requestAnimationFrame(
-			function animate(currentTime) {
-				const deltaTime = (currentTime - lastTime) / 1000; // Convert to seconds
-				lastTime = currentTime;
+		const animate = (currentTime: number) => {
+			const deltaTime = (currentTime - lastTime) / 1000; // Convert to seconds
+			lastTime = currentTime;
+			// Update angle and schedule next frame
+			setAngle(
+				(prevAngle) =>
+					(prevAngle + speed * deltaTime * 120) % (Math.PI * 2),
+			);
+			frameId = requestAnimationFrame(animate);
+		};
 
-				setAngle(
-					(prevAngle) =>
-						(prevAngle + speed * deltaTime * 120) % (Math.PI * 2),
-				); // Normalize to 60fps
-				requestAnimationFrame(animate);
-			},
-		);
-
-		return () => cancelAnimationFrame(animationFrame);
+		// Kick off the animation loop
+		frameId = requestAnimationFrame(animate);
+		// Cleanup the most recent frame
+		return () => cancelAnimationFrame(frameId);
 	}, [speed]);
 
 	// Generate dots
