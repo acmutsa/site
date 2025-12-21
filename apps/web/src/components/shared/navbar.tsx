@@ -1,17 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import { auth, currentUser } from "@clerk/nextjs/server";
-import { db } from "db";
-import { users } from "db/schema";
-import { eq } from "db/drizzle";
-import ProfileButton from "@/components/shared/profile-button";
-import { Button, buttonVariants, variantItems } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Button, variantItems } from "@/components/ui/button";
 
 import c from "config";
 import { Menu } from "lucide-react";
-import { Suspense } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 type NavbarProps = {
 	siteRegion?: string;
@@ -19,17 +12,6 @@ type NavbarProps = {
 };
 
 export default async function Navbar({ siteRegion, showBorder }: NavbarProps) {
-	const clerkAuth = await auth();
-	const clerkUser = await currentUser();
-	const { userId } = clerkAuth;
-	const user = userId
-		? await db.query.users.findFirst({
-				where: eq(users.clerkID, userId),
-				with: { data: true },
-			})
-		: null;
-
-	const registrationComplete = user != null;
 	return (
 		<div
 			className={
@@ -59,56 +41,7 @@ export default async function Navbar({ siteRegion, showBorder }: NavbarProps) {
 
 			{/* Large screen navbar */}
 			<div className="my-2 hidden items-center justify-end gap-x-2 md:flex">
-				{user ? (
-					<>
-						<Link
-							href={registrationComplete ? "/dash" : "/sign-up"}
-						>
-							<Button
-								variant={
-									registrationComplete ? "outline" : "default"
-								}
-							>
-								{registrationComplete
-									? "Dashboard"
-									: "Complete Registration"}
-							</Button>
-						</Link>
-						<Link href={"/events"}>
-							<Button variant={"outline"}>Events</Button>
-						</Link>
-						{(user.role === "admin" ||
-							user.role === "super_admin") && (
-							<Link href={"/admin"}>
-								<Button
-									variant={"outline"}
-									className="text-blue-400"
-								>
-									Admin
-								</Button>
-							</Link>
-						)}
-						<ProfileButton
-							clerkUser={clerkUser}
-							clerkAuth={clerkAuth}
-							user={user}
-						/>
-					</>
-				) : (
-					<>
-						<Link href={"/sign-in"}>
-							<Button
-								variant={"outline"}
-								className="hover:bg-background"
-							>
-								Sign In
-							</Button>
-						</Link>
-						<Link href={"/sign-up"}>
-							<Button>Register</Button>
-						</Link>
-					</>
-				)}
+				<PortalButton navVariant="default" customColor="" />
 			</div>
 
 			{/* Small screen navbar */}
@@ -118,66 +51,7 @@ export default async function Navbar({ siteRegion, showBorder }: NavbarProps) {
 						<Menu />
 					</SheetTrigger>
 					<SheetContent className="flex max-w-[40%] flex-col-reverse items-center justify-center gap-y-1">
-						{user ? (
-							<>
-								{registrationComplete && (
-									<Link href="/settings">
-										<Button variant="ghost">
-											Settings
-										</Button>
-									</Link>
-								)}
-								<Link
-									href={
-										registrationComplete
-											? "/dash"
-											: "/onboarding"
-									}
-								>
-									<Button
-										variant={
-											registrationComplete
-												? "ghost"
-												: "default"
-										}
-									>
-										{registrationComplete
-											? "Dashboard"
-											: "Complete Registration"}
-									</Button>
-								</Link>
-								<Link href={"/events"}>
-									<Button variant={"ghost"}>Events</Button>
-								</Link>
-								{(user.role === "admin" ||
-									user.role === "super_admin") && (
-									<Link href={"/admin"}>
-										<Button variant={"ghost"}>Admin</Button>
-									</Link>
-								)}
-								<div className="px-4">
-									<ProfileButton
-										clerkUser={clerkUser}
-										clerkAuth={clerkAuth}
-										user={user}
-									/>
-								</div>
-							</>
-						) : (
-							<div className="flex flex-col items-center justify-center space-y-3">
-								<Link href={"/sign-in"}>
-									<Button
-										variant={"outline"}
-										className="hover:bg-background"
-									>
-										Sign In
-									</Button>
-								</Link>
-								<Link href={"/sign-up"}>
-									<Button>Register</Button>
-								</Link>
-							</div>
-						)}
+						<PortalButton navVariant="default" customColor="" />
 					</SheetContent>
 				</Sheet>
 			</div>
@@ -254,80 +128,33 @@ export function HeroNav({
 				</NavLink>
 			</div>
 			<div className="flex items-center justify-end gap-x-3">
-				<Suspense>
-					<AccountBubble
-						navVariant={navVariant}
-						customColor={customColor}
-					/>
-				</Suspense>
+				<PortalButton
+					navVariant={navVariant}
+					customColor={customColor}
+				/>
 			</div>
 		</div>
 	);
 }
 
-async function AccountBubble({
+async function PortalButton({
 	navVariant,
 	customColor,
 }: {
 	navVariant: keyof typeof variant;
 	customColor?: string;
 }) {
-	const user = await currentUser();
-	const dashButtonStyles = customColor || variant[navVariant].dashButton;
-
-	if (!user) {
-		return (
-			<>
-				<Link href={"/sign-in"}>
-					<Button
-						variant={variant[navVariant].buttonVariant}
-						className="font-bold"
-						style={
-							customColor
-								? { backgroundColor: customColor }
-								: undefined
-						}
-					>
-						Sign-in
-					</Button>
-				</Link>
-				<Link href={"/sign-up"}>
-					<Button
-						variant={variant[navVariant].buttonVariant}
-						className="font-bold"
-						style={
-							customColor
-								? { backgroundColor: customColor }
-								: undefined
-						}
-					>
-						Register
-					</Button>
-				</Link>
-			</>
-		);
-	}
-
 	return (
-		<>
-			<Link href={"/dash"}>
-				<Button
-					variant={"link"}
-					className={dashButtonStyles}
-					style={
-						customColor
-							? { backgroundColor: customColor }
-							: undefined
-					}
-				>
-					My Dashboard
-				</Button>
-			</Link>
-			<Avatar className="size-10">
-				<AvatarImage src={user.imageUrl} alt="@shadcn" />
-				<AvatarFallback>{`${user.firstName?.charAt(0)} ${user.lastName?.charAt(0)}`}</AvatarFallback>
-			</Avatar>
-		</>
+		<Link href={process.env.PORTAL_URL || "https://portal.acmutsa.org"}>
+			<Button
+				variant={variant[navVariant].buttonVariant}
+				style={
+					customColor ? { backgroundColor: customColor } : undefined
+				}
+			>
+				Membership Portal
+			</Button>
+		</Link>
 	);
 }
 

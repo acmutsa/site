@@ -26,8 +26,9 @@ import {
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Footer from "@/components/shared/footer";
-import { getNextEvent, getUpcomingEvents } from "@/lib/queries/events";
+// import { getNextEvent, getUpcomingEvents } from "@/lib/queries/events";
 import { SPONSORS } from "@/site.config";
+import { EventType } from "@/lib/types/events";
 
 export default function Page() {
 	return (
@@ -333,7 +334,29 @@ export default function Page() {
 }
 
 async function UpcomingEvents() {
-	const event = await getNextEvent(true);
+	// const event = await getNextEvent(true);
+	const event: { type: string; event: EventType } = {
+		type: "future",
+		event: {
+			id: "1",
+			name: "ACM Spring Kickoff",
+			description:
+				"Join us for our first meeting of the Spring 2025 semester! We'll be discussing our upcoming events, workshops, and hackathons. Come meet the team and learn how you can get involved.",
+			thumbnailUrl:
+				"https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
+			start: new Date("2025-01-22T18:00:00"),
+			end: new Date("2025-01-22T19:00:00"),
+			checkinStart: new Date("2025-01-22T17:45:00"),
+			checkinEnd: new Date("2025-01-22T19:15:00"),
+			location: "NPB 1.202",
+			isUserCheckinable: true,
+			isHidden: false,
+			points: 10,
+			createdAt: new Date(),
+			updatedAt: new Date(),
+			semesterID: 1,
+		},
+	};
 	const timezone = "America/Chicago";
 
 	if (!event) {

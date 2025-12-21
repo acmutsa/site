@@ -1,31 +1,49 @@
-import { events, eventsToCategories, eventCategories } from "db/schema";
-
-import {
-	insertEventSchemaFormified,
-	selectEventSchema,
-	updateEventSchemaFormified,
-} from "db/zod";
-import { z } from "zod";
-
 import type { Noop, RefCallBack } from "react-hook-form";
 
 import type { ImageProps } from "next/image";
 
-import type { Semester } from "db/types";
+export type Semester = {
+	semesterID: number;
+	name: string;
+	startDate: Date;
+	endDate: Date;
+	pointsRequired: number;
+	isCurrent: boolean;
+};
 
-export type EventToCategoriesType = typeof eventsToCategories.$inferSelect;
+export type EventToCategoriesType = {
+	eventID: string;
+	categoryID: string;
+};
 
-export type EventCategoryType = typeof eventCategories.$inferSelect;
+export type EventCategoryType = {
+	id: string;
+	name: string;
+	color: string;
+};
 import c from "config";
 
 export type EventsToCategoriesWithCategoryType = EventToCategoriesType & {
-	category: {
-		name: string;
-		color: string;
-	};
+	category: EventCategoryType;
 };
 
-export type EventType = typeof events.$inferSelect;
+export type EventType = {
+	id: string;
+	name: string;
+	description: string;
+	thumbnailUrl: string;
+	start: Date;
+	end: Date;
+	checkinStart: Date;
+	checkinEnd: Date;
+	location: string;
+	isUserCheckinable: boolean;
+	isHidden: boolean;
+	points: number;
+	createdAt: Date;
+	updatedAt: Date;
+	semesterID: number;
+};
 
 export type EventAndCategoriesType = EventType & {
 	eventsToCategories: EventsToCategoriesWithCategoryType[];
@@ -62,35 +80,9 @@ export interface CalendarDetails {
 	location: string;
 }
 
-export enum CheckinResult {
-	SUCCESS = "success",
-	ALREADY_CHECKED_IN = "already_checked_in",
-	SOME_FAILED = "some_failed",
-	FAILED = "failed",
-}
-
-export type iEvent = z.infer<typeof insertEventSchemaFormified>;
-export type uEvent = z.infer<typeof updateEventSchemaFormified>;
-export type sEvent = z.infer<typeof selectEventSchema>;
-
 export type EventImageProps = Omit<ImageProps, "alt"> & {
 	alt?: string;
 	isLive?: boolean;
-};
-
-export type RatingFormAttributes = {
-	onChange: (...event: any[]) => void;
-	onBlur: Noop;
-	value: number;
-	disabled?: boolean | undefined;
-	name: string;
-	ref: RefCallBack;
-};
-
-export type NewEventFormProps = {
-	defaultDate: Date;
-	categoryOptions: { [key: string]: string };
-	semesterOptions: Semester[];
 };
 
 export type EventWithCatagoryType = EventType & {
