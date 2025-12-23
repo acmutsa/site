@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { ClerkProvider } from "@clerk/nextjs";
 import { cookies } from "next/headers";
 import { defaultTheme } from "config";
 import localFont from "next/font/local";
@@ -34,16 +33,14 @@ export default async function RootLayout(
 ) {
 	const theme = (await cookies()).get("ck_theme")?.value || defaultTheme;
 	return (
-		<ClerkProvider>
-			<html
-				lang="en"
-				className={`${chillax.variable} ${calsans.variable} ${inter.variable}`}
-			>
-				<body className={`${theme === "dark" ? "dark" : ""}`}>
-					<NuqsAdapter>{children}</NuqsAdapter>
-				</body>
-			</html>
-		</ClerkProvider>
+		<html
+			lang="en"
+			className={`${chillax.variable} ${calsans.variable} ${inter.variable}`}
+		>
+			<body className={`${theme === "dark" ? "dark" : ""}`}>
+				<NuqsAdapter>{children}</NuqsAdapter>
+			</body>
+		</html>
 	);
 }
 
