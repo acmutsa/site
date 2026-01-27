@@ -30,6 +30,12 @@ export interface Suborg {
 	discordLink: string;
 	aboutUs_One: string;
 	aboutUs_Two: string;
+	missionHead: string;
+	mPhrase1: string;
+	missionHead2: string;
+	mPhrase2: string;
+	missionHead3: string;
+	mPhrase3: string;
 }
 
 export const SUBORGS: Record<string, Suborg> = {
@@ -43,6 +49,12 @@ export const SUBORGS: Record<string, Suborg> = {
 		logoUrl: "/img/logos/suborgs/acmw-pink.png",
 		leadingSentence:
 			"We are the Association for Computing Machinery Women's Chapter at UTSA",
+		missionHead: "Connect",
+		mPhrase1: "Students get the opportunity to network with leaders in a field of similar interest",
+		missionHead2: "Encourage",
+		mPhrase2: "Empower students to pursue competitive career opportunities in computing fields",
+		missionHead3: "Mentor",
+		mPhrase3: "Students get the chance of mentorship to excel in their academic and professional goals",
 		discordLink: "https://discord.com/invite/Fu86P2W8BK",
 		aboutUs_One: "is an all-inclusive organization focused on tailoring its activities towards minorities.",
 		aboutUs_Two: "aims to create an engaging academic, professional, and social network for women and minorities in technology.",
@@ -57,6 +69,12 @@ export const SUBORGS: Record<string, Suborg> = {
 		logoUrl: "/img/logos/suborgs/rc-blue.png",
 		leadingSentence:
 			"We are Rowdy Creators: A community of developers, designers, and creators at UTSA",
+		missionHead: "Create",
+		mPhrase1: "Students get the chance to create long term projects of their choice",
+		missionHead2: "Collaborate",
+		mPhrase2: "Work together in groups or solo to create an excelling project",
+		missionHead3: "Showcase",
+		mPhrase3: "Students get the opportunity to display their wonderful projects to their peers",
 		discordLink: "https://discord.com/invite/gvqbjZU",
 		aboutUs_One: "gives students interested in technology the opportunity to learn new skills, network with other students, and create/develop hands-on projects.",
 		aboutUs_Two: "channels the skills of various disciplines (Engineering, Computer Science, Business, etc.) into technology projects using software and/or hardware.",
@@ -67,10 +85,16 @@ export const SUBORGS: Record<string, Suborg> = {
 			poppy: "rgb(65, 137, 93)",
 		},
 		name: "ICPC",
-		shortDesc: "Placeholder for shortDesc",
+		shortDesc: "Compete in Competitive Programming",
 		logoUrl: "/img/logos/suborgs/icpc-green.png",
 		leadingSentence:
-			"Placeholder for the leading Sentence",
+			"We are ACM ICPC: A community of competitve programmers striving for achievement",
+		missionHead: "Participate",
+		mPhrase1: "Join us in tackling competitive Leet Code problems",
+		missionHead2: "Compete",
+		mPhrase2: "Partake in ICPC competitions",
+		missionHead3: "Achieve",
+		mPhrase3: "Win at competitions, gain recognition, and enhance career opportunities",
 		discordLink: "https://discord.com/invite/qfckfeQ",
 		aboutUs_One: "or International Collegiate Programming Contest, is a world-wide programming contest where thousands of 3-person teams compete. Moreover, ",
 		aboutUs_Two: "provides the opportunity for students to learn and prepare for the contest.",
@@ -84,9 +108,15 @@ export const SUBORGS: Record<string, Suborg> = {
 		shortDesc: "A safe space for black people in the technology world",
 		logoUrl: "/img/logos/suborgs/cnc-gray.png",
 		leadingSentence:
-			"Placeholder for the leading Sentence",
+			"Coding in Color, a safe community for black people to advance together in the technical world",
+		missionHead: "Connect",
+		mPhrase1: "Students get the opportunity to network with leaders in a field of similar interest",
+		missionHead2: "Professional Development",
+		mPhrase2: "Equitable access to job and career opportunities through educational workshops",
+		missionHead3: "Community",
+		mPhrase3: "A healthy learning environment is essential for personal growth",
 		discordLink: "https://discord.gg/gNXxZfxxK5",
 		aboutUs_One: "strives to create a safe space for black people in the technology world to promote representation in our community.",
-		aboutUs_Two: "advocates for equitable access to job and career opportunities through educational workshops, forming connection with professionals in the field, and networking events.",
+		aboutUs_Two: "provides opportunities to people through workshops, events, and networking events",
 	}
 };

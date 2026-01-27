@@ -29,6 +29,12 @@ export default function Page({ params }: { params: { slug: string } }) {
 				discordLink={suborg.discordLink}
 				aboutUs_One={suborg.aboutUs_One}
 				aboutUs_Two={suborg.aboutUs_Two}
+				missionHead={suborg.missionHead}
+				missionHead2={suborg.missionHead2}
+				missionHead3={suborg.missionHead3}
+				mPhrase1={suborg.mPhrase1}
+				mPhrase2={suborg.mPhrase2}
+				mPhrase3={suborg.mPhrase3}
 			/>
 		</>
 	);

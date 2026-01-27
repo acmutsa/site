@@ -12,7 +12,7 @@ function modifyColor(color: RGBColor, alpha: number): string {
 }
 
 export default function SuborgHero(suborg: Suborg) {
-	const { name, shortDesc, logoUrl, colors, leadingSentence, discordLink, aboutUs_One, aboutUs_Two} = suborg;
+	const { name, shortDesc, logoUrl, colors, leadingSentence, discordLink, aboutUs_One, aboutUs_Two, missionHead, missionHead2, missionHead3, mPhrase1, mPhrase2, mPhrase3} = suborg;
 
 	return (
 		<>
@@ -163,18 +163,18 @@ export default function SuborgHero(suborg: Suborg) {
 							borderColor: modifyColor(colors.poppy, 0.5),
 						}}>
 						<h1 className="text-center font-chillax text-5xl font-bold p-5">
-							Connect
+							{missionHead}
 						</h1>
-						<p>Students get the opportunity to network with leaders in a field of similar interest</p>
+						<p>{mPhrase1}</p>
 					</div>
 					<div className="border-r p-10"
 						style={{
 							borderColor: modifyColor(colors.poppy, 0.5),
 						}}>
 						<h1 className="text-center font-chillax text-5xl font-bold p-5">
-							Encourage
+							{missionHead2}
 						</h1>
-						<p>Empower students to pursue competitive career opportunities in computing fields</p>
+						<p>{mPhrase2}</p>
 					</div>
 					<div className="p-10"
 						style={{
@@ -182,9 +182,9 @@ export default function SuborgHero(suborg: Suborg) {
 						}}>
 
 						<h1 className="text-center font-chillax text-5xl font-bold p-5">
-							Mentor
+							{missionHead3}
 						</h1>
-						<p>Students get the chance of mentorship to excel in their academic and professional goals</p>
+						<p>{mPhrase3}</p>
 					</div>
 				</div>
 			</div>
