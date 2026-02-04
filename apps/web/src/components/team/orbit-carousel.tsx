@@ -1,499 +1,352 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import Image from "next/image";
+import React, { useEffect, useMemo, useState } from "react";
 
-export type TeamMember = {
-	id: string;
-	name: string;
-	role?: string;
-	imageUrl: string;
+export type OrbitPerson = {
+  id: string;
+  name: string;
+  role?: string;
+  org?: string;
+  imageUrl: string;
 };
 
-function clampMod(n: number, m: number) {
-	return ((n % m) + m) % m;
+export type OrbitCarouselProps = {
+  people?: OrbitPerson[];
+  initialIndex?: number;
+};
+
+function clampIndex(i: number, n: number) {
+  if (n <= 0) return 0;
+  return ((i % n) + n) % n;
 }
 
-/**
- * Sample points along an SVG path so avatars can ride it.
- */
-function useOrbitPoints(
-	pathRef: React.RefObject<SVGPathElement>,
-	tValues: number[],
-) {
-	const [pts, setPts] = useState<{ x: number; y: number }[]>([]);
-
-	useLayoutEffect(() => {
-		const path = pathRef.current;
-		if (!path) return;
-
-		const update = () => {
-			const len = path.getTotalLength();
-			const next = tValues.map((t) => {
-				const p = path.getPointAtLength(len * t);
-				return { x: p.x, y: p.y };
-			});
-			setPts(next);
-		};
-
-		update();
-
-		const svg = path.ownerSVGElement;
-		if (!svg) return;
-
-		const ro = new ResizeObserver(() => update());
-		ro.observe(svg);
-
-		return () => ro.disconnect();
-	}, [pathRef, tValues.join(",")]);
-
-	return pts;
+function lerp(a: number, b: number, t: number) {
+  return a + (b - a) * t;
 }
 
-function Avatar({
-	member,
-	size,
-	active,
+function degToRad(deg: number) {
+  return (deg * Math.PI) / 180;
+}
+
+function mulberry32(seed: number) {
+  let t = seed >>> 0;
+  return function () {
+    t += 0x6d2b79f5;
+    let r = Math.imul(t ^ (t >>> 15), 1 | t);
+    r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
+    return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+type Pt = { x: number; y: number };
+
+function ellipsePoint(cx: number, cy: number, rx: number, ry: number, theta: number): Pt {
+  return {
+    x: cx + rx * Math.cos(theta),
+    y: cy + ry * Math.sin(theta),
+  };
+}
+
+function arcPoint(arc: { cx: number; cy: number; rx: number; ry: number }, t: number) {
+  const thetaStart = degToRad(200);
+  const thetaEnd = degToRad(340);
+  const theta = lerp(thetaStart, thetaEnd, t);
+  return ellipsePoint(arc.cx, arc.cy, arc.rx, arc.ry, theta);
+}
+
+function arcPathD(arc: { cx: number; cy: number; rx: number; ry: number }) {
+  const a = arcPoint(arc, 0);
+  const b = arcPoint(arc, 1);
+  return `M ${a.x.toFixed(2)} ${a.y.toFixed(2)} A ${arc.rx} ${arc.ry} 0 0 1 ${b.x.toFixed(
+    2
+  )} ${b.y.toFixed(2)}`;
+}
+
+function quadPath(a: Pt, c: Pt, b: Pt) {
+  return `M ${a.x.toFixed(2)} ${a.y.toFixed(2)} Q ${c.x.toFixed(2)} ${c.y.toFixed(
+    2
+  )} ${b.x.toFixed(2)} ${b.y.toFixed(2)}`;
+}
+
+export default function OrbitCarousel({ people = [], initialIndex = 0 }: OrbitCarouselProps) {
+  const n = people.length;
+  const [active, setActive] = useState(() => clampIndex(initialIndex, n || 1));
+
+  useEffect(() => {
+    setActive((v) => clampIndex(v, n || 1));
+  }, [n]);
+
+  if (!people || people.length === 0) {
+    return (
+      <div className="relative isolate overflow-hidden rounded-[44px] border border-black/5 bg-white shadow-[0_25px_60px_rgba(0,0,0,0.12)]">
+        <div className="p-10">
+          <div className="font-calsans text-xl font-bold text-black/80">No team members yet</div>
+          <div className="mt-1 font-mono text-sm text-black/50">Pass people into OrbitCarousel.</div>
+        </div>
+      </div>
+    );
+  }
+
+  const prev = clampIndex(active - 1, n);
+  const next = clampIndex(active + 1, n);
+
+  const activePerson = people[active];
+  const prevPerson = people[prev];
+  const nextPerson = people[next];
+
+  const W = 1200;
+  const H = 700;
+
+  // Slightly wider rx so left/right travel farther before clipping (feels "off-screen")
+  const arc = {
+    cx: 600,
+    cy: 640,
+    rx: 980,
+    ry: 260,
+  };
+
+  // More extreme endpoints so bubbles travel outwards (then naturally clip at card edges)
+  const tLeft = 0.10;
+  const tMid = 0.50;
+  const tRight = 0.90;
+
+  const pLeft = arcPoint(arc, tLeft);
+  const pMid = arcPoint(arc, tMid);
+  const pRight = arcPoint(arc, tRight);
+
+  const bg = useMemo(() => {
+    const rand = mulberry32(1337 + active * 97 + n * 13);
+
+    const lineCount = 5;
+    const lines = Array.from({ length: lineCount }).map(() => {
+      const a: Pt = { x: lerp(-80, 220, rand()), y: lerp(520, 640, rand()) };
+      const b: Pt = { x: lerp(W - 220, W + 80, rand()), y: lerp(520, 640, rand()) };
+      const c: Pt = {
+        x: (a.x + b.x) / 2 + lerp(-220, 220, rand()),
+        y: lerp(560, 720, rand()),
+      };
+      return {
+        d: quadPath(a, c, b),
+        opacity: lerp(0.10, 0.18, rand()),
+        strokeW: lerp(3.2, 4.8, rand()),
+      };
+    });
+
+    return { lines, dotT: tMid };
+  }, [active, n]);
+
+  function goPrev() {
+    setActive((v) => clampIndex(v - 1, n));
+  }
+  function goNext() {
+    setActive((v) => clampIndex(v + 1, n));
+  }
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") goPrev();
+      if (e.key === "ArrowRight") goNext();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [n]);
+
+  const dotPos = arcPoint(arc, bg.dotT);
+
+  const BASE = 170;
+  const sideScale = 120 / 170;
+
+  const visible = [
+    { idx: prev, person: prevPerson, pt: pLeft, scale: sideScale, emphasize: false, z: 20 },
+    { idx: active, person: activePerson, pt: pMid, scale: 1, emphasize: true, z: 30 },
+    { idx: next, person: nextPerson, pt: pRight, scale: sideScale, emphasize: false, z: 20 },
+  ];
+
+  return (
+    <div className="relative isolate overflow-hidden rounded-[44px] bg-gradient-to-br from-[#2f7cff] to-[#2d5cff] shadow-[0_25px_60px_rgba(0,0,0,0.15)]">
+      <svg
+        className="pointer-events-none absolute inset-0 z-0"
+        viewBox={`0 0 ${W} ${H}`}
+        fill="none"
+        aria-hidden="true"
+        preserveAspectRatio="xMidYMid meet"
+      >
+        <defs>
+          <radialGradient
+            id="g1"
+            cx="0"
+            cy="0"
+            r="1"
+            gradientUnits="userSpaceOnUse"
+            gradientTransform="translate(250 180) rotate(20) scale(520 240)"
+          >
+            <stop stopColor="white" stopOpacity="0.18" />
+            <stop offset="1" stopColor="white" stopOpacity="0" />
+          </radialGradient>
+
+          <radialGradient
+            id="g2"
+            cx="0"
+            cy="0"
+            r="1"
+            gradientUnits="userSpaceOnUse"
+            gradientTransform="translate(910 160) rotate(-12) scale(520 240)"
+          >
+            <stop stopColor="white" stopOpacity="0.14" />
+            <stop offset="1" stopColor="white" stopOpacity="0" />
+          </radialGradient>
+
+          <filter id="arcGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="3" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+
+        <rect x="0" y="0" width={W} height={H} fill="url(#g1)" />
+        <rect x="0" y="0" width={W} height={H} fill="url(#g2)" />
+
+        {bg.lines.map((ln, i) => (
+          <path
+            key={`bg-${i}`}
+            d={ln.d}
+            stroke="white"
+            strokeOpacity={ln.opacity}
+            strokeWidth={ln.strokeW}
+            strokeLinecap="round"
+          />
+        ))}
+
+        <path
+          d={arcPathD(arc)}
+          stroke="white"
+          strokeOpacity="0.95"
+          strokeWidth="7"
+          strokeLinecap="round"
+          filter="url(#arcGlow)"
+        />
+
+        <circle cx={dotPos.x} cy={dotPos.y} r="8" fill="white" fillOpacity="0.95" />
+      </svg>
+
+      <div className="relative z-10 h-[600px] p-12">
+        <div className="flex items-start justify-between">
+          <div>
+            <div className="font-mono text-xs font-semibold tracking-[0.35em] text-white/80">
+              {activePerson.org?.toUpperCase() ?? "ACM"}
+            </div>
+            <div className="mt-2 font-calsans text-4xl font-black text-white">{activePerson.name}</div>
+            {activePerson.role ? (
+              <div className="mt-1 font-mono text-sm font-semibold text-white/80">{activePerson.role}</div>
+            ) : null}
+          </div>
+
+          <div className="rounded-2xl bg-white/12 px-6 py-5 text-center backdrop-blur">
+            <div className="font-mono text-xs font-semibold tracking-[0.35em] text-white/80">PEOPLE</div>
+            <div className="mt-1 font-calsans text-4xl font-black text-white">{n}</div>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={goPrev}
+          className="absolute left-10 top-1/2 z-40 -translate-y-1/2 rounded-full p-3 text-white/70 transition hover:bg-white/10 hover:text-white"
+          aria-label="Previous person"
+        >
+          <span className="text-3xl leading-none">‹</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={goNext}
+          className="absolute right-10 top-1/2 z-40 -translate-y-1/2 rounded-full p-3 text-white/70 transition hover:bg-white/10 hover:text-white"
+          aria-label="Next person"
+        >
+          <span className="text-3xl leading-none">›</span>
+        </button>
+
+        <div className="absolute inset-0 z-30">
+          {visible.map((v) => (
+            <PersonBubble
+              key={v.person.id}
+              person={v.person}
+              x={v.pt.x}
+              y={v.pt.y}
+              baseSize={BASE}
+              scale={v.scale}
+              emphasize={v.emphasize}
+              zIndex={v.z}
+              onClick={() => setActive(v.idx)}
+            />
+          ))}
+        </div>
+
+        <div className="absolute bottom-10 left-10 right-10 z-30 rounded-[28px] bg-white/12 p-10 backdrop-blur">
+          <div className="font-calsans text-2xl font-black text-white">{activePerson.name}</div>
+          {activePerson.role ? (
+            <div className="mt-1 font-mono text-sm font-semibold text-white/80">{activePerson.role}</div>
+          ) : null}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PersonBubble({
+  person,
+  x,
+  y,
+  baseSize,
+  scale,
+  emphasize,
+  zIndex,
+  onClick,
 }: {
-	member: TeamMember;
-	size: number;
-	active?: boolean;
+  person: OrbitPerson;
+  x: number;
+  y: number;
+  baseSize: number;
+  scale: number;
+  emphasize?: boolean;
+  zIndex?: number;
+  onClick?: () => void;
 }) {
-	return (
-		<div
-			className={`relative grid place-items-center rounded-full border-4 border-white/90 bg-white/10 shadow-lg ${
-				active ? "ring-2 ring-white/60" : ""
-			}`}
-			style={{ width: size, height: size }}
-		>
-			<img
-				src={member.imageUrl}
-				alt={member.name}
-				className="h-full w-full rounded-full object-cover"
-				draggable={false}
-			/>
-		</div>
-	);
-}
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={[
+        "absolute -translate-x-1/2 -translate-y-1/2 rounded-full",
+        "transition-[left,top,transform,opacity] duration-700 ease-[cubic-bezier(.22,.61,.36,1)]",
+        emphasize ? "" : "hover:scale-[1.02]",
+      ].join(" ")}
+      style={{
+        left: `${(x / 1200) * 100}%`,
+        top: `${(y / 700) * 100}%`,
+        width: `${baseSize}px`,
+        height: `${baseSize}px`,
+        transform: `translate(-50%, -50%) scale(${scale})`,
+        opacity: emphasize ? 1 : 0.9,
+        zIndex,
+      }}
+      aria-label={person.name}
+    >
+      <div className="relative h-full w-full overflow-hidden rounded-full border-[6px] border-white/85 shadow-[0_20px_50px_rgba(0,0,0,0.30)]">
+        <Image
+          alt={person.name}
+          src={person.imageUrl}
+          fill
+          className="object-cover"
+          sizes="200px"
+          priority={emphasize}
+        />
+      </div>
 
-/**
- * “Landing dot” — pulses on the active slot.
- */
-function PulseDot({
-	xPct,
-	yPct,
-	trigger,
-}: {
-	xPct: number;
-	yPct: number;
-	trigger: number;
-}) {
-	return (
-		<motion.div
-			key={trigger}
-			className="pointer-events-none absolute -translate-x-1/2 -translate-y-1/2"
-			style={{ left: `${xPct}%`, top: `${yPct}%` }}
-			initial={{ opacity: 0.0, scale: 0.8 }}
-			animate={{ opacity: 1, scale: [0.9, 1.2, 0.95] }}
-			transition={{ duration: 0.55, ease: "easeInOut" }}
-		>
-			<div className="h-4 w-4 rounded-full bg-white shadow" />
-		</motion.div>
-	);
-}
-
-/**
- * Build a smooth SVG path from a list of points using cubic Béziers.
- * Points are in viewBox coordinates.
- */
-function catmullRomToBezier(points: { x: number; y: number }[]) {
-	if (points.length < 2) return "";
-	const p = points;
-
-	let d = `M ${p[0].x.toFixed(2)} ${p[0].y.toFixed(2)}`;
-
-	for (let i = 0; i < p.length - 1; i++) {
-		const p0 = p[Math.max(0, i - 1)];
-		const p1 = p[i];
-		const p2 = p[i + 1];
-		const p3 = p[Math.min(p.length - 1, i + 2)];
-
-		// Catmull-Rom -> Bezier conversion
-		const c1x = p1.x + (p2.x - p0.x) / 6;
-		const c1y = p1.y + (p2.y - p0.y) / 6;
-		const c2x = p2.x - (p3.x - p1.x) / 6;
-		const c2y = p2.y - (p3.y - p1.y) / 6;
-
-		d += ` C ${c1x.toFixed(2)} ${c1y.toFixed(2)}, ${c2x.toFixed(
-			2,
-		)} ${c2y.toFixed(2)}, ${p2.x.toFixed(2)} ${p2.y.toFixed(2)}`;
-	}
-
-	return d;
-}
-
-/**
- * Generate a “globe grid” (ACM-like):
- * - Latitudes: true arched bands (won’t flatten)
- * - Longitudes: tall arcs that cross the latitudes (grid feel)
- * - Nodes: placed to feel like intersections / network points
- */
-function buildGlobeGrid({
-	cx,
-	cy,
-	r,
-	latitudes,
-	longitudes,
-}: {
-	cx: number;
-	cy: number;
-	r: number;
-	latitudes: number[]; // in [-1..1] where 0 is equator
-	longitudes: number[]; // in radians
-}) {
-	// === Latitude paths: TRUE arcs using cubic Béziers (guaranteed curvature) ===
-	const latPaths = latitudes.map((t) => {
-		const y = cy + t * r * 0.72;
-		const width = Math.sqrt(Math.max(0, 1 - t * t));
-
-		const xLeft = cx - r * 1.18 * width;
-		const xRight = cx + r * 1.18 * width;
-
-		// Curve height controls “globe” feel.
-		const curveHeight = 160 + (1 - width) * 140;
-
-		const c1x = xLeft + (xRight - xLeft) * 0.33;
-		const c2x = xLeft + (xRight - xLeft) * 0.66;
-
-		return `M ${xLeft.toFixed(2)} ${y.toFixed(2)}
-			C ${c1x.toFixed(2)} ${(y - curveHeight).toFixed(2)},
-			  ${c2x.toFixed(2)} ${(y - curveHeight).toFixed(2)},
-			  ${xRight.toFixed(2)} ${y.toFixed(2)}`;
-	});
-
-	// === Longitude paths: tall arcs that CROSS the latitudes ===
-	const lonPaths = longitudes.map((theta) => {
-		const pts: { x: number; y: number }[] = [];
-
-		const yTop = cy - r * 0.1;
-		const yBot = cy + r * 0.92;
-
-		const steps = 34;
-		for (let i = 0; i <= steps; i++) {
-			const u = i / steps;
-			const y = yTop + (yBot - yTop) * u;
-
-			// normalize y into [-1..1] relative to globe height
-			const v = (y - cy) / (r * 0.78);
-			const vv = Math.min(1, Math.max(-1, v));
-
-			// sphere cross-section width at this y
-			const w = Math.sqrt(Math.max(0, 1 - vv * vv));
-
-			// base x for longitude
-			let x = cx + r * 1.05 * Math.cos(theta) * w;
-
-			// wrap bend (gives that “around the globe” feeling)
-			const bend = (0.25 + u) * 38;
-			x += bend * Math.sin(theta) * (1 - w);
-
-			pts.push({ x, y });
-		}
-
-		return catmullRomToBezier(pts);
-	});
-
-	// === Nodes (dots): sparse but “network-ish” ===
-	const nodes: { x: number; y: number; r: number; o: number }[] = [];
-
-	// Dots along the top thick latitude (more like the logo)
-	{
-		const t = latitudes[0];
-		const y = cy + t * r * 0.72;
-		const width = Math.sqrt(Math.max(0, 1 - t * t));
-		const xLeft = cx - r * 1.18 * width;
-		const xRight = cx + r * 1.18 * width;
-
-		const xList = [
-			xLeft + (xRight - xLeft) * 0.14,
-			xLeft + (xRight - xLeft) * 0.32,
-			cx,
-			xLeft + (xRight - xLeft) * 0.68,
-			xLeft + (xRight - xLeft) * 0.86,
-		];
-
-		// approximate “on-curve” y by nudging upward more near center
-		xList.forEach((xv, idx) => {
-			const centerN = 1 - Math.min(1, Math.abs((xv - cx) / (xRight - xLeft)) * 2);
-			const yv = y - (70 * centerN + 12); // sits on the arch visually
-			nodes.push({
-				x: xv,
-				y: yv,
-				r: idx === 2 ? 9.5 : 8.5,
-				o: 0.95,
-			});
-		});
-	}
-
-	// Additional “grid” dots lower down
-	nodes.push(
-		{ x: cx - r * 0.62, y: cy + r * 0.26, r: 7.5, o: 0.9 },
-		{ x: cx - r * 0.2, y: cy + r * 0.34, r: 7.5, o: 0.9 },
-		{ x: cx, y: cy + r * 0.42, r: 7.5, o: 0.9 },
-		{ x: cx + r * 0.26, y: cy + r * 0.30, r: 7.5, o: 0.9 },
-		{ x: cx + r * 0.64, y: cy + r * 0.24, r: 7.5, o: 0.9 },
-	);
-
-	return { latPaths, lonPaths, nodes };
-}
-
-export default function OrbitCarousel({
-	title,
-	members,
-}: {
-	title: string;
-	members: TeamMember[];
-}) {
-	const [activeIdx, setActiveIdx] = useState(0);
-	const [prevIdx, setPrevIdx] = useState(0);
-
-	// 5 visible slots along the main thick band
-	const tSlots = useMemo(() => [0.12, 0.3, 0.5, 0.7, 0.88], []);
-	const pathRef = useRef<SVGPathElement>(null);
-	const pts = useOrbitPoints(pathRef, tSlots);
-
-	useEffect(() => {
-		setActiveIdx(0);
-		setPrevIdx(0);
-	}, [members.map((m) => m.id).join(",")]);
-
-	const canNav = members.length > 1;
-
-	function go(delta: number) {
-		if (!canNav) return;
-		setPrevIdx(activeIdx);
-		setActiveIdx((i) => clampMod(i + delta, members.length));
-	}
-
-	const visible = useMemo(() => {
-		if (!members.length) return [];
-		const count = Math.min(5, members.length);
-		const mid = Math.floor(count / 2);
-
-		const out: { member: TeamMember; slotIndex: number; isActive: boolean }[] =
-			[];
-
-		for (let s = 0; s < count; s++) {
-			const rel = s - mid;
-			const idx = clampMod(activeIdx + rel, members.length);
-			const slotIndex = Math.round(s + (5 - count) / 2);
-
-			out.push({ member: members[idx], slotIndex, isActive: rel === 0 });
-		}
-
-		return out.filter((x) => x.slotIndex >= 0 && x.slotIndex < 5);
-	}, [members, activeIdx]);
-
-	const activeMember = members[activeIdx];
-
-	// Globe grid config tuned for the wide card
-	const grid = useMemo(() => {
-		return buildGlobeGrid({
-			cx: 600,
-			cy: 600, // push down so we see the "upper hemisphere" arcs like the logo
-			r: 620,
-			latitudes: [-0.2, -0.05, -0.12, 0.26], // 4 bands
-			longitudes: [-1.25, -0.85, -0.4, 0.4, 0.85, 1.25], // 6 longitudes
-		});
-	}, []);
-
-	return (
-		<div className="relative mx-auto w-full overflow-hidden rounded-3xl bg-acm-darker-blue bg-[url('/img/landing/noise.png')] bg-center px-6 pb-12 pt-10 text-white shadow-2xl">
-			<div className="mb-6 flex items-end justify-between gap-6">
-				<div>
-					<div className="font-mono text-xs font-semibold uppercase tracking-widest text-white/70">
-						{title}
-					</div>
-					<div className="mt-1 font-calsans text-2xl font-bold">
-						{activeMember?.name ?? "—"}
-					</div>
-					<div className="font-mono text-xs font-semibold text-white/70">
-						{activeMember?.role ?? ""}
-					</div>
-				</div>
-
-				<div className="hidden md:block rounded-2xl bg-white/10 px-4 py-3 text-right">
-					<div className="font-mono text-xs font-semibold uppercase tracking-widest text-white/70">
-						people
-					</div>
-					<div className="font-calsans text-2xl font-bold">
-						{members.length}
-					</div>
-				</div>
-			</div>
-
-			<button
-				onClick={() => go(-1)}
-				disabled={!canNav}
-				className="absolute left-6 top-[200px] grid h-12 w-12 place-items-center rounded-full bg-white/10 text-2xl transition hover:bg-white/15 disabled:opacity-40"
-				aria-label="Previous"
-			>
-				←
-			</button>
-			<button
-				onClick={() => go(1)}
-				disabled={!canNav}
-				className="absolute right-6 top-[200px] grid h-12 w-12 place-items-center rounded-full bg-white/10 text-2xl transition hover:bg-white/15 disabled:opacity-40"
-				aria-label="Next"
-			>
-				→
-			</button>
-
-			<div className="relative mt-6 h-[430px] w-full">
-				<svg
-					className="absolute inset-0 h-full w-full"
-					viewBox="0 0 1200 520"
-					// IMPORTANT: crop instead of stretching
-					preserveAspectRatio="xMidYMid slice"
-				>
-					<defs>
-						<clipPath id="orbitClip">
-							<rect x="0" y="0" width="1200" height="520" rx="48" />
-						</clipPath>
-						<filter
-							id="softGlow"
-							x="-30%"
-							y="-30%"
-							width="160%"
-							height="160%"
-						>
-							<feGaussianBlur stdDeviation="1.0" result="blur" />
-							<feMerge>
-								<feMergeNode in="blur" />
-								<feMergeNode in="SourceGraphic" />
-							</feMerge>
-						</filter>
-					</defs>
-
-					<g clipPath="url(#orbitClip)">
-						{/* Main latitude band (thick) */}
-						<path
-							d={grid.latPaths[0]}
-							fill="none"
-							stroke="rgba(255,255,255,0.92)"
-							strokeWidth="7"
-							filter="url(#softGlow)"
-						/>
-
-						{/* Other latitudes */}
-						{grid.latPaths.slice(1).map((d, i) => (
-							<path
-								key={`lat-${i}`}
-								d={d}
-								fill="none"
-								stroke="rgba(255,255,255,0.42)"
-								strokeWidth="5.5"
-							/>
-						))}
-
-						{/* Longitudes */}
-						{grid.lonPaths.map((d, i) => (
-							<path
-								key={`lon-${i}`}
-								d={d}
-								fill="none"
-								stroke="rgba(255,255,255,0.28)"
-								strokeWidth="5"
-							/>
-						))}
-
-						{/* Nodes */}
-						{grid.nodes.map((n, i) => (
-							<circle
-								key={`node-${i}`}
-								cx={n.x}
-								cy={n.y}
-								r={n.r}
-								fill="white"
-								opacity={n.o}
-							/>
-						))}
-
-						{/* Avatar travel path: follow the thick latitude band */}
-						<path
-							ref={pathRef}
-							d={grid.latPaths[0]}
-							fill="none"
-							stroke="transparent"
-							strokeWidth="60"
-						/>
-					</g>
-				</svg>
-
-				{/* Pulse dot on active slot */}
-				{pts.length === 5 ? (
-					<PulseDot
-						xPct={(pts[2].x / 1200) * 100}
-						yPct={(pts[2].y / 520) * 100}
-						trigger={activeIdx + prevIdx}
-					/>
-				) : null}
-
-				{/* Avatars */}
-				{pts.length === 5 ? (
-					<div className="absolute inset-0">
-						{visible.map(({ member, slotIndex, isActive }) => {
-							const p = pts[slotIndex];
-							const size = isActive ? 176 : 96;
-
-							return (
-								<motion.div
-									key={member.id}
-									className="absolute -translate-x-1/2 -translate-y-1/2"
-									initial={false}
-									animate={{
-										left: `${(p.x / 1200) * 100}%`,
-										top: `${(p.y / 520) * 100}%`,
-										scale: isActive ? 1 : 0.95,
-										opacity: isActive ? 1 : 0.9,
-									}}
-									transition={{
-										type: "spring",
-										stiffness: 260,
-										damping: 26,
-									}}
-								>
-									<Avatar member={member} size={size} active={isActive} />
-								</motion.div>
-							);
-						})}
-					</div>
-				) : (
-					<div className="absolute inset-0 grid place-items-center">
-						<div className="rounded-2xl bg-white/10 px-4 py-2 font-mono text-xs font-semibold text-white/80">
-							Loading orbit…
-						</div>
-					</div>
-				)}
-			</div>
-
-			<AnimatePresence mode="wait">
-				<motion.div
-					key={activeMember?.id ?? "empty"}
-					initial={{ opacity: 0, y: 8 }}
-					animate={{ opacity: 1, y: 0 }}
-					exit={{ opacity: 0, y: -8 }}
-					transition={{ duration: 0.18 }}
-					className="mx-auto mt-2 w-full max-w-xl rounded-3xl bg-white/10 p-4 backdrop-blur"
-				>
-					<div className="font-calsans text-lg font-bold">
-						{activeMember?.name ?? "No members"}
-					</div>
-					<div className="font-mono text-xs font-semibold text-white/70">
-						{activeMember?.role ?? ""}
-					</div>
-				</motion.div>
-			</AnimatePresence>
-		</div>
-	);
+      <div className="pointer-events-none absolute inset-0 rounded-full shadow-[0_0_0_10px_rgba(255,255,255,0.06)]" />
+    </button>
+  );
 }
