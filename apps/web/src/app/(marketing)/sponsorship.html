@@ -42,10 +42,19 @@
         <h2 id="interested">interested?</h2>
       <div id="belowInterested">
         <h3 id="wantToSponsor">blah blah blah Want to sponsor ACM? Check out our <a href = "x.html">Sponsorship Packet!</a></h3>
-        <a href="mailto:llanomartin79@gmail.com" class="button" id="email">email copy paste</a>
-        <a href="#" class="button" id="contactUs">contact us!</a>
+        <button onclick="copyText()">email copy paste</button>
+        <a href="mailto:llanomartin79@gmail.com" class="button" id="contactUs">contact us!</a>
       </div>
       <h4>put dat home page current sponsors section at the bottom b4 footer</h4>
     </div>
 </body>
 </html>
+
+<script>
+        function copyText() {
+
+            /* Copy text into clipboard */
+            navigator.clipboard.writeText
+                ("llanomartin79@gmail.com");
+        }
+    </script>
