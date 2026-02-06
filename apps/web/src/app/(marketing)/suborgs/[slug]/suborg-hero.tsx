@@ -66,7 +66,7 @@ export default function SuborgHero(suborg: Suborg) {
 						borderColor: modifyColor(colors.poppy, 0.5),
 					}}
 				>
-					<Image src={logoUrl} alt={name} width={200} height={200} />
+					<Image src={logoUrl.includes("icpc") ? "/img/logos/suborgs/icpc-green.png" : logoUrl} alt={name} width={300} height={300} />
 				</div>
 				<div className="col-span-5 flex flex-col items-center justify-center border  p-5"
 					style={{
@@ -208,11 +208,11 @@ export default function SuborgHero(suborg: Suborg) {
 				<div
 					className=" relative col-span-2 flex flex-col items-start justify-center p-5"
 				>
-					<Image className="absolute left-0 bottom-0" src={logoUrl} alt={name} width={200} height={200} />
+					<Image className="absolute left-0 bottom-0" src={logoUrl.includes("icpc") ? "/img/logos/suborgs/icpc-white.png" : logoUrl} alt={name} width={logoUrl.includes("icpc") ? 300 : 200} height={logoUrl.includes("icpc") ? 300 : 200} />
 				</div>
 
 				<div
-					className="relative col-span-3 flex flex-col items-start justify-center min-h-[350px]"
+					className="relative col-span-3 flex flex-col items-start justify-center min-h-[250px]"
 				>
 					<a href="https://portal.acmutsa.org/register" target="_blank"
 						className="hover:underline cursor-pointer absolute bottom-0 right-0 font-calsans text-5xl font-bold tracking-wide text-white"
