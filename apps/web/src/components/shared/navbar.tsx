@@ -202,8 +202,7 @@ function SuborgsDropdown({ linkStyles }: { linkStyles: string }) {
 		{ name: "ACM-W", slug: "acmw" },
 		{ name: "Rowdy-Creators", slug: "rowdycreators" },
 		{ name: "Coding-In-Color", slug: "codingincolor" },
-		{ name: "ICPC", slug: "icpc" },
-		{ name: "Rowdyhacks", slug: "rowdyhacks" },
+		{ name: "ICPC", slug: "acmicpc" },
 	];
 
 	return (
