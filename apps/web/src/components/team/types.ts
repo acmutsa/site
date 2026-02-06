@@ -13,6 +13,15 @@ export type TeamMember = {
   name: string;
   role?: string;
   imageUrl: string;
+
+  socials?: {
+    linkedin?: string;
+    github?: string;
+    instagram?: string;
+    website?: string;
+  };
+
+  links?: { label: string; href: string }[];
 };
 
 export type TeamGroup = {

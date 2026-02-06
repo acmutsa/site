@@ -10,6 +10,11 @@ export const TEAM_GROUPS: TeamGroup[] = [
         name: "Miguel Oseguera",
         role: "Technical Officer",
         imageUrl: "/img/officer_photos/acm_general/miguel-oseguera.jpg",
+        socials: {
+            linkedin: "www.linkedin.com/in/miguel-oseguera-0b5306281",
+            github: "https://github.com/Miguel-Oseguera",
+            instagram: "https://www.instagram.com/milo.o175/",
+        }
       },
       {
         id: "josh-silva",

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
 export type OrbitPerson = {
   id: string;
@@ -9,6 +9,12 @@ export type OrbitPerson = {
   role?: string;
   org?: string;
   imageUrl: string;
+  socials?: {
+    linkedin?: string;
+    github?: string;
+    instagram?: string;
+    website?: string;
+  };
 };
 
 export type OrbitCarouselProps = {
@@ -29,16 +35,6 @@ function degToRad(deg: number) {
   return (deg * Math.PI) / 180;
 }
 
-function mulberry32(seed: number) {
-  let t = seed >>> 0;
-  return function () {
-    t += 0x6d2b79f5;
-    let r = Math.imul(t ^ (t >>> 15), 1 | t);
-    r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
-    return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
 type Pt = { x: number; y: number };
 
 function ellipsePoint(cx: number, cy: number, rx: number, ry: number, theta: number): Pt {
@@ -48,6 +44,7 @@ function ellipsePoint(cx: number, cy: number, rx: number, ry: number, theta: num
   };
 }
 
+// Main arc angles (logo-ish)
 function arcPoint(arc: { cx: number; cy: number; rx: number; ry: number }, t: number) {
   const thetaStart = degToRad(200);
   const thetaEnd = degToRad(340);
@@ -63,11 +60,36 @@ function arcPathD(arc: { cx: number; cy: number; rx: number; ry: number }) {
   )} ${b.y.toFixed(2)}`;
 }
 
-function quadPath(a: Pt, c: Pt, b: Pt) {
-  return `M ${a.x.toFixed(2)} ${a.y.toFixed(2)} Q ${c.x.toFixed(2)} ${c.y.toFixed(
+function cubicPath(a: Pt, c1: Pt, c2: Pt, b: Pt) {
+  return `M ${a.x.toFixed(2)} ${a.y.toFixed(2)} C ${c1.x.toFixed(2)} ${c1.y.toFixed(
     2
-  )} ${b.x.toFixed(2)} ${b.y.toFixed(2)}`;
+  )} ${c2.x.toFixed(2)} ${c2.y.toFixed(2)} ${b.x.toFixed(2)} ${b.y.toFixed(2)}`;
 }
+
+// Deterministic, curvy grid helpers
+function ellipseArcD(
+  cx: number,
+  cy: number,
+  rx: number,
+  ry: number,
+  startDeg: number,
+  endDeg: number,
+  sweep: 0 | 1 = 1
+) {
+  const a = ellipsePoint(cx, cy, rx, ry, degToRad(startDeg));
+  const b = ellipsePoint(cx, cy, rx, ry, degToRad(endDeg));
+  const largeArc: 0 | 1 = Math.abs(endDeg - startDeg) >= 180 ? 1 : 0;
+  return `M ${a.x.toFixed(2)} ${a.y.toFixed(2)} A ${rx} ${ry} 0 ${largeArc} ${sweep} ${b.x.toFixed(
+    2
+  )} ${b.y.toFixed(2)}`;
+}
+
+type GridSeg = {
+  id: string;
+  d: string;
+  opacity: number;
+  strokeW: number;
+};
 
 export default function OrbitCarousel({ people = [], initialIndex = 0 }: OrbitCarouselProps) {
   const n = people.length;
@@ -98,7 +120,7 @@ export default function OrbitCarousel({ people = [], initialIndex = 0 }: OrbitCa
   const W = 1200;
   const H = 700;
 
-  // Slightly wider rx so left/right travel farther before clipping (feels "off-screen")
+  // ✅ MAIN ARC: do not move (this is the line the photos sit on)
   const arc = {
     cx: 600,
     cy: 640,
@@ -106,35 +128,14 @@ export default function OrbitCarousel({ people = [], initialIndex = 0 }: OrbitCa
     ry: 260,
   };
 
-  // More extreme endpoints so bubbles travel outwards (then naturally clip at card edges)
-  const tLeft = 0.10;
-  const tMid = 0.50;
-  const tRight = 0.90;
+  // Keep side bubbles INSIDE the card
+  const tLeft = 0.24;
+  const tMid = 0.5;
+  const tRight = 0.76;
 
   const pLeft = arcPoint(arc, tLeft);
   const pMid = arcPoint(arc, tMid);
   const pRight = arcPoint(arc, tRight);
-
-  const bg = useMemo(() => {
-    const rand = mulberry32(1337 + active * 97 + n * 13);
-
-    const lineCount = 5;
-    const lines = Array.from({ length: lineCount }).map(() => {
-      const a: Pt = { x: lerp(-80, 220, rand()), y: lerp(520, 640, rand()) };
-      const b: Pt = { x: lerp(W - 220, W + 80, rand()), y: lerp(520, 640, rand()) };
-      const c: Pt = {
-        x: (a.x + b.x) / 2 + lerp(-220, 220, rand()),
-        y: lerp(560, 720, rand()),
-      };
-      return {
-        d: quadPath(a, c, b),
-        opacity: lerp(0.10, 0.18, rand()),
-        strokeW: lerp(3.2, 4.8, rand()),
-      };
-    });
-
-    return { lines, dotT: tMid };
-  }, [active, n]);
 
   function goPrev() {
     setActive((v) => clampIndex(v - 1, n));
@@ -153,15 +154,99 @@ export default function OrbitCarousel({ people = [], initialIndex = 0 }: OrbitCa
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [n]);
 
-  const dotPos = arcPoint(arc, bg.dotT);
+  // ✅ Hard-coded, FEWER, MORE CURVY grid (below the main arc)
+  // - no straight lines
+  // - some are ~180° arcs (smooth arc, not a corner)
+  // - intersects naturally
+  // - “reach” into the main arc region (some end at it)
+  const grid = useMemo(() => {
+    const lat: GridSeg[] = [
+      { id: "lat-0", d: ellipseArcD(600, 735, 1200, 310, 205, 335, 1), opacity: 0.10, strokeW: 3.4 },
+      { id: "lat-1", d: ellipseArcD(585, 775, 1020, 300, 210, 330, 1), opacity: 0.08, strokeW: 3.0 },
+      { id: "lat-2", d: ellipseArcD(620, 820, 1320, 360, 215, 325, 1), opacity: 0.07, strokeW: 3.0 },
+    ];
+
+    const loops: GridSeg[] = [
+      { id: "loop-0", d: ellipseArcD(280, 835, 360, 180, 330, 150, 1), opacity: 0.08, strokeW: 3.2 },
+      { id: "loop-1", d: ellipseArcD(920, 830, 420, 190, 30, 210, 1), opacity: 0.08, strokeW: 3.2 },
+    ];
+
+    const merTs = [0.32, 0.5, 0.68];
+    const mer: GridSeg[] = merTs.map((t, i) => {
+      const end = arcPoint(arc, t); // ✅ hits main arc
+      const start: Pt = {
+        x: i === 0 ? 260 : i === 1 ? 600 : 940,
+        y: 698,
+      };
+
+      const dir = i === 0 ? -1 : i === 1 ? 1 : 1;
+      const bend = i === 1 ? 340 : 420;
+
+      const c1: Pt = { x: start.x + dir * bend, y: start.y - 190 };
+      const c2: Pt = { x: end.x - dir * bend * 0.9, y: end.y + 260 };
+
+      return { id: `mer-${i}`, d: cubicPath(start, c1, c2, end), opacity: 0.09, strokeW: 3.6 };
+    });
+
+    const all = [...lat, ...loops, ...mer];
+    return { lat, loops, mer, all };
+  }, []);
+
+  // ✅ Dots: one per grid line, animated along its own path
+  const pathRefs = useRef<Record<string, SVGPathElement | null>>({});
+  const [gridDots, setGridDots] = useState<Record<string, Pt>>({});
+
+  const rafRef = useRef<number | null>(null);
+  const startRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    // ⬇️ make this smaller = faster overall
+    const baseDurationMs = 100;
+
+    const tick = (ts: number) => {
+      if (startRef.current == null) startRef.current = ts;
+      const elapsed = ts - startRef.current;
+
+      const nextDots: Record<string, Pt> = {};
+
+      for (let i = 0; i < grid.all.length; i++) {
+        const seg = grid.all[i];
+        const el = pathRefs.current[seg.id];
+        if (!el) continue;
+
+        const len = el.getTotalLength();
+
+        // each dot has its own speed + phase
+        const speed = 0.85 + (i % 3) * 0.18; // subtle variety
+        const phase = (i * 0.17) % 1;
+
+        // u = progress 0..1
+        const u = ((elapsed / (baseDurationMs / speed)) + phase * baseDurationMs) / baseDurationMs;
+        const uu = ((u % 1) + 1) % 1;
+
+        const pt = el.getPointAtLength(len * uu);
+        nextDots[seg.id] = { x: pt.x, y: pt.y };
+      }
+
+      setGridDots(nextDots);
+      rafRef.current = requestAnimationFrame(tick);
+    };
+
+    rafRef.current = requestAnimationFrame(tick);
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+      startRef.current = null;
+    };
+  }, [grid]);
 
   const BASE = 170;
   const sideScale = 120 / 170;
 
   const visible = [
-    { idx: prev, person: prevPerson, pt: pLeft, scale: sideScale, emphasize: false, z: 20 },
-    { idx: active, person: activePerson, pt: pMid, scale: 1, emphasize: true, z: 30 },
-    { idx: next, person: nextPerson, pt: pRight, scale: sideScale, emphasize: false, z: 20 },
+    { slot: "left", idx: prev, person: prevPerson, pt: pLeft, scale: sideScale, emphasize: false, z: 20 },
+    { slot: "mid", idx: active, person: activePerson, pt: pMid, scale: 1, emphasize: true, z: 30 },
+    { slot: "right", idx: next, person: nextPerson, pt: pRight, scale: sideScale, emphasize: false, z: 20 },
   ];
 
   return (
@@ -210,9 +295,13 @@ export default function OrbitCarousel({ people = [], initialIndex = 0 }: OrbitCa
         <rect x="0" y="0" width={W} height={H} fill="url(#g1)" />
         <rect x="0" y="0" width={W} height={H} fill="url(#g2)" />
 
-        {bg.lines.map((ln, i) => (
+        {/* ✅ GRID (below main arc) */}
+        {grid.all.map((ln) => (
           <path
-            key={`bg-${i}`}
+            key={ln.id}
+            ref={(el) => {
+              pathRefs.current[ln.id] = el;
+            }}
             d={ln.d}
             stroke="white"
             strokeOpacity={ln.opacity}
@@ -221,6 +310,14 @@ export default function OrbitCarousel({ people = [], initialIndex = 0 }: OrbitCa
           />
         ))}
 
+        {/* ✅ Dots on the GRID lines (one per line) */}
+        {grid.all.map((ln) => {
+          const pt = gridDots[ln.id];
+          if (!pt) return null;
+          return <circle key={`dot-${ln.id}`} cx={pt.x} cy={pt.y} r="7.5" fill="white" fillOpacity="0.95" />;
+        })}
+
+        {/* ✅ MAIN ARC ON TOP (no dot here) */}
         <path
           d={arcPathD(arc)}
           stroke="white"
@@ -229,15 +326,13 @@ export default function OrbitCarousel({ people = [], initialIndex = 0 }: OrbitCa
           strokeLinecap="round"
           filter="url(#arcGlow)"
         />
-
-        <circle cx={dotPos.x} cy={dotPos.y} r="8" fill="white" fillOpacity="0.95" />
       </svg>
 
-      <div className="relative z-10 h-[600px] p-12">
+      <div className="relative z-10 h-[620px] p-12">
         <div className="flex items-start justify-between">
           <div>
             <div className="font-mono text-xs font-semibold tracking-[0.35em] text-white/80">
-              {activePerson.org?.toUpperCase() ?? "ACM"}
+              {(activePerson?.org ?? "ACM").toUpperCase()}
             </div>
             <div className="mt-2 font-calsans text-4xl font-black text-white">{activePerson.name}</div>
             {activePerson.role ? (
@@ -269,10 +364,11 @@ export default function OrbitCarousel({ people = [], initialIndex = 0 }: OrbitCa
           <span className="text-3xl leading-none">›</span>
         </button>
 
+        {/* Bubbles */}
         <div className="absolute inset-0 z-30">
           {visible.map((v) => (
             <PersonBubble
-              key={v.person.id}
+              key={`${v.slot}-${v.person.id}`}
               person={v.person}
               x={v.pt.x}
               y={v.pt.y}
@@ -285,11 +381,15 @@ export default function OrbitCarousel({ people = [], initialIndex = 0 }: OrbitCa
           ))}
         </div>
 
-        <div className="absolute bottom-10 left-10 right-10 z-30 rounded-[28px] bg-white/12 p-10 backdrop-blur">
-          <div className="font-calsans text-2xl font-black text-white">{activePerson.name}</div>
+        {/* Centered blur title card */}
+        <div className="absolute left-1/2 top-[470px] z-30 w-[420px] -translate-x-1/2 rounded-[22px] bg-white/10 px-10 py-6 text-center backdrop-blur-md flex flex-col">
+          <div className="font-calsans text-xl font-black text-white">{activePerson.name}</div>
           {activePerson.role ? (
             <div className="mt-1 font-mono text-sm font-semibold text-white/80">{activePerson.role}</div>
           ) : null}
+
+          {/* ✅ Socials render here (below the role) */}
+          <SocialLinks socials={activePerson.socials} />
         </div>
       </div>
     </div>
@@ -336,17 +436,55 @@ function PersonBubble({
       aria-label={person.name}
     >
       <div className="relative h-full w-full overflow-hidden rounded-full border-[6px] border-white/85 shadow-[0_20px_50px_rgba(0,0,0,0.30)]">
-        <Image
-          alt={person.name}
-          src={person.imageUrl}
-          fill
-          className="object-cover"
-          sizes="200px"
-          priority={emphasize}
-        />
+        <Image alt={person.name} src={person.imageUrl} fill className="object-cover" sizes="200px" priority={emphasize} />
       </div>
 
       <div className="pointer-events-none absolute inset-0 rounded-full shadow-[0_0_0_10px_rgba(255,255,255,0.06)]" />
     </button>
+  );
+}
+
+/* ---------------- Socials (ONLY addition) ---------------- */
+
+function normalizeUrl(url: string) {
+  if (/^https?:\/\//i.test(url)) return url;
+  return `https://${url}`;
+}
+
+function SocialLinks({
+  socials,
+}: {
+  socials?: {
+    linkedin?: string;
+    github?: string;
+    instagram?: string;
+    website?: string;
+  };
+}) {
+  const items = [
+    socials?.linkedin ? { k: "linkedin", href: socials.linkedin, label: "in" } : null,
+    socials?.github ? { k: "github", href: socials.github, label: "gh" } : null,
+    socials?.instagram ? { k: "instagram", href: socials.instagram, label: "ig" } : null,
+    socials?.website ? { k: "website", href: socials.website, label: "web" } : null,
+  ].filter(Boolean) as { k: string; href: string; label: string }[];
+
+  if (items.length === 0) return null;
+
+  return (
+    <div className="mt-3 flex items-center justify-center gap-2.5">
+      {items.map((it) => (
+        <a
+          key={it.k}
+          href={normalizeUrl(it.href)}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-xs font-mono font-bold text-white/90 ring-1 ring-white/15 transition hover:bg-white/20"
+          aria-label={it.k}
+          title={it.k}
+        >
+          {it.label}
+        </a>
+      ))}
+    </div>
   );
 }

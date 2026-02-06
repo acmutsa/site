@@ -22,7 +22,6 @@ export default function MeetTheTeamClient() {
 
   const people: OrbitPerson[] = useMemo(() => {
     const group = TEAM_GROUPS.find((g) => g.label === activeTab);
-
     if (!group) return [];
 
     return group.members.map((m) => ({
@@ -31,6 +30,9 @@ export default function MeetTheTeamClient() {
       role: m.role,
       org: group.label,
       imageUrl: m.imageUrl,
+
+      // ✅ THIS is the missing piece
+      socials: m.socials,
     }));
   }, [activeTab]);
 
@@ -49,7 +51,9 @@ export default function MeetTheTeamClient() {
             }`}
           >
             {tab}
-            {idx < TABS.length - 1 ? <span className="ml-3 text-acm-darker-blue/25">|</span> : null}
+            {idx < TABS.length - 1 ? (
+              <span className="ml-3 text-acm-darker-blue/25">|</span>
+            ) : null}
           </button>
         ))}
       </div>
@@ -61,9 +65,13 @@ export default function MeetTheTeamClient() {
           <OrbitCarousel people={people} initialIndex={0} />
         ) : (
           <div className="rounded-3xl border border-acm-darker-blue/10 bg-white p-10">
-            <div className="font-calsans text-2xl font-black text-acm-darker-blue">No members yet</div>
+            <div className="font-calsans text-2xl font-black text-acm-darker-blue">
+              No members yet
+            </div>
             <div className="mt-2 font-mono text-sm font-semibold text-acm-darker-blue/60">
-              Add people to the <span className="text-acm-darker-blue/80">{activeTab}</span> group in{" "}
+              Add people to the{" "}
+              <span className="text-acm-darker-blue/80">{activeTab}</span> group
+              in{" "}
               <span className="text-acm-darker-blue/80">team.data.ts</span>.
             </div>
           </div>

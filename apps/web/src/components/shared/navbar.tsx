@@ -108,7 +108,7 @@ export function HeroNav({
 				<NavLink linkStyles={linkStyles} href="/events">
 					Events
 				</NavLink>
-				<NavLink linkStyles={linkStyles} href="/team">
+				<NavLink linkStyles={linkStyles} href="./page.tsx">
 					Team
 				</NavLink>
 				<NavLink linkStyles={linkStyles} href="/suborgs">
