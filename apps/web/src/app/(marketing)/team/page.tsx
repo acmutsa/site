@@ -20,6 +20,7 @@ export default function TeamPage() {
 				<div className="mt-10">
 					<MeetTheTeamClient />
 				</div>
+				
 			</main>
 		</>
 	);

@@ -114,7 +114,7 @@ export function HeroNav({
 				</NavLink>
 
 				{/* Sub-orgs dropdown */}
-				<SuborgsDropdown linkStyles={linkStyles} />
+				<SuborgsDropdown linkStyles={linkStyles} navVariant={navVariant} />
 
 				<NavLink linkStyles={linkStyles} href="/sponsor">
 					Sponsor
@@ -186,7 +186,13 @@ function NavLink({
 	);
 }
 
-function SuborgsDropdown({ linkStyles }: { linkStyles: string }) {
+function SuborgsDropdown({
+	linkStyles,
+	navVariant,
+}: {
+	linkStyles: string;
+	navVariant: keyof typeof variant;
+}) {
 	const isCustomColor =
 		linkStyles.startsWith("rgb") ||
 		linkStyles.startsWith("#") ||
@@ -197,13 +203,23 @@ function SuborgsDropdown({ linkStyles }: { linkStyles: string }) {
 	}`;
 
 	// Only slugs matter since routes are /suborgs/[suborg]
-	// Replace these with your real suborg slugs whenever you're ready.
 	const suborgs: Array<{ name: string; slug: string }> = [
 		{ name: "ACM-W", slug: "acmw" },
 		{ name: "Rowdy-Creators", slug: "rowdycreators" },
 		{ name: "Coding-In-Color", slug: "codingincolor" },
 		{ name: "ICPC", slug: "acmicpc" },
 	];
+
+	// ✅ Fix: home page was showing white because bg-background resolves to light theme there.
+	// We force the dropdown panel to be dark for the default hero nav,
+	// and light for the blueForeground variant.
+	const panelClass =
+		navVariant === "default"
+			? "border-white/10 bg-white text-black"
+			: "border bg-white text-acm-darker-blue";
+
+	const itemHoverClass =
+		navVariant === "default" ? "hover:bg-white/10" : "hover:bg-muted";
 
 	return (
 		<div className="relative group">
@@ -216,14 +232,15 @@ function SuborgsDropdown({ linkStyles }: { linkStyles: string }) {
 			</button>
 
 			<div
-				className="
+				className={`
 					invisible opacity-0 translate-y-1
 					group-hover:visible group-hover:opacity-100 group-hover:translate-y-0
 					group-focus-within:visible group-focus-within:opacity-100 group-focus-within:translate-y-0
 					absolute left-0 top-full z-50 mt-3 w-56
-					rounded-xl border bg-background p-2 shadow-lg
+					rounded-xl p-2 shadow-lg
 					transition-all duration-150
-				"
+					${panelClass}
+				`}
 				role="menu"
 				aria-label="Sub-orgs"
 			>
@@ -231,7 +248,7 @@ function SuborgsDropdown({ linkStyles }: { linkStyles: string }) {
 					<Link
 						key={s.slug}
 						href={`/suborgs/${s.slug}`}
-						className="block rounded-lg px-3 py-2 text-sm hover:bg-muted"
+						className={`block rounded-lg px-3 py-2 text-sm ${itemHoverClass}`}
 					>
 						{s.name}
 					</Link>
