@@ -1,83 +1,64 @@
-<!DOCTYPE html>
-
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<html lang="en">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
-
-<head>
-    <title>ACM</title>
-    <link rel="stylesheet" href="Flexbox.css">
-    <style>
-</style>
-<body>
-  
+<>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+    rel="stylesheet"
+  />
+  <title>ACM</title>
+  <link rel="stylesheet" href="Flexbox.css" />
+  <style dangerouslySetInnerHTML={{ __html: "\n" }} />
   <h1>Sponsor ACM UTSA Today!</h1>
-  <p></p>
-    <div class="container">
-      <div id="top">
-        <h2>Why Sponsor?</h2>
-      </div>
-      
-      <!-- Nouns -->
-      <div class="box" id="box1">
-        <h3>Support a large and growing community of future innovators through activation events and workshops</h3>        
-      </div>
-        
-        <!-- Nouns -->
-      <div class="box" id="box2">
-        <h3>Participate in our annual events such as RowdyHacks, CodeQuantum and more</h3>        
-      </div>
-        
-      <!-- Verbs -->
-      <div class="box" id="box3">
-        <h3>Easily recruit from a large base of talented individuals across multiple sectors in tech</h3>        
-      </div>
-
+  <p />
+  <div className="container">
+    <div id="top">
+      <h2>Why Sponsor?</h2>
     </div>
-
-    <div class="containerf">
-        <h2 id="interested">interested?</h2>
-      <div id="belowInterested">
-        <h3 id="wantToSponsor">blah blah blah Want to sponsor ACM? Check out our <a href = "x.html">Sponsorship Packet!</a></h3>
-        <button onclick="copyText()">email copy paste</button>
-        <a href="mailto:llanomartin79@gmail.com" class="button" id="contactUs">contact us!</a>
-      </div>
-      <h4>put dat home page current sponsors section at the bottom b4 footer</h4>
+    {/* Nouns */}
+    <div className="box" id="box1">
+      <h3>
+        Support a large and growing community of future innovators through
+        activation events and workshops
+      </h3>
     </div>
-</body>
-</html>
-
-<style>
-    button {
-        background-color: white;
-        border: none;
-  padding: 12px 24px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  width: 15%;
-  min-width: 200px;
-  background-color: white;
-  border-style: solid;
-  border-color: rgba(38, 106, 224);
-  border-width: 1px;
-  color: rgb(236, 142, 0);
-  margin-right: 25px;
-    }
-</style>
-
-<script>
-        function copyText() {
-
-            /* Copy text into clipboard */
-            navigator.clipboard.writeText
-                ("llanomartin79@gmail.com");
-        }
-    </script>
+    {/* Nouns */}
+    <div className="box" id="box2">
+      <h3>
+        Participate in our annual events such as RowdyHacks, CodeQuantum and
+        more
+      </h3>
+    </div>
+    {/* Verbs */}
+    <div className="box" id="box3">
+      <h3>
+        Easily recruit from a large base of talented individuals across multiple
+        sectors in tech
+      </h3>
+    </div>
+  </div>
+  <div className="containerf">
+    <h2 id="interested">interested?</h2>
+    <div id="belowInterested">
+      <h3 id="wantToSponsor">
+        blah blah blah Want to sponsor ACM? Check out our{" "}
+        <a href="x.html">Sponsorship Packet!</a>
+      </h3>
+      <button onclick="copyText()">email copy paste</button>
+      <a
+        href="mailto:llanomartin79@gmail.com"
+        className="button"
+        id="contactUs"
+      >
+        contact us!
+      </a>
+    </div>
+    <h4>put dat home page current sponsors section at the bottom b4 footer</h4>
+  </div>
+  <style
+    dangerouslySetInnerHTML={{
+      __html:
+        "\n    button {\n        background-color: white;\n        border: none;\n  padding: 12px 24px;\n  text-align: center;\n  text-decoration: none;\n  display: inline-block;\n  font-size: 16px;\n  border-radius: 12px;\n  cursor: pointer;\n  transition: background-color 0.3s ease;\n  width: 15%;\n  min-width: 200px;\n  background-color: white;\n  border-style: solid;\n  border-color: rgba(38, 106, 224);\n  border-width: 1px;\n  color: rgb(236, 142, 0);\n  margin-right: 25px;\n    }\n"
+    }}
+  />
+</>
