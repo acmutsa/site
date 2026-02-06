@@ -44,7 +44,6 @@ function ellipsePoint(cx: number, cy: number, rx: number, ry: number, theta: num
   };
 }
 
-// Main arc angles (logo-ish)
 function arcPoint(arc: { cx: number; cy: number; rx: number; ry: number }, t: number) {
   const thetaStart = degToRad(200);
   const thetaEnd = degToRad(340);
@@ -66,7 +65,6 @@ function cubicPath(a: Pt, c1: Pt, c2: Pt, b: Pt) {
   )} ${c2.x.toFixed(2)} ${c2.y.toFixed(2)} ${b.x.toFixed(2)} ${b.y.toFixed(2)}`;
 }
 
-// Deterministic, curvy grid helpers
 function ellipseArcD(
   cx: number,
   cy: number,
@@ -120,7 +118,6 @@ export default function OrbitCarousel({ people = [], initialIndex = 0 }: OrbitCa
   const W = 1200;
   const H = 700;
 
-  // ✅ MAIN ARC: do not move (this is the line the photos sit on)
   const arc = {
     cx: 600,
     cy: 640,
@@ -128,7 +125,6 @@ export default function OrbitCarousel({ people = [], initialIndex = 0 }: OrbitCa
     ry: 260,
   };
 
-  // Keep side bubbles INSIDE the card
   const tLeft = 0.24;
   const tMid = 0.5;
   const tRight = 0.76;
@@ -151,14 +147,8 @@ export default function OrbitCarousel({ people = [], initialIndex = 0 }: OrbitCa
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [n]);
 
-  // ✅ Hard-coded, FEWER, MORE CURVY grid (below the main arc)
-  // - no straight lines
-  // - some are ~180° arcs (smooth arc, not a corner)
-  // - intersects naturally
-  // - “reach” into the main arc region (some end at it)
   const grid = useMemo(() => {
     const lat: GridSeg[] = [
       { id: "lat-0", d: ellipseArcD(600, 735, 1200, 310, 205, 335, 1), opacity: 0.10, strokeW: 3.4 },
@@ -192,7 +182,7 @@ export default function OrbitCarousel({ people = [], initialIndex = 0 }: OrbitCa
     return { lat, loops, mer, all };
   }, []);
 
-  // ✅ Dots: one per grid line, animated along its own path
+  // Dots: one per grid line, animated along its own path
   const pathRefs = useRef<Record<string, SVGPathElement | null>>({});
   const [gridDots, setGridDots] = useState<Record<string, Pt>>({});
 
@@ -200,7 +190,7 @@ export default function OrbitCarousel({ people = [], initialIndex = 0 }: OrbitCa
   const startRef = useRef<number | null>(null);
 
   useEffect(() => {
-    // ⬇️ make this smaller = faster overall
+    // make this smaller = faster overall
     const baseDurationMs = 100;
 
     const tick = (ts: number) => {
@@ -216,11 +206,9 @@ export default function OrbitCarousel({ people = [], initialIndex = 0 }: OrbitCa
 
         const len = el.getTotalLength();
 
-        // each dot has its own speed + phase
         const speed = 0.85 + (i % 3) * 0.18; // subtle variety
         const phase = (i * 0.17) % 1;
 
-        // u = progress 0..1
         const u = ((elapsed / (baseDurationMs / speed)) + phase * baseDurationMs) / baseDurationMs;
         const uu = ((u % 1) + 1) % 1;
 
@@ -243,11 +231,34 @@ export default function OrbitCarousel({ people = [], initialIndex = 0 }: OrbitCa
   const BASE = 170;
   const sideScale = 120 / 170;
 
-  const visible = [
-    { slot: "left", idx: prev, person: prevPerson, pt: pLeft, scale: sideScale, emphasize: false, z: 20 },
-    { slot: "mid", idx: active, person: activePerson, pt: pMid, scale: 1, emphasize: true, z: 30 },
-    { slot: "right", idx: next, person: nextPerson, pt: pRight, scale: sideScale, emphasize: false, z: 20 },
-  ];
+  const bubbleTargets = useMemo(() => {
+    return [
+      {
+        idx: prev,
+        person: prevPerson,
+        pt: pLeft,
+        scale: sideScale,
+        emphasize: false,
+        z: 20,
+      },
+      {
+        idx: active,
+        person: activePerson,
+        pt: pMid,
+        scale: 1,
+        emphasize: true,
+        z: 30,
+      },
+      {
+        idx: next,
+        person: nextPerson,
+        pt: pRight,
+        scale: sideScale,
+        emphasize: false,
+        z: 20,
+      },
+    ];
+  }, [prev, active, next, prevPerson, activePerson, nextPerson, pLeft.x, pLeft.y, pMid.x, pMid.y, pRight.x, pRight.y]);
 
   return (
     <div className="relative isolate overflow-hidden rounded-[44px] bg-gradient-to-br from-[#2f7cff] to-[#2d5cff] shadow-[0_25px_60px_rgba(0,0,0,0.15)]">
@@ -295,7 +306,6 @@ export default function OrbitCarousel({ people = [], initialIndex = 0 }: OrbitCa
         <rect x="0" y="0" width={W} height={H} fill="url(#g1)" />
         <rect x="0" y="0" width={W} height={H} fill="url(#g2)" />
 
-        {/* ✅ GRID (below main arc) */}
         {grid.all.map((ln) => (
           <path
             key={ln.id}
@@ -310,14 +320,13 @@ export default function OrbitCarousel({ people = [], initialIndex = 0 }: OrbitCa
           />
         ))}
 
-        {/* ✅ Dots on the GRID lines (one per line) */}
+
         {grid.all.map((ln) => {
           const pt = gridDots[ln.id];
           if (!pt) return null;
           return <circle key={`dot-${ln.id}`} cx={pt.x} cy={pt.y} r="7.5" fill="white" fillOpacity="0.95" />;
         })}
 
-        {/* ✅ MAIN ARC ON TOP (no dot here) */}
         <path
           d={arcPathD(arc)}
           stroke="white"
@@ -366,9 +375,9 @@ export default function OrbitCarousel({ people = [], initialIndex = 0 }: OrbitCa
 
         {/* Bubbles */}
         <div className="absolute inset-0 z-30">
-          {visible.map((v) => (
+          {bubbleTargets.map((v) => (
             <PersonBubble
-              key={`${v.slot}-${v.person.id}`}
+              key={v.person.id}
               person={v.person}
               x={v.pt.x}
               y={v.pt.y}
@@ -381,14 +390,12 @@ export default function OrbitCarousel({ people = [], initialIndex = 0 }: OrbitCa
           ))}
         </div>
 
-        {/* Centered blur title card */}
         <div className="absolute left-1/2 top-[470px] z-30 w-[420px] -translate-x-1/2 rounded-[22px] bg-white/10 px-10 py-6 text-center backdrop-blur-md flex flex-col">
           <div className="font-calsans text-xl font-black text-white">{activePerson.name}</div>
           {activePerson.role ? (
             <div className="mt-1 font-mono text-sm font-semibold text-white/80">{activePerson.role}</div>
           ) : null}
 
-          {/* ✅ Socials render here (below the role) */}
           <SocialLinks socials={activePerson.socials} />
         </div>
       </div>
