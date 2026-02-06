@@ -32,9 +32,7 @@ export default async function Navbar({ siteRegion, showBorder }: NavbarProps) {
 				{siteRegion && (
 					<>
 						<div className="h-[45%] w-[2px] rotate-[25deg] bg-muted-foreground" />
-						<h2 className="font-bold tracking-tight">
-							{siteRegion}
-						</h2>
+						<h2 className="font-bold tracking-tight">{siteRegion}</h2>
 					</>
 				)}
 			</div>
@@ -48,7 +46,9 @@ export default async function Navbar({ siteRegion, showBorder }: NavbarProps) {
 			<div className="flex items-center justify-end gap-2 md:hidden">
 				<Sheet>
 					<SheetTrigger asChild>
-						<Menu />
+						<button type="button" aria-label="Open menu">
+							<Menu />
+						</button>
 					</SheetTrigger>
 					<SheetContent className="flex max-w-[40%] flex-col-reverse items-center justify-center gap-y-1">
 						<PortalButton navVariant="default" customColor="" />
@@ -89,7 +89,6 @@ export function HeroNav({
 	customColor?: string;
 }) {
 	const linkStyles = customColor || variant[navVariant].link;
-	const dashButtonStyles = customColor || variant[navVariant].dashButton;
 
 	return (
 		<div
@@ -105,33 +104,37 @@ export function HeroNav({
 						className="mr-5"
 					/>
 				</Link>
+
 				<NavLink linkStyles={linkStyles} href="/events">
 					Events
 				</NavLink>
-				<NavLink linkStyles={linkStyles} href="./page.tsx">
+
+				<NavLink linkStyles={linkStyles} href="/team">
 					Team
 				</NavLink>
-				<NavLink linkStyles={linkStyles} href="/suborgs">
-					Sub-orgs
-				</NavLink>
+
+				{/* Sub-orgs dropdown */}
+				<SuborgsDropdown linkStyles={linkStyles} />
+
 				<NavLink linkStyles={linkStyles} href="/sponsor">
 					Sponsor
 				</NavLink>
+
 				<NavLink linkStyles={linkStyles} href="/donate">
 					Donate
 				</NavLink>
+
 				<NavLink linkStyles={linkStyles} href="/contact">
 					Contact
 				</NavLink>
+
 				<NavLink linkStyles={linkStyles} href="/resources">
 					Resources
 				</NavLink>
 			</div>
+
 			<div className="flex items-center justify-end gap-x-3">
-				<PortalButton
-					navVariant={navVariant}
-					customColor={customColor}
-				/>
+				<PortalButton navVariant={navVariant} customColor={customColor} />
 			</div>
 		</div>
 	);
@@ -148,9 +151,7 @@ async function PortalButton({
 		<Link href={process.env.PORTAL_URL || "https://portal.acmutsa.org"}>
 			<Button
 				variant={variant[navVariant].buttonVariant}
-				style={
-					customColor ? { backgroundColor: customColor } : undefined
-				}
+				style={customColor ? { backgroundColor: customColor } : undefined}
 			>
 				Membership Portal
 			</Button>
@@ -167,7 +168,6 @@ function NavLink({
 	children: React.ReactNode;
 	linkStyles: string;
 }) {
-	// Check if linkStyles is a custom color (starts with rgb, hex, etc.)
 	const isCustomColor =
 		linkStyles.startsWith("rgb") ||
 		linkStyles.startsWith("#") ||
@@ -176,10 +176,68 @@ function NavLink({
 	return (
 		<Link
 			href={href}
-			className={`text-md font-semibold hover:underline ${isCustomColor ? "" : linkStyles}`}
+			className={`text-md font-semibold hover:underline ${
+				isCustomColor ? "" : linkStyles
+			}`}
 			style={isCustomColor ? { color: linkStyles } : undefined}
 		>
 			{children}
 		</Link>
+	);
+}
+
+function SuborgsDropdown({ linkStyles }: { linkStyles: string }) {
+	const isCustomColor =
+		linkStyles.startsWith("rgb") ||
+		linkStyles.startsWith("#") ||
+		linkStyles.startsWith("hsl");
+
+	const triggerClass = `text-md font-semibold hover:underline ${
+		isCustomColor ? "" : linkStyles
+	}`;
+
+	// Only slugs matter since routes are /suborgs/[suborg]
+	// Replace these with your real suborg slugs whenever you're ready.
+	const suborgs: Array<{ name: string; slug: string }> = [
+		{ name: "ACM-W", slug: "acmw" },
+		{ name: "Rowdy-Creators", slug: "rowdycreators" },
+		{ name: "Coding-In-Color", slug: "codingincolor" },
+		{ name: "ICPC", slug: "icpc" },
+		{ name: "Rowdyhacks", slug: "rowdyhacks" },
+	];
+
+	return (
+		<div className="relative group">
+			<button
+				type="button"
+				className={triggerClass}
+				style={isCustomColor ? { color: linkStyles } : undefined}
+			>
+				Sub-orgs <span aria-hidden>▾</span>
+			</button>
+
+			<div
+				className="
+					invisible opacity-0 translate-y-1
+					group-hover:visible group-hover:opacity-100 group-hover:translate-y-0
+					group-focus-within:visible group-focus-within:opacity-100 group-focus-within:translate-y-0
+					absolute left-0 top-full z-50 mt-3 w-56
+					rounded-xl border bg-background p-2 shadow-lg
+					transition-all duration-150
+				"
+				role="menu"
+				aria-label="Sub-orgs"
+			>
+				{suborgs.map((s) => (
+					<Link
+						key={s.slug}
+						href={`/suborgs/${s.slug}`}
+						className="block rounded-lg px-3 py-2 text-sm hover:bg-muted"
+					>
+						{s.name}
+					</Link>
+				))}
+			</div>
+		</div>
 	);
 }
