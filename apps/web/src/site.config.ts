@@ -118,5 +118,25 @@ export const SUBORGS: Record<string, Suborg> = {
 		discordLink: "https://discord.gg/gNXxZfxxK5",
 		aboutUs_One: "strives to create a safe space for black people in the technology world to promote representation in our community.",
 		aboutUs_Two: "provides opportunities to people through workshops, events, and networking events",
+	},
+	rowdyhacks: {
+		slug: "rowdyhacks",
+		colors: {
+			poppy: "rgb(197, 125, 58)",
+		},
+		name: "Rowdy Hacks",
+		shortDesc: "An Annual Fall Hackathon",
+		logoUrl: "/img/logos/hackathons/rh-orange.png",
+		leadingSentence:
+			"Rowdy Hacks, a competitive hackathon that promotes creativity, intelligence, and teamwork",
+		missionHead: "Connect",
+		mPhrase1: "Students get the opportunity to network with peers, learn, and grow together",
+		missionHead2: "Resume Builder",
+		mPhrase2: "A phenomenal project gives students the opportunity to shine in front of sponsors and start elevating their resumes.",
+		missionHead3: "Prizes",
+		mPhrase3: "Students teams get to compete against other teams for valuable and rare prizes",
+		discordLink: "https://discord.com/invite/FzFEZBRmhr",
+		aboutUs_One: "is UTSA's annual hackathon, hosted by the Association for Computing Machinery (ACM) at UTSA.",
+		aboutUs_Two: "is a weekend-long event where students, tech enthusiasts, and creative minds from all backgrounds come together to collaborate, innovate, and build real-world projects in 24 hours.",
 	}
 };
