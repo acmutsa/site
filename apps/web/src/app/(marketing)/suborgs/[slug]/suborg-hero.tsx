@@ -206,16 +206,16 @@ export default function SuborgHero(suborg: Suborg) {
 					</h1>
 				</div>
 				<div
-					className=" relative col-span-2 flex flex-col items-start justify-center p-5"
+					className=" relative col-span-3 flex flex-col items-start justify-center p-5"
 				>
-					<Image className="absolute left-0 bottom-0" src={logoUrl.includes("icpc") ? "/img/logos/suborgs/icpc-white.png" : logoUrl} alt={name} width={logoUrl.includes("icpc") ? 300 : 200} height={logoUrl.includes("icpc") ? 300 : 200} />
+					<Image className="opacity-90 max-h-[450px] max-w-full object-contain" src={logoUrl.includes("icpc") ? "/img/logos/suborgs/icpc-white.png" : logoUrl} alt={name} width={logoUrl.includes("icpc") ? 400 : 500} height={0} />
 				</div>
 
 				<div
-					className="relative col-span-3 flex flex-col items-start justify-center min-h-[250px]"
+					className="relative col-span-2 flex flex-col items-start justify-center"
 				>
 					<a href="https://portal.acmutsa.org/register" target="_blank"
-						className="hover:underline cursor-pointer absolute bottom-0 right-0 font-calsans text-5xl font-bold tracking-wide text-white"
+						className="hover:underline cursor-pointer absolute bottom-0 right-0 font-calsans text-8xl font-bold tracking-wide text-white"
 					>
 						{"Become a Member >"}
 					</a>
