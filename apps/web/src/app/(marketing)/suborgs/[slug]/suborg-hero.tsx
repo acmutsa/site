@@ -2,6 +2,7 @@ import Image from "next/image";
 import type { RGBColor, Suborg } from "@/site.config";
 import { Suspense, cloneElement, Fragment } from "react";
 import { _Object$ } from "@aws-sdk/client-s3";
+import Footer from "@/components/shared/footer";
 
 function modifyColor(color: RGBColor, alpha: number): string {
 	const match = color.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
@@ -12,7 +13,7 @@ function modifyColor(color: RGBColor, alpha: number): string {
 }
 
 export default function SuborgHero(suborg: Suborg) {
-	const { name, shortDesc, logoUrl, colors, leadingSentence, discordLink, aboutUs_One, aboutUs_Two, missionHead, missionHead2, missionHead3, mPhrase1, mPhrase2, mPhrase3} = suborg;
+	const { name, shortDesc, logoUrl, colors, leadingSentence, discordLink, aboutUs_One, aboutUs_Two, missionHead, missionHead2, missionHead3, mPhrase1, mPhrase2, mPhrase3 } = suborg;
 
 	return (
 		<>
@@ -101,7 +102,7 @@ export default function SuborgHero(suborg: Suborg) {
 						}}
 					>
 
-						<Pill 
+						<Pill
 							icon={
 								<Image
 									src={logoUrl}
@@ -110,7 +111,7 @@ export default function SuborgHero(suborg: Suborg) {
 									height={30}
 								/>
 							}
-							bgColor={modifyColor(colors.poppy,0.25)}
+							bgColor={modifyColor(colors.poppy, 0.25)}
 						><span className="font-bold text-3xl ">{name}</span>
 						</Pill> {aboutUs_One}
 						<Pill
@@ -122,7 +123,7 @@ export default function SuborgHero(suborg: Suborg) {
 									height={30}
 								/>
 							}
-							bgColor={modifyColor(colors.poppy,0.25)}
+							bgColor={modifyColor(colors.poppy, 0.25)}
 						><span className="font-bold text-3xl ">{name}</span>
 						</Pill> {aboutUs_Two}
 					</h1>
@@ -192,7 +193,7 @@ export default function SuborgHero(suborg: Suborg) {
 			<div className="p-5"></div>
 
 			<div
-				className="mx-auto grid max-w-screen-xl grid-cols-5 border-2 border-acm-darker-blue/50 p-10"
+				className="mx-auto bg-[url('/img/landing/noise.png')] grid max-w-screen-xl grid-cols-5 border-2 border-acm-darker-blue/50 p-10"
 				style={{
 					borderColor: modifyColor(colors.poppy, 0.5),
 					background: colors.poppy,
@@ -258,6 +259,14 @@ export default function SuborgHero(suborg: Suborg) {
 			</div>
 			<div className="p-5"></div>
 
+			<div
+				style={{ "--footer-bg": colors.poppy } as React.CSSProperties}
+				className="[&_footer]:bg-[var(--footer-bg)]"
+			>
+				<Footer />
+			</div>
+			{/* Read more about how the Footer Code works */}
+
 
 		</>
 	);
@@ -270,7 +279,7 @@ function Pill({
 }: {
 	icon: React.ReactNode;
 	children: React.ReactNode;
-	bgColor?: string; 
+	bgColor?: string;
 }) {
 	return (
 		<span

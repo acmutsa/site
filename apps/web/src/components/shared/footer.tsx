@@ -16,7 +16,7 @@ export default function Footer() {
 					</h1>
 
 					<Image
-						src="/img/logos/acm-white.png"
+						src="/img/logos/acm.svg"
 						alt="ACM Logo"
 						width={50}
 						height={50}
@@ -32,14 +32,21 @@ export default function Footer() {
 						<FooterLink
 							text="Discord"
 							href="https://go.acmutsa.org/discord"
+							target="_blank"
+						/>
+						<FooterLink
+							text="Contact"
+							href="/contact"
 						/>
 						<FooterLink
 							text="Wiki"
 							href="https://wiki.acmutsa.org/"
+							target="_blank"
 						/>
 						<FooterLink
 							text="Constitution"
 							href="https://go.acmutsa.org/constitution"
+							target="_blank"
 						/>
 					</div>
 					<div className="flex flex-col items-start justify-start">
@@ -47,25 +54,13 @@ export default function Footer() {
 							Suborgs &<br />
 							Hackathons
 						</h3>
-						<FooterLink text="ACM-W" href="/suborg/acm-w" />
-						<FooterLink text="Coding in Color" href="/suborg/cic" />
-						<FooterLink text="ICPC" href="/suborg/icpc" />
-						<FooterLink
-							text="Rowdy Creators"
-							href="/suborg/rowdy-creators"
-						/>
-						<FooterLink
-							text="RowdyHacks"
-							href="https://rowdyhacks.org"
-						/>
-						<FooterLink
-							text="Code Quantum"
-							href="https://cqhacks.org"
-						/>
-						<FooterLink
-							text="Rowdy Datathon"
-							href="https://rowdydatathon.org"
-						/>
+						<FooterLink text="ACM-W" href="/suborgs/acmw" />
+						<FooterLink text="Coding in Color" href="/suborgs/codingincolor" />
+						<FooterLink text="ICPC" href="/suborgs/acmicpc" />
+						<FooterLink text="Rowdy Creators" href="/suborgs/rowdycreators"/>
+						<FooterLink text="RowdyHacks" href="/suborgs/rowdyhacks"/>
+						<FooterLink text="Code Quantum" href="https://cqhacks.org"/>
+						<FooterLink text="Rowdy Datathon" href="https://rowdydatathon.org"/>
 					</div>
 					<div className="flex flex-col items-start justify-start">
 						<h3 className="pb-3 font-mono text-xl font-bold text-white">
