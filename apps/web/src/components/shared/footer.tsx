@@ -33,16 +33,18 @@ export default function Footer({ email, orgName }: FooterProps) {
 					<div className="flex flex-col items-start justify-start">
 						<h3 className="pb-3 font-mono text-xl font-bold text-white">
 							Contacts
-						</h3>
-						<hr className="w-[87px] border-t-2 border-white mb-3" />
-
-						<div className="p-0 text-left font-calsans text-white">
-							ACM Email: <br />
-							team@acmutsa.org
-							<br />
-							<br />
-							{orgName} Email: <br /> {email}
-						</div>
+						</h3><br />
+						
+						<p className="p-0 text-left font-calsans text-white">ACM UTSA Email:</p>
+						<FooterLink
+							text="team@acmutsa.org"
+							href={`mailto:team@acmutsa.org?subject=Inquiry about ACM UTSA Suborg`}
+						/>
+						<p className="p-0 text-left font-calsans text-white mt-4">{orgName} Email:</p>
+						<FooterLink
+							text={email}
+							href={`mailto:${email}?subject=Inquiry about ${orgName} Suborg`}
+						/>
 					</div>
 					<div className="flex flex-col items-start justify-start">
 
