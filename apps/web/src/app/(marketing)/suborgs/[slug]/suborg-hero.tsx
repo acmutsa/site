@@ -13,7 +13,7 @@ function modifyColor(color: RGBColor, alpha: number): string {
 }
 
 export default function SuborgHero(suborg: Suborg) {
-	const { name, shortDesc, logoUrl, colors, leadingSentence, discordLink, aboutUs_One, aboutUs_Two, missionHead, missionHead2, missionHead3, mPhrase1, mPhrase2, mPhrase3 } = suborg;
+	const { name, shortDesc, logoUrl, colors, leadingSentence, discordLink, aboutUs_One, aboutUs_Two, missionHead, missionHead2, missionHead3, mPhrase1, mPhrase2, mPhrase3, suborgemail } = suborg;
 
 	return (
 		<>
@@ -263,10 +263,8 @@ export default function SuborgHero(suborg: Suborg) {
 				style={{ "--footer-bg": colors.poppy } as React.CSSProperties}
 				className="[&_footer]:bg-[var(--footer-bg)]"
 			>
-				<Footer />
+				<Footer orgName={name} email={suborgemail} />
 			</div>
-			{/* Read more about how the Footer Code works */}
-
 
 		</>
 	);
