@@ -59,7 +59,7 @@ export const SUBORGS: Record<string, Suborg> = {
 		discordLink: "https://discord.com/invite/Fu86P2W8BK",
 		aboutUs_One: "is an all-inclusive organization focused on tailoring its activities towards minorities.",
 		aboutUs_Two: "aims to create an engaging academic, professional, and social network for women and minorities in technology.",
-		suborgemail: "acmwteam	@acmutsa.org",
+		suborgemail: "acmwteam@acmutsa.org",
 	},
 	rowdycreators: {
 		slug: "rowdycreators",
@@ -80,7 +80,7 @@ export const SUBORGS: Record<string, Suborg> = {
 		discordLink: "https://discord.com/invite/gvqbjZU",
 		aboutUs_One: "gives students interested in technology the opportunity to learn new skills, network with other students, and create/develop hands-on projects.",
 		aboutUs_Two: "channels the skills of various disciplines (Engineering, Computer Science, Business, etc.) into technology projects using software and/or hardware.",
-		suborgemail: "team	@rowdycreators.org",
+		suborgemail: "team@rowdycreators.org",
 	},
 	acmicpc: {
 		slug: "acm icpc",
@@ -101,7 +101,7 @@ export const SUBORGS: Record<string, Suborg> = {
 		discordLink: "https://discord.com/invite/qfckfeQ",
 		aboutUs_One: "or International Collegiate Programming Contest, is a world-wide programming contest where thousands of 3-person teams compete. Moreover, ",
 		aboutUs_Two: "provides the opportunity for students to learn and prepare for the contest.",
-		suborgemail: "Please Use the ACM Email above",
+		suborgemail: "team@acmutsa.org",
 	},
 	codingincolor: {
 		slug: "coding in color",
@@ -122,7 +122,7 @@ export const SUBORGS: Record<string, Suborg> = {
 		discordLink: "https://discord.gg/gNXxZfxxK5",
 		aboutUs_One: "strives to create a safe space for black people in the technology world to promote representation in our community.",
 		aboutUs_Two: "provides opportunities to people through workshops, events, and networking events",
-		suborgemail: "team	@cicutsa.org",
+		suborgemail: "team@cicutsa.org",
 
 	},
 	rowdyhacks: {
@@ -144,6 +144,6 @@ export const SUBORGS: Record<string, Suborg> = {
 		discordLink: "https://discord.com/invite/FzFEZBRmhr",
 		aboutUs_One: "is UTSA's annual hackathon, hosted by the Association for Computing Machinery (ACM) at UTSA.",
 		aboutUs_Two: "is a weekend-long event where students, tech enthusiasts, and creative minds from all backgrounds come together to collaborate, innovate, and build real-world projects in 24 hours.",
-		suborgemail: "team	@rowdyhacks.org",
+		suborgemail: "team@rowdyhacks.org",
 	}
 };

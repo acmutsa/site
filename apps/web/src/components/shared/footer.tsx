@@ -65,7 +65,7 @@ export default function Footer({ email, orgName }: FooterProps) {
 						/>
 						<FooterLink
 							text="Constitution"
-							href="https://go.acmutsa.org/constitution"
+							href="https://file.notion.so/f/f/70f8f5fc-b58a-46f6-9e2b-d7bf203e13ab/6096233e-217f-4599-b131-48738b2bc7af/THE_ASSOCIATION_OF_COMPUTING_MACHINERY_AT_THE_UNIVERSITY_OF_TEXAS_AT_SAN_ANTONIO_CONSTITUTION_-_Updated_Spring_2025.pdf?table=block&id=328c7f3b-3742-807a-b8d0-e8853a31efed&spaceId=70f8f5fc-b58a-46f6-9e2b-d7bf203e13ab&expirationTimestamp=1774051200000&signature=P5WSQulpp21LNG0JUMAa64ZL9BDZhnwjwrkIK17I9PY&downloadName=THE+ASSOCIATION+OF+COMPUTING+MACHINERY+AT+THE+UNIVERSITY+OF+TEXAS+AT+SAN+ANTONIO+CONSTITUTION+-+Updated+Spring+2025.pdf"
 							target="_blank"
 						/>
 					</div>
