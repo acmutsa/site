@@ -128,9 +128,7 @@ export function HeroNav({
 					Contact
 				</NavLink>
 
-				<NavLink linkStyles={linkStyles} href="/resources">
-					Resources
-				</NavLink>
+				<ResourcesDropdown linkStyles={linkStyles} navVariant={navVariant}/>
 			</div>
 
 			<div className="flex items-center justify-end gap-x-3">
@@ -186,6 +184,73 @@ function NavLink({
 	);
 }
 
+function ResourcesDropdown({
+	linkStyles,
+	navVariant,
+}: {
+	linkStyles: string;
+	navVariant: keyof typeof variant;
+}) {
+	const isCustomColor =
+		linkStyles.startsWith("rgb") ||
+		linkStyles.startsWith("#") ||
+		linkStyles.startsWith("hsl");
+
+	const triggerClass = `text-md font-semibold hover:underline ${
+		isCustomColor ? "" : linkStyles
+	}`;
+
+	const resources = [
+		{ name: "Feedback", href: "/feedback",},
+		{ name: "Elections", href: "/elections",}
+	];
+
+	const panelClass =
+		navVariant === "default"
+			? "border-white/10 bg-white text-black"
+			: "border bg-white text-acm-darker-blue";
+
+	const itemHoverClass =
+		navVariant === "default" ? "hover:bg-white/10" : "hover:bg-muted";
+
+	return (
+		<div className="relative group">
+			<button
+				type="button"
+				className={triggerClass}
+				style={isCustomColor ? { color: linkStyles } : undefined}
+			>
+				Resources <span aria-hidden>▾</span>
+			</button>
+
+			<div
+				className={`
+					invisible opacity-0 translate-y-1
+					group-hover:visible group-hover:opacity-100 group-hover:translate-y-0
+					group-focus-within:visible group-focus-within:opacity-100 group-focus-within:translate-y-0
+					absolute left-0 top-full z-50 mt-3 w-40
+					rounded-xl p-2 shadow-lg
+					transition-all duration-150
+					${panelClass}
+				`}
+				role="menu"
+				aria-label="Resources"
+			>
+				{resources.map((r) => (
+					<Link
+						key={r.name}
+						href={r.href}
+						className={`block rounded-lg px-3 py-2 text-sm ${itemHoverClass}`}
+						style={isCustomColor ? { color: linkStyles } : undefined}
+					>
+						{r.name}
+					</Link>
+				))}
+			</div>	
+		</div>
+	)
+}
+
 function SuborgsDropdown({
 	linkStyles,
 	navVariant,
@@ -204,10 +269,11 @@ function SuborgsDropdown({
 
 	// Only slugs matter since routes are /suborgs/[suborg]
 	const suborgs: Array<{ name: string; slug: string }> = [
-		{ name: "ACM-W", slug: "acmw" },
-		{ name: "Rowdy-Creators", slug: "rowdycreators" },
-		{ name: "Coding-In-Color", slug: "codingincolor" },
+		{ name: "ACM W", slug: "acmw" },
+		{ name: "Rowdy Creators", slug: "rowdycreators" },
+		{ name: "Coding In Color", slug: "codingincolor" },
 		{ name: "ICPC", slug: "acmicpc" },
+		{ name: "Rowdy Hacks", slug: "rowdyhacks"},
 	];
 
 	// ✅ Fix: home page was showing white because bg-background resolves to light theme there.
@@ -249,6 +315,8 @@ function SuborgsDropdown({
 						key={s.slug}
 						href={`/suborgs/${s.slug}`}
 						className={`block rounded-lg px-3 py-2 text-sm ${itemHoverClass}`}
+						style={isCustomColor ? { color: linkStyles } : undefined}
+
 					>
 						{s.name}
 					</Link>

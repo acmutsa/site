@@ -35,6 +35,7 @@ export default function Page({ params }: { params: { slug: string } }) {
 				mPhrase1={suborg.mPhrase1}
 				mPhrase2={suborg.mPhrase2}
 				mPhrase3={suborg.mPhrase3}
+				suborgemail={suborg.suborgemail}
 			/>
 		</>
 	);
