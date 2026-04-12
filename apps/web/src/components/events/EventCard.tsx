@@ -4,6 +4,7 @@ interface EventCardProps {
     title: string;
     date: string;
     location: string;
+    status: string;
     imageUrl?: string;
 }
 
