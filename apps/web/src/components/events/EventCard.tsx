@@ -1,20 +1,35 @@
 import React from "react";
 
-export default function EventCard() {
-	return (
-		// change bg to white or transparent later, gray for testing
-        <div className="m-auto flex w-64 flex-col gap-1 pb-1 bg-gray-200">
-		{/* <div className="items-left m-auto flex h-40 w-fit flex-col bg-gray-200"> */}
+interface EventCardProps {
+    title: string;
+    date: string;
+    location: string;
+    imageUrl?: string;
+}
 
-			{/* change to img later */}
-            <div className="relative aspect-square w-full bg-gray-400"></div>
-			{/* <div className="aspect-square h-full w-full bg-gray-400" /> */}
-            
-            <div className="flex flex-col px-2 gap-1">
-        <h2 className="font-mono font-semibold text-lg text-acm-darker-blue">Event Title</h2>
-        <p className="font-mono font-sm text-acm-darker-blue">Date @ Time</p>
-        <p className="font-mono font-sm text-acm-darker-blue">Location</p>
-      </div>
-		</div>
-	);
+export default function EventCard({ title, date, location, imageUrl }: EventCardProps) {
+    return (
+        <div className="m-auto flex w-64 flex-col gap-1 bg-gray-200 pb-1">
+
+            <div className="relative aspect-square w-full bg-gray-400 overflow-hidden">
+                {imageUrl && (
+                    <img src={imageUrl} alt={title} className="h-full w-full object-cover" />
+                )}
+            </div>
+        
+            <div className="flex flex-col gap-1 px-2">
+                <h2 className="font-mono font-semibold text-acm-darker-blue">
+                    {title}
+                </h2>
+
+                {/* implement ISO date formatting later*/}
+                <p className="text-sm font-mono text-acm-darker-blue">
+                    {date}
+                </p>
+                <p className="text-sm font-mono text-acm-darker-blue">
+                    {location}
+                </p>
+            </div>
+        </div>
+    );
 }
