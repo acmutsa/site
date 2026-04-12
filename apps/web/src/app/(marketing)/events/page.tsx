@@ -1,5 +1,5 @@
 import { HeroNav } from "@/components/shared/navbar";
-
+import EventCard from "@/components/events/EventCard";
 // TODO: use suborg hero or sumn for event popup - suborg tags
 // make event card component and connect to calendar
 // make event card popup component and connect to event card
@@ -26,6 +26,9 @@ export default function EventsPage() {
                             <p className="mt-4 max-w-[850px] font-mono text-sm font-semibold text-acm-darker-blue/70">
                                 Discover ways to meet, collaborate, and grow through our community-driven events.
                             </p>
+                            <div className="mt-12 mx-auto w-full max-w-screen-xl pb-24">
+                                <EventCard />
+                            </div>
 
                         </main>
         </>
