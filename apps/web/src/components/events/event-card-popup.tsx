@@ -89,13 +89,11 @@ export default function EventPopup({ event, onClose }: EventPopupProps) {
                             {/* change to images/icons later */}
                             <h2>
                                 ◷{" "}
-                                {event.date ||
-                                    "No date provided for this event."}
+                                {event.date || "TBD"}
                             </h2>
                             <h2>
                                 ⚲{" "}
-                                {event.location ||
-                                    "No location provided for this event."}
+                                {event.location || "TBD"}
                             </h2>
                         </div>
 

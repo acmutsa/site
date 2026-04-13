@@ -37,6 +37,7 @@ export const DUMMY_EVENTS: EventType[] = [
         location: "Student Union", 
         status: "upcoming",
         description: "Relaxing painting session.",
+        tags: [EVENT_TAGS.SOCIAL, EVENT_TAGS.CB, EVENT_TAGS.HACKATHON]
     },
     { 
         id: 4, 
@@ -52,6 +53,7 @@ export const DUMMY_EVENTS: EventType[] = [
         date: "Apr 29 @ 2:00 PM", 
         location: "NPB", 
         status: "upcoming",
+        tags: [EVENT_TAGS.RC, EVENT_TAGS.WORKSHOP]
     },
     { 
         id: 6, 
@@ -59,6 +61,7 @@ export const DUMMY_EVENTS: EventType[] = [
         date: "Apr 30 @ 5:00 PM", 
         location: "NPB", 
         status: "upcoming",
+        tags: [EVENT_TAGS.CIC, EVENT_TAGS.WORKSHOP]
     },
     { 
         id: 7, 
@@ -74,19 +77,27 @@ export const DUMMY_EVENTS: EventType[] = [
     location: "", 
     status: "upcoming",
     description: "" 
-},
+    },
+
+    // past events testing
     { 
         id: 9, 
         title: "Rowdy CyberCon", 
         date: "Apr 11 @ 4:00 PM", 
         location: "SP1", 
         status: "past",
+        description: "",
+        tags: [{label: "CyberJedis", color: "#233a70"}, // testing custom tags 
+            {label: "WiCys", color: "#762c96"},
+            EVENT_TAGS.HACKATHON, EVENT_TAGS.CB]
     },
     { 
         id: 10, 
         title: "Rec Field Social", 
         date: "Apr 3 @ 5:00 PM", 
         location: "Field 2", 
-        status: "past" 
+        status: "past",
+        description: "",
+        tags: [EVENT_TAGS.CIC, EVENT_TAGS.SOCIAL]
     },
 ];

@@ -32,10 +32,10 @@ export default function EventCard({ event, onClick }: EventCardProps) {
 
 					{/* implement ISO date formatting later*/}
 					<p className="font-mono text-sm text-acm-darker-blue">
-						{date || "None Provided"}
+						{date || "TBD"}
 					</p>
 					<p className="font-mono text-sm text-acm-darker-blue">
-						{location || "None Provided"}
+						{location || "TBD"}
 					</p>
 				</div>
 			</div>
