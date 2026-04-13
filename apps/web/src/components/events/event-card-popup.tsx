@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useRef, useState } from "react";
 import { EventType } from "@/components/events/types";
 import EventTag from "@/components/events/EventTag";
 
@@ -12,10 +12,24 @@ interface EventPopupProps {
 // TODO: add transition to popup open/close
 // TODO: able to go to next or previous event in popup without closing and reopening? button/swipe ask later
 export default function EventPopup({ event, onClose }: EventPopupProps) {
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
+    const [canScrollLeft, setCanScrollLeft] = useState(false);
+    const [canScrollRight, setCanScrollRight] = useState(true);
+
+    const handleScroll = () => {
+        if (scrollContainerRef.current) {
+            const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
+            setCanScrollLeft(scrollLeft > 0);
+            setCanScrollRight(Math.ceil(scrollLeft + clientWidth) < scrollWidth);
+        }
+    };
     // prevent background scrolling when popup is open
     useEffect(() => {
         if (event) {
             document.body.style.overflow = "hidden";
+            // check when popup opens
+            handleScroll();
+            window.addEventListener("resize", handleScroll);
         } else {
             document.body.style.overflow = "unset";
         }
@@ -88,7 +102,11 @@ export default function EventPopup({ event, onClose }: EventPopupProps) {
                         {/* TODO: ask if suborg and event type tags should be separate (2 diff rows) or combined (1 row & scroll, suborg or type first?) */}
                         {/* TODO: make suborg tag clickable & take you to suborg page*/}
                         <div className="relative mb-6">
-                            <div className="no-scrollbar flex flex-nowrap gap-2 overflow-x-auto px-12 pb-2">
+                            <div 
+                                ref={scrollContainerRef}
+                                onScroll={handleScroll}
+                                className="no-scrollbar flex flex-nowrap gap-2 overflow-x-auto pr-12 pb-2"
+                            >
                                 {event.tags?.map((tag, index) => (
                                     <EventTag
                                         key={index}
@@ -98,8 +116,13 @@ export default function EventPopup({ event, onClose }: EventPopupProps) {
                                     />
                                 ))}
                             </div>
-                            <div className="pointer-events-none absolute bottom-0 left-0 top-0 w-12 bg-gradient-to-r from-white to-transparent" />
-                            <div className="pointer-events-none absolute bottom-0 right-0 top-0 w-12 bg-gradient-to-l from-white to-transparent" />
+                            
+                            {/* now only fades out at beginning and end of scroll */}
+                            {/* left */}
+                            {/* dude the transition duration is bugging me so much */}
+                            <div className={`pointer-events-none absolute bottom-0 left-0 top-0 w-10 bg-gradient-to-r from-white to-transparent transition-opacity duration-150 ${canScrollLeft ? "opacity-100" : "opacity-0"}`} />
+                            {/* right */}
+                            <div className={`pointer-events-none absolute bottom-0 right-0 top-0 w-10 bg-gradient-to-l from-white to-transparent ${canScrollRight ? "opacity-100" : "opacity-0"}`} />
                         </div>
 
                         <h2 className="mb-2 text-xl font-bold text-acm-darker-blue">

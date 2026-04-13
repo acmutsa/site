@@ -11,6 +11,7 @@ interface EventGridProps {
 }
 
 // TODO: figure out page concat later? only show 1 2 ... n-1 n for pages
+// TODO: be able to swipe/drag to next page? butttons only show up on hover?
 export default function EventGridClient({ allEvents }: EventGridProps) {
 	// track tabs and page
 	// only want 6 events per page (for now)
