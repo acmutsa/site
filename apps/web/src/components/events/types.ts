@@ -26,6 +26,7 @@ export const EVENT_TAGS = {
     },
 
     // suborgs
+    // TODO: add icons/logos for suborgs
     ACMW: { 
         label: "ACM-W", 
         color: SUBORGS.acmw.colors.poppy 

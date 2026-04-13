@@ -27,7 +27,7 @@ export const DUMMY_EVENTS: EventType[] = [
         date: "Apr 26 @ 12:00 PM", 
         location: "NPB 01.114", 
         status: "upcoming",
-        description: "Competitive programming practice session.",
+        description: "jdfjskdhfkj2342342rferetCompetitive programming practice session. ".repeat(30), // testing overflow
         tags: [EVENT_TAGS.ICPC, EVENT_TAGS.WORKSHOP, EVENT_TAGS.WORKSHOP, EVENT_TAGS.CB, EVENT_TAGS.CB, EVENT_TAGS.CB, EVENT_TAGS.CB, EVENT_TAGS.CB, EVENT_TAGS.CB, EVENT_TAGS.CB]
     },
     { 
