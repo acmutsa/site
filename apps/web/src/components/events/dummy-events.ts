@@ -28,7 +28,7 @@ export const DUMMY_EVENTS: EventType[] = [
         location: "NPB 01.114", 
         status: "upcoming",
         description: "Competitive programming practice session.",
-        tags: [EVENT_TAGS.ICPC, EVENT_TAGS.WORKSHOP, EVENT_TAGS.WORKSHOP, EVENT_TAGS.CB, EVENT_TAGS.CB, EVENT_TAGS.CB, EVENT_TAGS.CB]
+        tags: [EVENT_TAGS.ICPC, EVENT_TAGS.WORKSHOP, EVENT_TAGS.WORKSHOP, EVENT_TAGS.CB, EVENT_TAGS.CB, EVENT_TAGS.CB, EVENT_TAGS.CB, EVENT_TAGS.CB, EVENT_TAGS.CB, EVENT_TAGS.CB]
     },
     { 
         id: 3, 

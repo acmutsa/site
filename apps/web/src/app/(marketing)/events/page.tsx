@@ -3,20 +3,11 @@ import Footer from "@/components/shared/footer";
 import EventGridClient from "@/components/events/event-grid-client";
 import { DUMMY_EVENTS } from "@/components/events/dummy-events";
 
-/* TODO:
- *  ̶m̶a̶k̶e̶ ̶e̶v̶e̶n̶t̶ ̶c̶a̶r̶d̶ ̶c̶o̶m̶p̶o̶n̶e̶n̶t̶ and connect to calendar
-
- *  popup done
- *    use suborg hero or sumn for event popup - suborg tags
- * 
- * upcoming & past events sections
- * 
- * figure out calendar - will probably save for last..
- * 
- * maybe add ONGOING sticker for events that are currently happening?
- * 
- * make everything rounded?
- */
+// TODO: connect event to calendar
+// TODO:figure out calendar - will probably save for last..
+// TODO: maybe add ONGOING sticker for events that are currently happening?
+// TODO: make everything rounded?
+// TODO: make filtering system using tags and be able to search for events w/ search bar
 
 export default function EventsPage() {
 	return (

@@ -9,7 +9,8 @@ interface EventPopupProps {
 
 // TODO: figure what to do if event title too long
 // TODO: link play button to yt or directy to event vod/stream
-// TODO: add suborgs tags somehow
+// TODO: add transition to popup open/close
+// TODO: able to go to next or previous event in popup without closing and reopening? button/swipe ask later
 export default function EventPopup({ event, onClose }: EventPopupProps) {
 	// prevent background scrolling when popup is open
 	useEffect(() => {
@@ -83,16 +84,20 @@ export default function EventPopup({ event, onClose }: EventPopupProps) {
 							</h2>
 						</div>
 
-                        // TODO: ask if suborg and event type tags should be separate (2 diff rows) or combined (1 row & scroll, suborg or type first?)
-						<div className="mb-2 flex flex-nowrap gap-2 overflow-x-auto pb-2 no-scrollbar">
-							{event.tags?.map((tag, index) => (
-								<EventTag
-									key={index}
-									text={tag.label}
-									color={tag.color}
-									icon={tag.icon}
-								/>
-							))}
+						{/* TODO: ask if suborg and event type tags should be separate (2 diff rows) or combined (1 row & scroll, suborg or type first?) */}
+						<div className="relative mb-6">
+							<div className="flex flex-nowrap gap-2 overflow-x-auto px-12 pb-2 no-scrollbar">
+								{event.tags?.map((tag, index) => (
+									<EventTag
+										key={index}
+										text={tag.label}
+										color={tag.color}
+										icon={tag.icon}
+									/>
+								))}
+							</div>
+							<div className="pointer-events-none absolute bottom-0 left-0 top-0 w-12 bg-gradient-to-r from-white to-transparent" />
+							<div className="pointer-events-none absolute bottom-0 right-0 top-0 w-12 bg-gradient-to-l from-white to-transparent" />
 						</div>
 
 						<h2 className="mb-2 text-xl font-bold text-acm-darker-blue">
