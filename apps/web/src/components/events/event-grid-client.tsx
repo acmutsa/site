@@ -2,13 +2,15 @@
 
 import React, { useState } from "react";
 import EventCard from "@/components/events/EventCard";
+import EventPopup from "@/components/events/event-card-popup";
 
-interface EventType {
+export interface EventType {
 	id: number;
 	title: string;
 	date: string;
 	location: string;
 	status: string;
+    description?: string;
 	imageUrl?: string;
 }
 
@@ -22,6 +24,8 @@ export default function EventGridClient({ allEvents }: EventGridProps) {
 	const [activeTab, setActiveTab] = useState<"upcoming" | "past">("upcoming");
 	const [currentPage, setCurrentPage] = useState(1);
 	const eventsPerPage = 6;
+
+	const [selectedEvent, setSelectedEvent] = useState<EventType | null>(null);
 
 	const filteredEvents = allEvents.filter(
 		(event) => event.status === activeTab,
@@ -63,8 +67,9 @@ export default function EventGridClient({ allEvents }: EventGridProps) {
 				</button>
 			</div>
 
+			{/* event grid */}
 			{filteredEvents.length === 0 ? (
-				<div className="flex h-64 min-h-[800px] w-full items-center justify-center border-2 border-dashed border-acm-darker-blue/30 font-mono font-semibold text-2xl text-acm-darker-blue">
+				<div className="flex h-64 min-h-[800px] w-full items-center justify-center border-2 border-dashed border-acm-darker-blue/30 font-mono text-2xl font-semibold text-acm-darker-blue">
 					No events found.
 				</div>
 			) : (
@@ -77,7 +82,9 @@ export default function EventGridClient({ allEvents }: EventGridProps) {
 								date={event.date}
 								location={event.location}
 								status={event.status}
+								description={event.description}
 								imageUrl={event.imageUrl}
+								onClick={() => setSelectedEvent(event)}
 							/>
 						))}
 					</div>
@@ -105,6 +112,10 @@ export default function EventGridClient({ allEvents }: EventGridProps) {
 					)}
 				</div>
 			)}
+			<EventPopup
+				event={selectedEvent}
+				onClose={() => setSelectedEvent(null)}
+			/>
 		</div>
 	);
 }

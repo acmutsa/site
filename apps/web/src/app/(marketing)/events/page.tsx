@@ -25,12 +25,14 @@ const dummyEvents = [
     { id: 2, title: "ITT: Game Dev", date: "Apr 25 @ 6:00 PM", location: "NPB", status: "upcoming" },
     { id: 3, title: "ICPC", date: "Apr 26 @ 12:00 PM", location: "NPB 01.114", status: "upcoming" },
     { id: 4, title: "Painting Social", date: "Apr 27 @ 10:00 AM", location: "Student Union", status: "upcoming" },
-    { id: 5, title: "Movie Social", date: "Apr 28 @ 8:00 PM", location: "Retama", status: "upcoming" },
+    { id: 5, title: "Movie Social", date: "Apr 28 @ 8:00 PM", location: "Retama", description: "Join us for a movie night! more words more words more words more words more words more words more more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words more words ", status: "upcoming" },
     { id: 6, title: "RC Workathon", date: "Apr 29 @ 2:00 PM", location: "NPB", status: "upcoming" },
+    { id: 7, title: "CiC Workshop", date: "Apr 30 @ 5:00 PM", location: "NPB", status: "upcoming" },
     { id: 7, title: "CiC Workshop", date: "Apr 30 @ 5:00 PM", location: "NPB", status: "upcoming" }, 
+ 
     
-    // { id: 8, title: "Rowdy CyberCon", date: "Apr 11 @ 4:00 PM", location: "SP1", status: "past" },
-    // { id: 9, title: "Rec Field Social", date: "Apr 3 @ 5:00 PM", location: "Field 2", status: "past" },
+    { id: 8, title: "Rowdy CyberCon", date: "Apr 11 @ 4:00 PM", location: "SP1", status: "past" },
+    { id: 9, title: "Rec Field Social", date: "Apr 3 @ 5:00 PM", location: "Field 2", status: "past" },
 ];
 
 export default function EventsPage() {

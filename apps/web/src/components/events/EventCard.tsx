@@ -5,11 +5,17 @@ interface EventCardProps {
     date: string;
     location: string;
     status: string;
+    description?: string; // optional for card, required for popup
     imageUrl?: string;
+    onClick?: () => void;
 }
 
-export default function EventCard({ title, date, location, imageUrl }: EventCardProps) {
+export default function EventCard({ title, date, location, description, imageUrl, onClick }: EventCardProps) {
     return (
+        <div 
+            onClick={onClick}
+            className="flex flex-col group cursor-pointer"
+        >
         <div className="m-auto flex w-64 flex-col gap-1 bg-gray-200 pb-1">
 
             <div className="relative aspect-square w-full bg-gray-400 overflow-hidden">
@@ -31,6 +37,7 @@ export default function EventCard({ title, date, location, imageUrl }: EventCard
                     {location}
                 </p>
             </div>
+        </div>
         </div>
     );
 }
