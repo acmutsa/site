@@ -1,10 +1,10 @@
-import React, { useEffect,useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { EventType } from "@/components/events/types";
 import EventTag from "@/components/events/EventTag";
 
 interface EventPopupProps {
-    event: EventType | null;
-    onClose: () => void;
+	event: EventType | null;
+	onClose: () => void;
 }
 
 // TODO: figure what to do if event title too long
@@ -12,58 +12,79 @@ interface EventPopupProps {
 // TODO: add transition to popup open/close
 // TODO: able to go to next or previous event in popup without closing and reopening? button/swipe ask later
 export default function EventPopup({ event, onClose }: EventPopupProps) {
-    const scrollContainerRef = useRef<HTMLDivElement>(null);
-    const [canScrollLeft, setCanScrollLeft] = useState(false);
-    const [canScrollRight, setCanScrollRight] = useState(true);
+	const scrollContainerRef = useRef<HTMLDivElement>(null);
+	const [canScrollLeft, setCanScrollLeft] = useState(false);
+	const [canScrollRight, setCanScrollRight] = useState(true);
 
-    const handleScroll = () => {
-        if (scrollContainerRef.current) {
-            const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
-            setCanScrollLeft(scrollLeft > 0);
-            setCanScrollRight(Math.ceil(scrollLeft + clientWidth) < scrollWidth);
-        }
-    };
-    // prevent background scrolling when popup is open
-    useEffect(() => {
-        if (event) {
-            document.body.style.overflow = "hidden";
-            // check when popup opens
-            handleScroll();
-            window.addEventListener("resize", handleScroll);
-        } else {
-            document.body.style.overflow = "unset";
-        }
+	// L/R scrolling
+	const handleScroll = () => {
+		if (scrollContainerRef.current) {
+			const { scrollLeft, scrollWidth, clientWidth } =
+				scrollContainerRef.current;
+			setCanScrollLeft(scrollLeft > 0);
+			setCanScrollRight(
+				Math.ceil(scrollLeft + clientWidth) < scrollWidth,
+			);
+		}
+	};
 
-        return () => {
-            document.body.style.overflow = "unset";
-        };
-    }, [event]);
+	// top/bot scrolling
+	const descScrollRef = useRef<HTMLDivElement>(null);
+	const [canScrollTop, setCanScrollTop] = useState(false);
+	const [canScrollBottom, setCanScrollBottom] = useState(true);
 
-    if (!event) return null;
+	const handleDescScroll = () => {
+		if (descScrollRef.current) {
+			const { scrollTop, scrollHeight, clientHeight } =
+				descScrollRef.current;
+			setCanScrollTop(scrollTop > 0);
+			setCanScrollBottom(
+				Math.ceil(scrollTop + clientHeight) < scrollHeight,
+			);
+		}
+	};
 
-    return (
-        <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 p-4 backdrop-blur-sm"
-            onClick={onClose}
-        >
-            {/* Added rounded-xl here just to keep the edges smooth! */}
-            <div
-                className="relative grid max-h-[85vh] w-[95vw] max-w-5xl grid-cols-1 overflow-hidden bg-white shadow-2xl md:h-[600px] md:grid-cols-2"
-                onClick={(e) => e.stopPropagation()}
-            >
-                <button
-                    onClick={onClose}
-                    className="absolute right-4 top-2 z-10 font-mono text-2xl font-bold text-acm-darker-blue/50 transition-colors hover:text-acm-darker-blue"
-                >
-                    ✕
-                </button>
+	// prevent background scrolling when popup is open
+	useEffect(() => {
+		if (event) {
+			document.body.style.overflow = "hidden";
+			// check when popup opens
+			handleScroll();
+			window.addEventListener("resize", handleScroll);
+		} else {
+			document.body.style.overflow = "unset";
+		}
 
-                <div className="flex h-full w-full items-center justify-center bg-gray-200">
-                    <div className="px-6 text-center font-mono text-gray-500">
-                        {event.imageUrl ? "Image/Video" : "No Content Provided"}
-                    </div>
-                </div>
-                {/* add later when db done
+		return () => {
+			document.body.style.overflow = "unset";
+		};
+	}, [event]);
+
+	if (!event) return null;
+
+	return (
+		<div
+			className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 p-4 backdrop-blur-sm"
+			onClick={onClose}
+		>
+			{/* Added rounded-xl here just to keep the edges smooth! */}
+			<div
+				className="relative grid max-h-[85vh] w-[95vw] max-w-5xl grid-cols-1 overflow-hidden bg-white shadow-2xl md:h-[600px] md:grid-cols-2"
+				onClick={(e) => e.stopPropagation()}
+			>
+				<button
+					onClick={onClose}
+					className="absolute right-4 top-2 z-10 font-mono text-2xl font-bold text-acm-darker-blue/50 transition-colors hover:text-acm-darker-blue"
+				>
+					✕
+				</button>
+
+				<div className="flex h-full w-full items-center justify-center bg-gray-200">
+					<div className="px-6 text-center font-mono text-gray-500">
+						{event.imageUrl ? "Image/Video" : "No Content Provided"}
+					</div>
+				</div>
+				{/* add later when db done
                 <div className="bg-gray-200 flex w-full aspect-square items-center justify-center overflow-hidden">
                     {event.imageUrl ? (
                         <img 
@@ -79,77 +100,86 @@ export default function EventPopup({ event, onClose }: EventPopupProps) {
                 </div>
                 */}
 
-                <div className="flex h-full flex-col overflow-hidden p-12 font-mono">
-                    <div className="shrink-0">
-                        <h2 className="mb-6 font-mono text-4xl font-bold text-acm-darker-blue">
-                            {event.title}
-                        </h2>
+				<div className="flex h-full flex-col overflow-hidden p-12 font-mono">
+					<div className="shrink-0">
+						<h2 className="mb-6 font-mono text-4xl font-bold text-acm-darker-blue">
+							{event.title}
+						</h2>
 
-                        <div className="mb-4 space-y-2 text-xl font-bold text-acm-darker-blue">
-                            {/* change to images/icons later */}
-                            <h2>
-                                ◷{" "}
-                                {event.date || "TBD"}
-                            </h2>
-                            <h2>
-                                ⚲{" "}
-                                {event.location || "TBD"}
-                            </h2>
-                        </div>
+						<div className="mb-4 space-y-2 text-xl font-bold text-acm-darker-blue">
+							{/* change to images/icons later */}
+							<h2>◷ {event.date || "TBD"}</h2>
+							<h2>⚲ {event.location || "TBD"}</h2>
+						</div>
 
-                        {/* TODO: ask if suborg and event type tags should be separate (2 diff rows) or combined (1 row & scroll, suborg or type first?) */}
-                        {/* TODO: make suborg tag clickable & take you to suborg page*/}
-                        <div className="relative mb-6">
-                            <div 
-                                ref={scrollContainerRef}
-                                onScroll={handleScroll}
-                                className="no-scrollbar flex flex-nowrap gap-2 overflow-x-auto pr-12 pb-2"
-                            >
-                                {event.tags?.map((tag, index) => (
-                                    <EventTag
-                                        key={index}
-                                        text={tag.label}
-                                        color={tag.color}
-                                        icon={tag.icon}
-                                    />
-                                ))}
-                            </div>
-                            
-                            {/* now only fades out at beginning and end of scroll */}
-                            {/* left */}
-                            {/* dude the transition duration is bugging me so much */}
-                            <div className={`pointer-events-none absolute bottom-0 left-0 top-0 w-10 bg-gradient-to-r from-white to-transparent transition-opacity duration-150 ${canScrollLeft ? "opacity-100" : "opacity-0"}`} />
-                            {/* right */}
-                            <div className={`pointer-events-none absolute bottom-0 right-0 top-0 w-10 bg-gradient-to-l from-white to-transparent ${canScrollRight ? "opacity-100" : "opacity-0"}`} />
-                        </div>
+						{/* TODO: ask if suborg and event type tags should be separate (2 diff rows) or combined (1 row & scroll, suborg or type first?) */}
+						{/* TODO: make suborg tag clickable & take you to suborg page*/}
+						<div className="relative mb-6">
+							<div
+								ref={scrollContainerRef}
+								onScroll={handleScroll}
+								className="flex flex-nowrap gap-2 overflow-x-auto pb-2 pr-12 no-scrollbar"
+							>
+								{event.tags?.map((tag, index) => (
+									<EventTag
+										key={index}
+										text={tag.label}
+										color={tag.color}
+										icon={tag.icon}
+									/>
+								))}
+							</div>
 
-                        <h2 className="mb-2 text-xl font-bold text-acm-darker-blue">
-                            Description
-                        </h2>
-                    </div>
-                    
-                    <div className="no-scrollbar mb-6 min-h-0 flex-1 overflow-y-auto">
-                        <p className="text-sm">
-                            {event.description || "No description provided for this event."}
-                        </p>
-                    </div>
+							{/* now only fades out at beginning and end of scroll */}
+							{/* left */}
+							{/* dude the transition duration is bugging me so much */}
+							<div
+								className={`pointer-events-none absolute bottom-0 left-0 top-0 w-10 bg-gradient-to-r from-white to-transparent transition-opacity duration-150 ${canScrollLeft ? "opacity-100" : "opacity-0"}`}
+							/>
+							{/* right */}
+							<div
+								className={`pointer-events-none absolute bottom-0 right-0 top-0 w-10 bg-gradient-to-l from-white to-transparent ${canScrollRight ? "opacity-100" : "opacity-0"}`}
+							/>
+						</div>
 
-                    <div className="flex w-full shrink-0 gap-4">                        
-                        <button className="flex h-12 w-14 shrink-0 items-center justify-center rounded-sm bg-acm-darker-blue text-white transition-all hover:brightness-75">
-                            ▶
-                            {/* TODO: change to image/icon later? links to stream/yt - def a way to direectly link to stream or vod*/}
-                        </button>
-                        <button className="flex-1 bg-acm-darker-blue px-6 py-2 font-bold text-white transition-all hover:brightness-75">
-                            Remind Me{" "}
-                            {/* TODO: link to event in membership portal? or add to google calendar? ask later */}
-                        </button>
-                        <button className="flex-1 border-2 border-acm-darker-blue px-6 py-2 font-bold text-acm-darker-blue transition-colors hover:bg-acm-darker-blue/10">
-                            Check In{" "}
-                            {/* TODO: link to event in membership portal */}
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
+						<h2 className="mb-2 text-xl font-bold text-acm-darker-blue">
+							Description
+						</h2>
+					</div>
+					<div className="relative mb-6 flex min-h-0 flex-1 flex-col">
+						<div
+							ref={descScrollRef}
+							onScroll={handleDescScroll}
+							className="flex-1 overflow-y-auto no-scrollbar"
+						>
+							<p className="text-sm">
+								{event.description ||
+									"No description provided for this event."}
+							</p>
+						</div>
+
+						{/* top */}
+						<div className={`pointer-events-none absolute left-0 top-0 h-6 w-full bg-gradient-to-b from-white to-transparent transition-opacity duration-300 ${canScrollTop ? "opacity-100" : "opacity-0"}`}/>
+						{/* bot */}
+						<div className={`pointer-events-none absolute left-0 bottom-0 h-6 w-full bg-gradient-to-t from-white to-transparent ${canScrollBottom ? "opacity-100" : "opacity-0"}`}/>
+					</div>
+
+					<div className="flex w-full shrink-0 gap-4">
+						<button className="flex h-12 w-14 shrink-0 items-center justify-center rounded-sm bg-acm-darker-blue text-white transition-all hover:brightness-75">
+							▶
+							{/* TODO: change to image/icon later? links to stream/yt - def a way to direectly link to stream or vod*/}
+						</button>
+						<button className="flex-1 bg-acm-darker-blue px-6 py-2 font-bold text-white transition-all hover:brightness-75">
+							Remind Me{" "}
+							{/* TODO: link to event in membership portal? or add to google calendar? ask later */}
+						</button>
+						<button className="flex-1 border-2 border-acm-darker-blue px-6 py-2 font-bold text-acm-darker-blue transition-colors hover:bg-acm-darker-blue/10">
+							Check In{" "}
+							{/* TODO: link to event in membership portal */}
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
 }
