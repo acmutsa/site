@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { EventType } from "./event-grid-client";
 
 interface EventPopupProps {
@@ -6,7 +6,22 @@ interface EventPopupProps {
 	onClose: () => void;
 }
 
+// TODO: figure what to do if event title too long
+// TODO: link play button to yt or directy to event vod/stream
 export default function EventPopup({ event, onClose }: EventPopupProps) {
+    // prevent background scrolling when popup is open
+    useEffect(() => {
+        if (event) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "unset";
+        }
+
+        return () => {
+            document.body.style.overflow = "unset";
+        };
+    }, [event]);
+
 	if (!event) return null;
 
 	return (
@@ -30,6 +45,21 @@ export default function EventPopup({ event, onClose }: EventPopupProps) {
 						{event.imageUrl ? "Image/Video" : "No Content Provided"}
 					</div>
 				</div>
+                {/* add later when db done
+                <div className="bg-gray-200 flex w-full aspect-square items-center justify-center overflow-hidden">
+                    {event.imageUrl ? (
+                        <img 
+                            src={event.imageUrl} 
+                            alt={event.title} 
+                            className="aspect-square h-full w-full object-cover" 
+                        />
+                    ) : (
+                        <div className="font-mono text-gray-500 text-center px-6">
+                            No Image Provided
+                        </div>
+                    )}
+                </div>
+                */}
 
 				<div className="flex flex-col justify-between p-12 font-mono">
 					<div>
@@ -39,8 +69,8 @@ export default function EventPopup({ event, onClose }: EventPopupProps) {
 
 						<div className="mb-8 space-y-2 text-xl font-bold text-acm-darker-blue">
 							{/* change to images/icons later */}
-							<h2>◷ {event.date}</h2>
-							<h2>⚲ {event.location}</h2>
+							<h2>◷ {event.date || "No date provided for this event."}</h2>
+							<h2>⚲ {event.location || "No location provided for this event."}</h2>
 						</div>
 
 						<h2 className="mb-2 text-xl font-bold text-acm-darker-blue">Description</h2>
@@ -52,13 +82,13 @@ export default function EventPopup({ event, onClose }: EventPopupProps) {
 					</div>
 
                     <div className="flex w-full gap-4">
-                         <button className="flex h-10 w-14 shrink-0 items-center justify-center rounded-sm bg-acm-darker-blue text-white transition-all hover:brightness-75">
+                         <button className="flex h-full w-14 shrink-0 items-center justify-center rounded-sm bg-acm-darker-blue text-white transition-all hover:brightness-75">
                              ▶{/* change to image/icon later? */}
                          </button>
-                         <button className="flex-1 bg-acm-darker-blue px-6 py-2 text-sm font-bold text-white transition-all hover:brightness-75">
+                         <button className="flex-1 bg-acm-darker-blue px-6 py-2  font-bold text-white transition-all hover:brightness-75">
                              Remind Me
                          </button>
-                         <button className="flex-1 border-2 border-acm-darker-blue px-6 py-2 text-sm font-bold text-acm-darker-blue transition-colors hover:bg-acm-darker-blue/10">
+                         <button className="flex-1 border-2 border-acm-darker-blue px-6 py-2 font-bold text-acm-darker-blue transition-colors hover:bg-acm-darker-blue/10">
                              Check In
                          </button>
                     </div>
