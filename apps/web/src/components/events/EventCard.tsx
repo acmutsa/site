@@ -1,25 +1,17 @@
 import React from "react";
+import { EventType } from "@/components/events/types";
 
+// TODO: might have to add links
 interface EventCardProps {
-	title: string;
-	date: string;
-	location: string;
-	status: string;
-	description?: string; // optional for card, required for popup
-	imageUrl?: string;
-	onClick?: () => void;
+    event: EventType;
+    onClick: () => void;
 }
 
 // TODO: make image say no image provided like event popup when none
 // TODO: concat title if too long
-export default function EventCard({
-	title,
-	date,
-	location,
-	description,
-	imageUrl,
-	onClick,
-}: EventCardProps) {
+export default function EventCard({ event, onClick }: EventCardProps) {
+    const { title, date, location, imageUrl } = event;
+
 	return (
 		<div onClick={onClick} className="group flex cursor-pointer flex-col">
 			<div className="m-auto flex w-64 flex-col gap-1 bg-gray-200 pb-1">

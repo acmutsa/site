@@ -3,21 +3,14 @@
 import React, { useState } from "react";
 import EventCard from "@/components/events/EventCard";
 import EventPopup from "@/components/events/event-card-popup";
-
-export interface EventType {
-	id: number;
-	title: string;
-	date: string;
-	location: string;
-	status: string;
-    description?: string;
-	imageUrl?: string;
-}
+import { EventType } from "@/components/events/types";
+import { DUMMY_EVENTS } from "@/components/events/dummy-events";
 
 interface EventGridProps {
-	allEvents: EventType[];
+    allEvents: EventType[];
 }
 
+// TODO: figure out page concat later? only show 1 2 ... n-1 n for pages
 export default function EventGridClient({ allEvents }: EventGridProps) {
 	// track tabs and page
 	// only want 6 events per page (for now)
@@ -78,12 +71,7 @@ export default function EventGridClient({ allEvents }: EventGridProps) {
 						{currentEvents.map((event) => (
 							<EventCard
 								key={event.id}
-								title={event.title}
-								date={event.date}
-								location={event.location}
-								status={event.status}
-								description={event.description}
-								imageUrl={event.imageUrl}
+								event={event}
 								onClick={() => setSelectedEvent(event)}
 							/>
 						))}
