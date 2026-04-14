@@ -8,7 +8,7 @@ interface EventCardProps {
 }
 
 // TODO: make image say no image provided like event popup when none
-// TODO: concat title if too long
+// TODO: concat title if too long !! should not go over row
 export default function EventCard({ event, onClick }: EventCardProps) {
     const { title, date, location, imageUrl } = event;
 

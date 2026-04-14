@@ -46,6 +46,7 @@ export const DUMMY_EVENTS: EventType[] = [
         location: "Retama", 
         status: "upcoming",
         description: "Join us for a movie night! " + "more words ".repeat(100), // testing overflow
+        tags: [EVENT_TAGS.ACMW, EVENT_TAGS.CIC, EVENT_TAGS.RC, EVENT_TAGS.ICPC, EVENT_TAGS.ROWDYHACKS]
     },
     { 
         id: 5, 
@@ -65,7 +66,7 @@ export const DUMMY_EVENTS: EventType[] = [
     },
     { 
         id: 7, 
-        title: "CiC Workshop 2", 
+        title: "CiC Workshop 2" + "long title ".repeat(10), 
         date: "Apr 30 @ 5:00 PM", 
         location: "NPB", 
         status: "upcoming",

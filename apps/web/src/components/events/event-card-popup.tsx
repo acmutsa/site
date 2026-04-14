@@ -9,8 +9,10 @@ interface EventPopupProps {
 
 // TODO: figure what to do if event title too long
 // TODO: link play button to yt or directy to event vod/stream
-// TODO: add transition to popup open/close
+// TODO: add transition to popup open/close - use same animation as navbar?
 // TODO: able to go to next or previous event in popup without closing and reopening? button/swipe ask later
+
+//TODO: be able to scroll through page if title is too long - add fade at top and bottom when scrollable
 export default function EventPopup({ event, onClose }: EventPopupProps) {
 	const scrollContainerRef = useRef<HTMLDivElement>(null);
 	const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -159,6 +161,7 @@ export default function EventPopup({ event, onClose }: EventPopupProps) {
 						</div>
 
 						{/* top */}
+                        {/* FIXME: when scrolling description on event popup and closing popup while fade out is active, effect appears on next opened popup */}
 						<div className={`pointer-events-none absolute left-0 top-0 h-6 w-full bg-gradient-to-b from-white to-transparent transition-opacity duration-300 ${canScrollTop ? "opacity-100" : "opacity-0"}`}/>
 						{/* bot */}
 						<div className={`pointer-events-none absolute left-0 bottom-0 h-6 w-full bg-gradient-to-t from-white to-transparent ${canScrollBottom ? "opacity-100" : "opacity-0"}`}/>

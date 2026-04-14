@@ -26,25 +26,31 @@ export const EVENT_TAGS = {
     },
 
     // suborgs
-    // TODO: add icons/logos for suborgs
+    // TODO: edit icons for icpc and rowdycreators - remove text
     ACMW: { 
-        label: "ACM-W", 
-        color: SUBORGS.acmw.colors.poppy 
+        label: "ACM W", 
+        color: SUBORGS.acmw.colors.poppy,
+        icon: SUBORGS.acmw.logoUrl
     },
     RC: { 
         label: "Rowdy Creators", 
-        color: SUBORGS.rowdycreators.colors.poppy 
+        color: SUBORGS.rowdycreators.colors.poppy, 
+        icon: SUBORGS.rowdycreators.logoUrl
     },
     ICPC: { 
         label: "ICPC", 
-        color: SUBORGS.acmicpc.colors.poppy},
+        color: SUBORGS.acmicpc.colors.poppy,
+        icon: SUBORGS.acmicpc.logoUrl
+    },
     CIC: { 
         label: "CiC", 
-        color: SUBORGS.codingincolor.colors.poppy 
+        color: SUBORGS.codingincolor.colors.poppy, 
+        icon: SUBORGS.codingincolor.logoUrl
     },
     ROWDYHACKS: { 
         label: "RowdyHacks", 
-        color: SUBORGS.rowdyhacks.colors.poppy 
+        color: SUBORGS.rowdyhacks.colors.poppy,
+        icon: SUBORGS.rowdyhacks.logoUrl 
     },
 } as const;
 

@@ -12,6 +12,7 @@ interface EventGridProps {
 
 // TODO: figure out page concat later? only show 1 2 ... n-1 n for pages
 // TODO: be able to swipe/drag to next page? butttons only show up on hover?
+        //TODO: instead of pages make carousel like ig w dots so that user can swipe through all events instead of clicking pages
 export default function EventGridClient({ allEvents }: EventGridProps) {
 	// track tabs and page
 	// only want 6 events per page (for now)
@@ -42,9 +43,7 @@ export default function EventGridClient({ allEvents }: EventGridProps) {
 				<button
 					onClick={() => handleTabSwitch("upcoming")}
 					className={`px-6 py-2 transition-colors ${
-						activeTab === "upcoming"
-							? "bg-acm-darker-blue text-white"
-							: "bg-white text-acm-darker-blue hover:bg-acm-darker-blue/10"
+						activeTab === "upcoming" ? "bg-acm-darker-blue text-white" : "bg-white text-acm-darker-blue hover:bg-acm-darker-blue/10"
 					}`}
 				>
 					Upcoming
@@ -52,9 +51,7 @@ export default function EventGridClient({ allEvents }: EventGridProps) {
 				<button
 					onClick={() => handleTabSwitch("past")}
 					className={`px-6 py-2 transition-colors ${
-						activeTab === "past"
-							? "bg-acm-darker-blue text-white"
-							: "bg-white text-acm-darker-blue hover:bg-acm-darker-blue/10"
+						activeTab === "past" ? "bg-acm-darker-blue text-white" : "bg-white text-acm-darker-blue hover:bg-acm-darker-blue/10"
 					}`}
 				>
 					Past
@@ -88,9 +85,7 @@ export default function EventGridClient({ allEvents }: EventGridProps) {
 										key={pageNum}
 										onClick={() => setCurrentPage(pageNum)}
 										className={`border-2 border-acm-darker-blue px-3 py-1 transition-colors ${
-											currentPage === pageNum
-												? "bg-acm-darker-blue text-white"
-												: "bg-white text-acm-darker-blue hover:bg-acm-darker-blue/10"
+											currentPage === pageNum ? "bg-acm-darker-blue text-white" : "bg-white text-acm-darker-blue hover:bg-acm-darker-blue/10"
 										}`}
 									>
 										{pageNum}
