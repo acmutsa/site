@@ -15,9 +15,9 @@ export default function EventCard({ event, onClick }: EventCardProps) {
 
 	return (
 		<div onClick={onClick} className="group flex cursor-pointer flex-col">
-			<div className="mx-auto flex w-64 flex-col gap-1 hover:underline hover:underline-offset-2 hover:decoration-2 hover:decoration-acm-darker-blue">
+			<div className="mx-auto flex w-64 flex-col gap-1 hover:underline hover:underline-offset-2 hover:decoration-2 hover:decoration-acm-darker-blue/50">
 				{/* image */}
-				<div className="relative aspect-square w-full overflow-hidden rounded-2xl bg-gray-400">
+				<div className="relative aspect-square w-full overflow-hidden rounded-2xl">
 					{imageUrl ? (
 						<img
 							src={imageUrl}
@@ -25,7 +25,7 @@ export default function EventCard({ event, onClick }: EventCardProps) {
 							className="aspect-square h-full w-full object-cover"
 						/>
 					) : (
-						<div className="flex h-full w-full items-center justify-center px-4 text-center font-mono text-xs font-bold text-gray-600">
+						<div className="flex h-full w-full items-center justify-center px-4 text-center font-mono text-xs font-bold bg-gray-400 text-gray-600">
 							No Image Provided
 						</div>
 					)}

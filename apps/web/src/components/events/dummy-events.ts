@@ -68,6 +68,7 @@ export const DUMMY_EVENTS: EventType[] = [
         date: "2024-04-30T17:00:00-05:00", 
         location: "NPB", 
         status: "upcoming",
+        imageUrl: "/img/photos/birdsup.png",
         tags: [EVENT_TAGS.CIC, EVENT_TAGS.WORKSHOP]
     },
     { 
@@ -76,6 +77,8 @@ export const DUMMY_EVENTS: EventType[] = [
         date: "2024-04-30T17:00:00-05:00", 
         location: "NPB", 
         status: "upcoming",
+        imageUrl: "/img/photos/dinochess.jpg",
+        tags: [EVENT_TAGS.CIC, EVENT_TAGS.WORKSHOP]
     }, 
     { 
         id: 8, 
@@ -94,6 +97,7 @@ export const DUMMY_EVENTS: EventType[] = [
         location: "SP1", 
         status: "past",
         description: "",
+        imageUrl: "https://www.rowdycybercon.org/_next/image?url=%2Fimg%2Flogo%2Frowdyconlogo.png&w=640&q=75",
         tags: [{label: "CyberJedis", color: "#233a70"}, // testing custom tags 
             {label: "WiCys", color: "#762c96"},
             EVENT_TAGS.HACKATHON, EVENT_TAGS.CB]
@@ -105,6 +109,7 @@ export const DUMMY_EVENTS: EventType[] = [
         location: "Field 2", 
         status: "past",
         description: "",
+        imageUrl: "img/photos/dinogreen.jpg",
         tags: [EVENT_TAGS.CIC, EVENT_TAGS.SOCIAL]
     },
 ];

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import EventCard from "@/components/events/EventCard";
 import EventPopup from "@/components/events/event-card-popup";
 import { EventType } from "@/components/events/types";
@@ -13,12 +13,13 @@ interface EventGridProps {
 // TODO: be able to swipe/drag to next page? butttons only show up on hover?
         //TODO: instead of pages make carousel like ig w dots so that user can swipe through all events instead of clicking pages
 export default function EventGridClient({ allEvents }: EventGridProps) {
-	// track tabs and page
+	// track tabs and
 	// only want 6 events per page (for now)
         // maybe change to 4 when calendar is added
 	const [activeTab, setActiveTab] = useState<"upcoming" | "past">("upcoming");
-	const [currentPage, setCurrentPage] = useState(1);
+	const [currentPage, setCurrentPage] = useState(0);
 	const eventsPerPage = 6;
+    const carouselRef = useRef<HTMLDivElement>(null);
 
 	const [selectedEvent, setSelectedEvent] = useState<EventType | null>(null);
 
@@ -26,15 +27,36 @@ export default function EventGridClient({ allEvents }: EventGridProps) {
 		(event) => event.status === activeTab,
 	);
 
-	const totalPages = Math.ceil(filteredEvents.length / eventsPerPage);
+	const pages = [];
+    for (let i = 0; i < filteredEvents.length; i += eventsPerPage) {
+        pages.push(filteredEvents.slice(i, i + eventsPerPage));
+    }
 	const startIndex = (currentPage - 1) * eventsPerPage;
 	const endIndex = startIndex + eventsPerPage;
 	const currentEvents = filteredEvents.slice(startIndex, endIndex);
 
 	const handleTabSwitch = (tab: "upcoming" | "past") => {
-		setActiveTab(tab);
-		setCurrentPage(1); // reset to page 1 when switching tabs
-	};
+        setActiveTab(tab);
+        setCurrentPage(0); 
+        if (carouselRef.current) {
+            carouselRef.current.scrollTo({ left: 0, behavior: "auto" });
+        }
+    };
+    const handleScroll = () => {
+        if (!carouselRef.current) return;
+        const { scrollLeft, clientWidth } = carouselRef.current;
+        const newIndex = Math.round(scrollLeft / clientWidth);
+        if (newIndex !== currentPage) {
+            setCurrentPage(newIndex);
+        }
+    };
+    const scrollToPage = (index: number) => {
+        if (!carouselRef.current) return;
+        carouselRef.current.scrollTo({
+            left: index * carouselRef.current.clientWidth,
+            behavior: "smooth",
+        });
+    };
 
 	return (
 		<div className="flex w-full flex-col">
@@ -58,44 +80,52 @@ export default function EventGridClient({ allEvents }: EventGridProps) {
 				</button>
 			</div>
 
-			{/* event grid */}
+			{/* event grid carousel*/}
+            {/*TODO: maybe add buttons on side? only appear on hover */}
 			{filteredEvents.length === 0 ? (
-				<div className="flex h-64 min-h-[800px] w-full items-center justify-center border-2 border-dashed border-acm-darker-blue/30 font-mono text-2xl font-semibold text-acm-darker-blue">
-					No events found.
-				</div>
-			) : (
-				<div className="flex w-full flex-col items-end">
-					<div className="grid w-full justify-items-center grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-						{currentEvents.map((event) => (
-							<EventCard
-								key={event.id}
-								event={event}
-								onClick={() => setSelectedEvent(event)}
-							/>
-						))}
-					</div>
+                <div className="flex h-64 min-h-[800px] w-full items-center justify-center rounded-2xl border-2 border-dashed border-acm-darker-blue/30 font-mono text-2xl font-semibold text-acm-darker-blue">
+                    No events found.
+                </div>
+            ) : (
+                <div className="flex w-full flex-col items-center">
+                    <div
+                        ref={carouselRef}
+                        onScroll={handleScroll}
+                        className="flex w-full snap-x snap-mandatory overflow-x-auto no-scrollbar"
+                    >
+                        {pages.map((pageEvents, pageIndex) => (
+                            <div
+                                key={pageIndex}
+                                className="w-full shrink-0 snap-center pb-4"
+                            >
+                                <div className="grid w-full justify-items-center grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                                    {pageEvents.map((event) => (
+                                        <EventCard
+                                            key={event.id}
+                                            event={event}
+                                            onClick={() => setSelectedEvent(event)}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
 
-					{/* for more than 1 page */}
-					{totalPages > 1 && (
-						<div className="mt-10 flex gap-1 font-mono text-lg font-bold">
-							{Array.from({ length: totalPages }, (_, index) => {
-								const pageNum = index + 1;
-								return (
-									<button
-										key={pageNum}
-										onClick={() => setCurrentPage(pageNum)}
-										className={`border-2 border-acm-darker-blue rounded-md px-3 py-1 transition-colors ${
-											currentPage === pageNum ? "bg-acm-darker-blue text-white" : "bg-white text-acm-darker-blue hover:bg-acm-darker-blue/10"
-										}`}
-									>
-										{pageNum}
-									</button>
-								);
-							})}
-						</div>
-					)}
-				</div>
-			)}
+                    {pages.length > 1 && (
+                        <div className="mt-8 flex justify-center gap-2">
+                            {pages.map((_, idx) => (
+                                <button
+                                    key={idx}
+                                    onClick={() => scrollToPage(idx)}
+                                    aria-label={`Go to page ${idx + 1}`}
+                                    className={`h-2.5 w-2.5 rounded-full transition-all duration-300 ${currentPage === idx ? "bg-acm-darker-blue" : "bg-acm-darker-blue/30 hover:bg-acm-darker-blue/60"
+                                    }`}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </div>
+            )}
 			<EventPopup
 				event={selectedEvent}
 				onClose={() => setSelectedEvent(null)}
