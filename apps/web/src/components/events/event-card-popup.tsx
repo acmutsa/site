@@ -47,21 +47,6 @@ export default function EventPopup({ event, onClose }: EventPopupProps) {
 	};
 
 	// prevent background scrolling when popup is open
-	useEffect(() => {
-		if (event) {
-			document.body.style.overflow = "hidden";
-			// check when popup opens
-			handleScroll();
-			window.addEventListener("resize", handleScroll);
-		} else {
-			document.body.style.overflow = "unset";
-		}
-
-		return () => {
-			document.body.style.overflow = "unset";
-		};
-	}, [event]);
-
     useEffect(() => {
         if (event) {
             document.body.style.overflow = "hidden";
@@ -99,9 +84,8 @@ export default function EventPopup({ event, onClose }: EventPopupProps) {
 			className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 p-4 backdrop-blur-sm"
 			onClick={onClose}
 		>
-			{/* Added rounded-xl here just to keep the edges smooth! */}
 			<div
-				className="relative grid max-h-[85vh] w-[95vw] max-w-5xl grid-cols-1 overflow-hidden bg-white shadow-2xl md:h-[600px] md:grid-cols-2"
+				className="relative grid max-h-[85vh] w-[95vw] max-w-5xl grid-cols-1 overflow-hidden rounded-2xl bg-white shadow-2xl md:h-[600px] md:grid-cols-2"
 				onClick={(e) => e.stopPropagation()}
 			>
 				<button
@@ -162,7 +146,6 @@ export default function EventPopup({ event, onClose }: EventPopupProps) {
 								))}
 							</div>
 
-							{/* now only fades out at beginning and end of scroll */}
 							{/* left */}
 							{/* dude the transition duration is bugging me so much */}
 							<div
@@ -191,22 +174,21 @@ export default function EventPopup({ event, onClose }: EventPopupProps) {
 						</div>
 
 						{/* top */}
-                        {/* FIXME: when scrolling description on event popup and closing popup while fade out is active, effect appears on next opened popup */}
 						<div className={`pointer-events-none absolute left-0 top-0 h-6 w-full bg-gradient-to-b from-white to-transparent transition-opacity duration-300 ${canScrollTop ? "opacity-100" : "opacity-0"}`}/>
 						{/* bot */}
 						<div className={`pointer-events-none absolute left-0 bottom-0 h-6 w-full bg-gradient-to-t from-white to-transparent ${canScrollBottom ? "opacity-100" : "opacity-0"}`}/>
 					</div>
 
 					<div className="flex w-full shrink-0 gap-4">
-						<button className="flex h-12 w-14 shrink-0 items-center justify-center rounded-sm bg-acm-darker-blue text-white transition-all hover:brightness-75">
+						<button className="flex h-12 w-14 shrink-0 items-center justify-center rounded-md bg-acm-darker-blue text-white transition-all hover:brightness-75">
 							▶
 							{/* TODO: change to image/icon later? links to stream/yt - def a way to direectly link to stream or vod*/}
 						</button>
-						<button className="flex-1 bg-acm-darker-blue px-6 py-2 font-bold text-white transition-all hover:brightness-75">
+						<button className="flex-1 bg-acm-darker-blue px-6 py-2 rounded-md font-bold text-white transition-all hover:brightness-75">
 							Remind Me{" "}
 							{/* TODO: link to event in membership portal? or add to google calendar? ask later */}
 						</button>
-						<button className="flex-1 border-2 border-acm-darker-blue px-6 py-2 font-bold text-acm-darker-blue transition-colors hover:bg-acm-darker-blue/10">
+						<button className="flex-1 border-2 border-acm-darker-blue px-6 py-2 rounded-md font-bold text-acm-darker-blue transition-colors hover:bg-acm-darker-blue/10">
 							Check In{" "}
 							{/* TODO: link to event in membership portal */}
 						</button>

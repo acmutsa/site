@@ -16,6 +16,7 @@ interface EventGridProps {
 export default function EventGridClient({ allEvents }: EventGridProps) {
 	// track tabs and page
 	// only want 6 events per page (for now)
+        // maybe change to 4 when calendar is added
 	const [activeTab, setActiveTab] = useState<"upcoming" | "past">("upcoming");
 	const [currentPage, setCurrentPage] = useState(1);
 	const eventsPerPage = 6;
@@ -39,7 +40,7 @@ export default function EventGridClient({ allEvents }: EventGridProps) {
 	return (
 		<div className="flex w-full flex-col">
 			{/* button/tabs */}
-			<div className="mb-8 flex w-fit self-end border-2 border-acm-darker-blue font-mono text-sm font-bold">
+			<div className="mb-8 flex w-fit self-end border-2 border-acm-darker-blue overflow-hidden rounded-md font-mono text-sm font-bold ">
 				<button
 					onClick={() => handleTabSwitch("upcoming")}
 					className={`px-6 py-2 transition-colors ${

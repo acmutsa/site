@@ -14,23 +14,23 @@ export default function EventCard({ event, onClick }: EventCardProps) {
 
 	return (
 		<div onClick={onClick} className="group flex cursor-pointer flex-col">
-			<div className="m-auto flex w-64 flex-col gap-1 bg-gray-200 pb-1">
-				<div className="relative aspect-square w-full overflow-hidden bg-gray-400">
+			<div className="m-auto flex w-64 flex-col gap-1 pb-1">
+				<div className="relative aspect-square w-full overflow-hidden rounded-2xl bg-gray-400">
 					{imageUrl && (
 						<img
 							src={imageUrl}
 							alt={title}
-							className="h-full w-full object-cover"
+							className="h-full w-full object-cover aspect-square"
 						/>
 					)}
 				</div>
 
-				<div className="flex flex-col gap-1 px-2">
+				<div className="flex flex-col gap-1">
 					<h2 className="font-mono font-semibold text-acm-darker-blue">
 						{title}
 					</h2>
 
-					{/* implement ISO date formatting later*/}
+					{/* implement ISO date formatting later?*/}
 					<p className="font-mono text-sm text-acm-darker-blue">
 						{date || "TBD"}
 					</p>
