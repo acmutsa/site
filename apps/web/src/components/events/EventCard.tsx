@@ -1,5 +1,6 @@
 import React from "react";
 import { EventType } from "@/components/events/types";
+import { Calendar, MapPin } from "lucide-react";
 
 // TODO: might have to add links
 interface EventCardProps {
@@ -15,7 +16,7 @@ export default function EventCard({ event, onClick }: EventCardProps) {
 	return (
 		<div onClick={onClick} className="group flex cursor-pointer flex-col">
 			<div className="m-auto flex w-64 flex-col gap-1">
-                {/* image */}
+				{/* image */}
 				<div className="relative aspect-square w-full overflow-hidden rounded-2xl bg-gray-400">
 					{imageUrl ? (
 						<img
@@ -24,23 +25,37 @@ export default function EventCard({ event, onClick }: EventCardProps) {
 							className="aspect-square h-full w-full object-cover"
 						/>
 					) : (
-						<div className="flex h-full w-full items-center justify-center px-4 text-center text-xs font-bold font-mono text-gray-600">
+						<div className="flex h-full w-full items-center justify-center px-4 text-center font-mono text-xs font-bold text-gray-600">
 							No Image Provided
 						</div>
 					)}
 					<div className="pointer-events-none absolute inset-0 bg-acm-darker-blue opacity-0 transition-opacity group-hover:opacity-10" />
 				</div>
 
-                {/* info */}
+				{/* info */}
+                {/* idk if i want the icons on the events cards - ask later */}
 				<div className="flex flex-col">
 					<h2 className="truncate font-calsans font-bold text-acm-darker-blue">
 						{title}
 					</h2>
-					{/* implement ISO date formatting later?*/}
-					<p className="font-calsans text-sm text-acm-darker-blue">
-						{date || "TBD"}
+					<p className="flex items-center gap-x-1 font-calsans text-sm text-acm-darker-blue">
+						<Calendar
+							strokeWidth={2.5}
+							size={15}
+							className="shrink-0"
+						/>
+						{date
+							? new Date(date).toLocaleString("en-US", {
+									timeZone: "America/Chicago",
+									month: "short",
+									day: "numeric",
+									hour: "numeric",
+									minute: "numeric",
+								}).replace(", ", " @ ")
+							: "TBD"}
 					</p>
-					<p className="font-calsans text-sm text-acm-darker-blue">
+					<p className="flex items-center gap-x-1 font-calsans text-sm text-acm-darker-blue">
+						<MapPin strokeWidth={2.5} size={15} />
 						{location || "TBD"}
 					</p>
 				</div>

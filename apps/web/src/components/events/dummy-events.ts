@@ -6,7 +6,7 @@ export const DUMMY_EVENTS: EventType[] = [
     { 
         id: 0, 
         title: "ACM-W Workshop", 
-        date: "Apr 24 @ 5:00 PM", 
+        date: "2024-04-24T17:00:00-05:00", 
         location: "NPB", 
         status: "upcoming",
         description: "Join ACM-W for a technical workshop focused on career development and tech skills.",
@@ -15,7 +15,7 @@ export const DUMMY_EVENTS: EventType[] = [
     { 
         id: 1, 
         title: "ITT: Game Dev", 
-        date: "Apr 25 @ 6:00 PM", 
+        date: "2024-04-25T18:00:00-05:00", 
         location: "NPB", 
         status: "upcoming",
         description: "Explore the world of game development with ITT.",
@@ -24,7 +24,7 @@ export const DUMMY_EVENTS: EventType[] = [
     { 
         id: 2, 
         title: "ICPC", 
-        date: "Apr 26 @ 12:00 PM", 
+        date: "2024-04-26T12:00:00-05:00", 
         location: "NPB 01.114", 
         status: "upcoming",
         description: "jdfjskdhfkj2342342rferetCompetitive programming practice session. ".repeat(30), // testing overflow
@@ -33,7 +33,7 @@ export const DUMMY_EVENTS: EventType[] = [
     { 
         id: 3, 
         title: "Painting Social", 
-        date: "Apr 27 @ 10:00 AM", 
+        date: "2024-04-27T10:00:00-05:00", 
         location: "Student Union", 
         status: "upcoming",
         description: "Relaxing painting session.",
@@ -42,7 +42,7 @@ export const DUMMY_EVENTS: EventType[] = [
     { 
         id: 4, 
         title: "Movie Social", 
-        date: "Apr 28 @ 8:00 PM", 
+        date: "2024-04-28T20:00:00-05:00", 
         location: "Retama", 
         status: "upcoming",
         description: "Join us for a movie night! " + "more words ".repeat(100), // testing overflow
@@ -51,7 +51,7 @@ export const DUMMY_EVENTS: EventType[] = [
     { 
         id: 5, 
         title: "RC Workathon", 
-        date: "Apr 29 @ 2:00 PM", 
+        date: "2024-04-29T14:00:00-05:00", 
         location: "NPB", 
         status: "upcoming",
         tags: [EVENT_TAGS.RC, EVENT_TAGS.WORKSHOP]
@@ -59,7 +59,7 @@ export const DUMMY_EVENTS: EventType[] = [
     { 
         id: 6, 
         title: "CiC Workshop", 
-        date: "Apr 30 @ 5:00 PM", 
+        date: "2024-04-30T17:00:00-05:00", 
         location: "NPB", 
         status: "upcoming",
         tags: [EVENT_TAGS.CIC, EVENT_TAGS.WORKSHOP]
@@ -67,24 +67,24 @@ export const DUMMY_EVENTS: EventType[] = [
     { 
         id: 7, 
         title: "CiC Workshop 2" + "long title ".repeat(10), 
-        date: "Apr 30 @ 5:00 PM", 
+        date: "2024-04-30T17:00:00-05:00", 
         location: "NPB", 
         status: "upcoming",
     }, 
     { 
-    id: 8, 
-    title: "Empty Event", 
-    date: "",
-    location: "", 
-    status: "upcoming",
-    description: "" 
+        id: 8, 
+        title: "Empty Event", 
+        date: "",
+        location: "", 
+        status: "upcoming",
+        description: "" 
     },
 
     // past events testing
     { 
         id: 9, 
         title: "Rowdy CyberCon", 
-        date: "Apr 11 @ 4:00 PM", 
+        date: "2024-04-11T16:00:00-05:00", 
         location: "SP1", 
         status: "past",
         description: "",
@@ -95,7 +95,7 @@ export const DUMMY_EVENTS: EventType[] = [
     { 
         id: 10, 
         title: "Rec Field Social", 
-        date: "Apr 3 @ 5:00 PM", 
+        date: "2024-04-03T17:00:00-05:00", 
         location: "Field 2", 
         status: "past",
         description: "",
