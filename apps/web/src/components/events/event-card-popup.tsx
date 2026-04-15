@@ -62,6 +62,36 @@ export default function EventPopup({ event, onClose }: EventPopupProps) {
 		};
 	}, [event]);
 
+    useEffect(() => {
+        if (event) {
+            document.body.style.overflow = "hidden";
+            
+            if (scrollContainerRef.current) scrollContainerRef.current.scrollLeft = 0;
+            if (descScrollRef.current) descScrollRef.current.scrollTop = 0;
+
+            // check when popup opens
+            handleScroll();
+            handleDescScroll(); 
+            window.addEventListener("resize", handleScroll);
+            window.addEventListener("resize", handleDescScroll);
+        } else {
+            document.body.style.overflow = "unset";
+            
+            // reset states when popup is closed
+            setCanScrollTop(false);
+            setCanScrollBottom(true);
+            setCanScrollLeft(false);
+            setCanScrollRight(true);
+        }
+
+        return () => {
+            document.body.style.overflow = "unset";
+            // for cleanup
+            window.removeEventListener("resize", handleScroll);
+            window.removeEventListener("resize", handleDescScroll);
+        };
+    }, [event]);
+
 	if (!event) return null;
 
 	return (
