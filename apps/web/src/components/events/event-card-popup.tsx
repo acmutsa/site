@@ -96,7 +96,7 @@ export default function EventPopup({ event, onClose }: EventPopupProps) {
 				</button>
 
 				<div className="flex h-full w-full items-center justify-center bg-gray-200">
-					<div className="px-6 text-center font-calsans text-gray-500">
+					<div className="px-6 text-center font-mono text-gray-500">
 						{event.imageUrl ? "Image/Video" : "No Content Provided"}
 					</div>
 				</div>
@@ -116,13 +116,13 @@ export default function EventPopup({ event, onClose }: EventPopupProps) {
                 </div>
                 */}
 
-				<div className="flex h-full flex-col overflow-hidden p-12 font-calsans">
+				<div className="flex h-full flex-col overflow-hidden p-12">
 					<div className="shrink-0">
-						<h2 className="mb-2 font-calsans text-4xl font-bold text-acm-darker-blue">
+						<h2 className="mb-2 text-4xl font-calsans font-bold text-acm-darker-blue">
 							{event.title}
 						</h2>
 
-						<div className="mb-4 space-y-2 text-xl font-bold text-acm-darker-blue">
+						<div className="mb-4 space-y-2 text-xl font-calsans font-bold text-acm-darker-blue">
 							{/* change to images/icons later */}
 							<h2>◷ {event.date || "TBD"}</h2>
 							<h2>⚲ {event.location || "TBD"}</h2>
@@ -130,7 +130,7 @@ export default function EventPopup({ event, onClose }: EventPopupProps) {
 
 						{/* TODO: ask if suborg and event type tags should be separate (2 diff rows) or combined (1 row & scroll, suborg or type first?) */}
 						{/* TODO: make suborg tag clickable & take you to suborg page*/}
-						<div className="relative mb-2">
+						<div className="relative mb-2 font-calsans">
 							<div
 								ref={scrollContainerRef}
 								onScroll={handleScroll}
@@ -157,7 +157,7 @@ export default function EventPopup({ event, onClose }: EventPopupProps) {
 							/>
 						</div>
 
-						<h2 className="mb-2 text-xl font-bold text-acm-darker-blue">
+						<h2 className="mb-2 text-xl font-calsans font-bold text-acm-darker-blue">
 							Description
 						</h2>
 					</div>
@@ -167,7 +167,7 @@ export default function EventPopup({ event, onClose }: EventPopupProps) {
 							onScroll={handleDescScroll}
 							className="flex-1 overflow-y-auto no-scrollbar"
 						>
-							<p className="text-sm">
+							<p className="font-mono text-sm">
 								{event.description ||
 									"No description provided for this event."}
 							</p>
