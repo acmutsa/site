@@ -88,10 +88,90 @@ export const DUMMY_EVENTS: EventType[] = [
         status: "upcoming",
         description: "" 
     },
+    { 
+        id: 9, 
+        title: "Empty Event", 
+        date: "",
+        location: "", 
+        status: "upcoming",
+        description: "" 
+    },
+    { 
+        id: 10, 
+        title: "Empty Event", 
+        date: "",
+        location: "", 
+        status: "upcoming",
+        description: "" 
+    },
+    { 
+        id: 11, 
+        title: "Empty Event", 
+        date: "",
+        location: "", 
+        status: "upcoming",
+        description: "" 
+    },
+    { 
+        id: 12, 
+        title: "Empty Event", 
+        date: "",
+        location: "", 
+        status: "upcoming",
+        description: "" 
+    },
+    { 
+        id: 13, 
+        title: "Empty Event", 
+        date: "",
+        location: "", 
+        status: "upcoming",
+        description: "" 
+    },
+    { 
+        id: 14, 
+        title: "Empty Event", 
+        date: "",
+        location: "", 
+        status: "upcoming",
+        description: "" 
+    },
+    { 
+        id: 15, 
+        title: "Empty Event", 
+        date: "",
+        location: "", 
+        status: "upcoming",
+        description: "" 
+    },
+    { 
+        id: 16, 
+        title: "Empty Event", 
+        date: "",
+        location: "", 
+        status: "upcoming",
+        description: "" 
+    },
+    { 
+        id: 17, 
+        title: "Empty Event", 
+        date: "",
+        location: "", 
+        status: "upcoming",
+        description: "" 
+    },
+    { 
+        id: 18, 
+        title: "Empty Event", 
+        date: "",
+        location: "", 
+        status: "upcoming",
+        description: "" 
+    },
 
     // past events testing
     { 
-        id: 9, 
+        id: 19, 
         title: "Rowdy CyberCon", 
         date: "2024-04-11T16:00:00-05:00", 
         location: "SP1", 
@@ -103,7 +183,7 @@ export const DUMMY_EVENTS: EventType[] = [
             EVENT_TAGS.HACKATHON, EVENT_TAGS.CB]
     },
     { 
-        id: 10, 
+        id: 20, 
         title: "Rec Field Social", 
         date: "2024-04-03T17:00:00-05:00", 
         location: "Field 2", 

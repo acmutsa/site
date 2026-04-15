@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { EventType } from "@/components/events/types";
 import EventTag from "@/components/events/EventTag";
-import { Calendar, MapPin } from "lucide-react";
+import { Calendar, MapPin, Play} from "lucide-react";
 
 interface EventPopupProps {
 	event: EventType | null;
@@ -202,9 +202,13 @@ export default function EventPopup({ event, onClose }: EventPopupProps) {
 					</div>
 
 					<div className="flex w-full shrink-0 gap-4">
-						<button className="flex h-12 w-14 shrink-0 items-center justify-center rounded-md bg-acm-darker-blue text-white transition-all hover:brightness-75">
-							▶
-							{/* TODO: change to image/icon later? links to stream/yt - def a way to direectly link to stream or vod*/}
+						<button className="flex h-12 w-14 shrink-0 items-center justify-center rounded-md bg-acm-darker-blue text-white transition-all hover:brightness-75 ">
+							<Play
+								strokeWidth={2.5}
+								size={20}
+								className="shrink-0"
+							/>
+							{/* TODO:  links to stream/yt - def a way to direectly link to stream or vod*/}
 						</button>
 						<button className="flex-1 rounded-md bg-acm-darker-blue px-6 py-2 font-bold text-white transition-all hover:brightness-75">
 							Remind Me{" "}
