@@ -90,13 +90,13 @@ export default function EventPopup({ event, onClose }: EventPopupProps) {
 			>
 				<button
 					onClick={onClose}
-					className="absolute right-4 top-2 z-10 font-mono text-2xl font-bold text-acm-darker-blue/50 transition-colors hover:text-acm-darker-blue"
+					className="absolute right-4 top-2 z-10 font-calsans text-2xl font-bold text-acm-darker-blue/50 transition-colors hover:text-acm-darker-blue"
 				>
 					✕
 				</button>
 
 				<div className="flex h-full w-full items-center justify-center bg-gray-200">
-					<div className="px-6 text-center font-mono text-gray-500">
+					<div className="px-6 text-center font-calsans text-gray-500">
 						{event.imageUrl ? "Image/Video" : "No Content Provided"}
 					</div>
 				</div>
@@ -109,16 +109,16 @@ export default function EventPopup({ event, onClose }: EventPopupProps) {
                             className="aspect-square h-full w-full object-cover" 
                         />
                     ) : (
-                        <div className="font-mono text-gray-500 text-center px-6">
+                        <div className="font-calsans text-gray-500 text-center px-6">
                             No Image Provided
                         </div>
                     )}
                 </div>
                 */}
 
-				<div className="flex h-full flex-col overflow-hidden p-12 font-mono">
+				<div className="flex h-full flex-col overflow-hidden p-12 font-calsans">
 					<div className="shrink-0">
-						<h2 className="mb-6 font-mono text-4xl font-bold text-acm-darker-blue">
+						<h2 className="mb-2 font-calsans text-4xl font-bold text-acm-darker-blue">
 							{event.title}
 						</h2>
 
@@ -130,7 +130,7 @@ export default function EventPopup({ event, onClose }: EventPopupProps) {
 
 						{/* TODO: ask if suborg and event type tags should be separate (2 diff rows) or combined (1 row & scroll, suborg or type first?) */}
 						{/* TODO: make suborg tag clickable & take you to suborg page*/}
-						<div className="relative mb-6">
+						<div className="relative mb-2">
 							<div
 								ref={scrollContainerRef}
 								onScroll={handleScroll}

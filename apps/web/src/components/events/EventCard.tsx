@@ -26,15 +26,14 @@ export default function EventCard({ event, onClick }: EventCardProps) {
 				</div>
 
 				<div className="flex flex-col gap-1">
-					<h2 className="font-mono font-semibold text-acm-darker-blue">
+					<h2 className="font-calsans font-semibold text-acm-darker-blue">
 						{title}
 					</h2>
-
 					{/* implement ISO date formatting later?*/}
-					<p className="font-mono text-sm text-acm-darker-blue">
+					<p className="font-calsans text-sm text-acm-darker-blue">
 						{date || "TBD"}
 					</p>
-					<p className="font-mono text-sm text-acm-darker-blue">
+					<p className="font-calsans text-sm text-acm-darker-blue">
 						{location || "TBD"}
 					</p>
 				</div>
