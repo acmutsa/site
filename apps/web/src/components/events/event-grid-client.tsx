@@ -65,7 +65,7 @@ export default function EventGridClient({ allEvents }: EventGridProps) {
 				</div>
 			) : (
 				<div className="flex w-full flex-col items-end">
-					<div className="grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+					<div className="grid w-full justify-items-center grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
 						{currentEvents.map((event) => (
 							<EventCard
 								key={event.id}
