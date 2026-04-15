@@ -10,24 +10,27 @@ export const DUMMY_EVENTS: EventType[] = [
         location: "NPB", 
         status: "upcoming",
         description: "Join ACM-W for a technical workshop focused on career development and tech skills.",
+        imageUrl: "/img/test_image.webp",
         tags: [EVENT_TAGS.ACMW, EVENT_TAGS.WORKSHOP]
     },
     { 
         id: 1, 
         title: "ITT: Game Dev", 
         date: "2024-04-25T18:00:00-05:00", 
-        location: "NPB", 
+        location: "NPB 1.202", 
         status: "upcoming",
         description: "Explore the world of game development with ITT.",
+        imageUrl: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&auto=format&fit=crop&q=60&ixlib=rb-4.0.3",
         tags: [EVENT_TAGS.WORKSHOP]
     },
     { 
         id: 2, 
         title: "ICPC", 
         date: "2024-04-26T12:00:00-05:00", 
-        location: "NPB 01.114", 
+        location: "NPB 1.114", 
         status: "upcoming",
         description: "jdfjskdhfkj2342342rferetCompetitive programming practice session. ".repeat(30), // testing overflow
+        imageUrl: "/img/photos/rhshirt.jpg",
         tags: [EVENT_TAGS.ICPC, EVENT_TAGS.WORKSHOP, EVENT_TAGS.WORKSHOP, EVENT_TAGS.CB, EVENT_TAGS.CB, EVENT_TAGS.CB, EVENT_TAGS.CB, EVENT_TAGS.CB, EVENT_TAGS.CB, EVENT_TAGS.CB]
     },
     { 
@@ -37,6 +40,7 @@ export const DUMMY_EVENTS: EventType[] = [
         location: "Student Union", 
         status: "upcoming",
         description: "Relaxing painting session.",
+        imageUrl: "/img/photos/bag.png",
         tags: [EVENT_TAGS.SOCIAL, EVENT_TAGS.CB, EVENT_TAGS.HACKATHON]
     },
     { 
@@ -46,6 +50,7 @@ export const DUMMY_EVENTS: EventType[] = [
         location: "Retama", 
         status: "upcoming",
         description: "Join us for a movie night! " + "more words ".repeat(100), // testing overflow
+        imageUrl: "img/photos/walrus.jpg",
         tags: [EVENT_TAGS.ACMW, EVENT_TAGS.CIC, EVENT_TAGS.RC, EVENT_TAGS.ICPC, EVENT_TAGS.ROWDYHACKS]
     },
     { 
@@ -54,6 +59,7 @@ export const DUMMY_EVENTS: EventType[] = [
         date: "2024-04-29T14:00:00-05:00", 
         location: "NPB", 
         status: "upcoming",
+        imageUrl: "/img/photos/shock.jpg",
         tags: [EVENT_TAGS.RC, EVENT_TAGS.WORKSHOP]
     },
     { 

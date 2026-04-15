@@ -10,7 +10,6 @@ interface EventGridProps {
     allEvents: EventType[];
 }
 
-// TODO: figure out page concat later? only show 1 2 ... n-1 n for pages
 // TODO: be able to swipe/drag to next page? butttons only show up on hover?
         //TODO: instead of pages make carousel like ig w dots so that user can swipe through all events instead of clicking pages
 export default function EventGridClient({ allEvents }: EventGridProps) {
@@ -85,7 +84,7 @@ export default function EventGridClient({ allEvents }: EventGridProps) {
 									<button
 										key={pageNum}
 										onClick={() => setCurrentPage(pageNum)}
-										className={`border-2 border-acm-darker-blue px-3 py-1 transition-colors ${
+										className={`border-2 border-acm-darker-blue rounded-md px-3 py-1 transition-colors ${
 											currentPage === pageNum ? "bg-acm-darker-blue text-white" : "bg-white text-acm-darker-blue hover:bg-acm-darker-blue/10"
 										}`}
 									>

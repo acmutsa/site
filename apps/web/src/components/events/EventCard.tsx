@@ -15,7 +15,7 @@ export default function EventCard({ event, onClick }: EventCardProps) {
 
 	return (
 		<div onClick={onClick} className="group flex cursor-pointer flex-col">
-			<div className="m-auto flex w-64 flex-col gap-1">
+			<div className="m-auto flex w-64 flex-col gap-1 hover:underline hover:underline-offset-2 hover:decoration-2 hover:decoration-acm-darker-blue">
 				{/* image */}
 				<div className="relative aspect-square w-full overflow-hidden rounded-2xl bg-gray-400">
 					{imageUrl ? (

@@ -6,7 +6,6 @@ import { DUMMY_EVENTS } from "@/components/events/dummy-events";
 // TODO: connect event to calendar
 // TODO:figure out calendar - will probably save for last..
 // TODO: maybe add ONGOING sticker for events that are currently happening?
-// TODO: make everything rounded!!!!!!! maybe not everything - landing page style
 // TODO: make filtering system using tags and be able to search for events w/ search bar
 
 // TODO: fix stuff for phone layout
@@ -34,7 +33,6 @@ export default function EventsPage() {
                 TODO: make fixed sized so that page doesnt squish when only 1 row of events
                 */}
 				<div className="mx-auto mt-12 w-full max-w-screen-xl pb-24">
-					{/* map events later T-T */}
 					<EventGridClient allEvents={DUMMY_EVENTS} />
 				</div>
 			</div>
