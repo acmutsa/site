@@ -82,11 +82,13 @@ export const DUMMY_EVENTS: EventType[] = [
     }, 
     { 
         id: 8, 
-        title: "Empty Event", 
-        date: "",
-        location: "", 
+        title: "ITT: How to Start Streaming" + "long title ".repeat(10), 
+        date: "2024-05-01T17:00:00-05:00", 
+        location: "NPB", 
         status: "upcoming",
-        description: "" 
+        description: "That's my streamer! ".repeat(50),
+        imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTpesSrqJcPddgXogNFDkrpQZHZ2pO55BesqQ&s",
+        tags: [EVENT_TAGS.CIC, EVENT_TAGS.WORKSHOP]
     },
     { 
         id: 9, 
