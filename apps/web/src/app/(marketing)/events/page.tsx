@@ -1,12 +1,12 @@
 import { HeroNav } from "@/components/shared/navbar";
 import Footer from "@/components/shared/footer";
-import EventGridClient from "@/components/events/event-grid-client";
 import { DUMMY_EVENTS } from "@/components/events/dummy-events";
+import EventCalendar from "@/components/events/EventCalendar";
+import EventsClientWrapper from "@/components/events/events-client-wrapper";
 
-// TODO: connect event to calendar
-// TODO:figure out calendar - will probably save for last..
 // TODO: maybe add ONGOING sticker for events that are currently happening?
 // TODO: make filtering system using tags and be able to search for events w/ search bar
+// FIXEME: edit spacing between all the stuff
 
 // TODO: fix stuff for phone layout
 export default function EventsPage() {
@@ -28,12 +28,8 @@ export default function EventsPage() {
 					community-driven events.
 				</p>
 
-                {/* 
-                TODO: move all this to the right when calendar is made
-                TODO: make fixed sized so that page doesnt squish when only 1 row of events
-                */}
-				<div className="mx-auto mt-12 w-full max-w-screen-xl pb-24">
-					<EventGridClient allEvents={DUMMY_EVENTS} />
+				<div className="mx-auto mt-12 flex w-full max-w-screen-xl flex-col gap-8 pb-24 lg:flex-row lg:items-stretch">
+					<EventsClientWrapper allEvents={DUMMY_EVENTS} />
 				</div>
 			</div>
 			<Footer orgName="ACM UTSA" />

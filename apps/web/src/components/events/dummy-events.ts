@@ -6,7 +6,7 @@ export const DUMMY_EVENTS: EventType[] = [
     { 
         id: 0, 
         title: "ACM-W Workshop", 
-        date: "2024-04-24T17:00:00-05:00", 
+        date: "2026-04-24T17:00:00-05:00", 
         location: "NPB", 
         status: "upcoming",
         description: "Join ACM-W for a technical workshop focused on career development and tech skills.",
@@ -16,7 +16,7 @@ export const DUMMY_EVENTS: EventType[] = [
     { 
         id: 1, 
         title: "ITT: Game Dev", 
-        date: "2024-04-25T18:00:00-05:00", 
+        date: "2026-04-25T18:00:00-05:00", 
         location: "NPB 1.202", 
         status: "upcoming",
         description: "Explore the world of game development with ITT.",
@@ -26,7 +26,7 @@ export const DUMMY_EVENTS: EventType[] = [
     { 
         id: 2, 
         title: "ICPC", 
-        date: "2024-04-26T12:00:00-05:00", 
+        date: "2026-04-26T12:00:00-05:00", 
         location: "NPB 1.114", 
         status: "upcoming",
         description: "jdfjskdhfkj2342342rferetCompetitive programming practice session. ".repeat(30), // testing overflow
@@ -36,7 +36,7 @@ export const DUMMY_EVENTS: EventType[] = [
     { 
         id: 3, 
         title: "Painting Social", 
-        date: "2024-04-27T10:00:00-05:00", 
+        date: "2026-04-27T10:00:00-05:00", 
         location: "Student Union", 
         status: "upcoming",
         description: "Relaxing painting session.",
@@ -46,7 +46,7 @@ export const DUMMY_EVENTS: EventType[] = [
     { 
         id: 4, 
         title: "Movie Social", 
-        date: "2024-04-28T20:00:00-05:00", 
+        date: "2026-04-28T20:00:00-05:00", 
         location: "Retama", 
         status: "upcoming",
         description: "Join us for a movie night! " + "more words ".repeat(100), // testing overflow
@@ -56,7 +56,7 @@ export const DUMMY_EVENTS: EventType[] = [
     { 
         id: 5, 
         title: "RC Workathon", 
-        date: "2024-04-29T14:00:00-05:00", 
+        date: "2026-04-29T14:00:00-05:00", 
         location: "NPB", 
         status: "upcoming",
         imageUrl: "/img/photos/shock.jpg",
@@ -65,7 +65,7 @@ export const DUMMY_EVENTS: EventType[] = [
     { 
         id: 6, 
         title: "CiC Workshop", 
-        date: "2024-04-30T17:00:00-05:00", 
+        date: "2026-04-30T17:00:00-05:00", 
         location: "NPB", 
         status: "upcoming",
         imageUrl: "/img/photos/birdsup.png",
@@ -74,7 +74,7 @@ export const DUMMY_EVENTS: EventType[] = [
     { 
         id: 7, 
         title: "CiC Workshop 2" + "long title ".repeat(10), 
-        date: "2024-04-30T17:00:00-05:00", 
+        date: "2026-04-30T17:00:00-05:00", 
         location: "NPB", 
         status: "upcoming",
         imageUrl: "/img/photos/dinochess.jpg",
@@ -83,7 +83,7 @@ export const DUMMY_EVENTS: EventType[] = [
     { 
         id: 8, 
         title: "ITT: How to Start Streaming" + "long title ".repeat(10), 
-        date: "2024-05-01T17:00:00-05:00", 
+        date: "2026-05-01T17:00:00-05:00", 
         location: "NPB", 
         status: "upcoming",
         description: "That's my streamer! ".repeat(50),
@@ -170,12 +170,22 @@ export const DUMMY_EVENTS: EventType[] = [
         status: "upcoming",
         description: "" 
     },
+    // testing more than 2 events on same day
+    { 
+        id: 19, 
+        title: "CiC Workshop 3" + "long title ".repeat(10), 
+        date: "2026-04-30T17:00:00-05:00", 
+        location: "NPB", 
+        status: "upcoming",
+        imageUrl: "/img/photos/dinochess.jpg",
+        tags: [EVENT_TAGS.CIC, EVENT_TAGS.WORKSHOP]
+    }, 
 
     // past events testing
     { 
-        id: 19, 
+        id: 20, 
         title: "Rowdy CyberCon", 
-        date: "2024-04-11T16:00:00-05:00", 
+        date: "2026-04-11T16:00:00-05:00", 
         location: "SP1", 
         status: "past",
         description: "",
@@ -185,9 +195,9 @@ export const DUMMY_EVENTS: EventType[] = [
             EVENT_TAGS.HACKATHON, EVENT_TAGS.CB]
     },
     { 
-        id: 20, 
+        id: 21, 
         title: "Rec Field Social", 
-        date: "2024-04-03T17:00:00-05:00", 
+        date: "2026-04-03T17:00:00-05:00", 
         location: "Field 2", 
         status: "past",
         description: "",

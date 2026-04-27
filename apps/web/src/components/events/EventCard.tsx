@@ -8,14 +8,12 @@ interface EventCardProps {
 	onClick: () => void;
 }
 
-// TODO: make image say no image provided like event popup when none
-// TODO: concat title if too long !! should not go over row
 export default function EventCard({ event, onClick }: EventCardProps) {
 	const { title, date, location, imageUrl } = event;
 
 	return (
-		<div onClick={onClick} className="group flex cursor-pointer flex-col">
-			<div className="mx-auto flex w-64 flex-col gap-1 hover:underline hover:underline-offset-2 hover:decoration-2 hover:decoration-acm-darker-blue/50">
+		<div onClick={onClick} className="group flex cursor-pointer flex-col w-full min-w-0">
+			<div className="mx-auto flex w-full flex-col gap-1 hover:underline hover:underline-offset-2 hover:decoration-2 hover:decoration-acm-darker-blue/50">
 				{/* image */}
 				<div className="relative aspect-square w-full overflow-hidden rounded-2xl">
 					{imageUrl ? (
@@ -33,7 +31,6 @@ export default function EventCard({ event, onClick }: EventCardProps) {
 				</div>
 
 				{/* info */}
-                {/* idk if i want the icons on the events cards - ask later */}
 				<div className="flex flex-col">
 					<h2 className="truncate font-calsans font-bold text-acm-darker-blue">
 						{title}

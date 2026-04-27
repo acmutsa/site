@@ -2,26 +2,24 @@
 
 import React, { useState, useRef } from "react";
 import EventCard from "@/components/events/EventCard";
-import EventPopup from "@/components/events/event-card-popup";
 import { EventType } from "@/components/events/types";
 import { ChevronLeft, ChevronRight, Search, ListFilter } from "lucide-react";
 
 interface EventGridProps {
 	allEvents: EventType[];
+	onEventClick: (event: EventType) => void;
 }
 
+// TODO: the the search and filter buttons actually do something
 // TODO: be able to swipe/drag to next page?
 // TODO: user can swipe through all events instead of clicking pages
-export default function EventGridClient({ allEvents }: EventGridProps) {
-	// track tabs and
-	// only want 6 events per page (for now)
+export default function EventGridClient({ allEvents, onEventClick }: EventGridProps) {
+	// track tabs and only want 6 events per page (for now)
 	// maybe change to 4 when calendar is added
 	const [activeTab, setActiveTab] = useState<"upcoming" | "past">("upcoming");
 	const [currentPage, setCurrentPage] = useState(0);
 	const eventsPerPage = 6;
 	const carouselRef = useRef<HTMLDivElement>(null);
-
-	const [selectedEvent, setSelectedEvent] = useState<EventType | null>(null);
 
 	const filteredEvents = allEvents.filter(
 		(event) => event.status === activeTab,
@@ -58,7 +56,8 @@ export default function EventGridClient({ allEvents }: EventGridProps) {
 	};
 
 	return (
-		<div className="flex w-full flex-col">
+		// might have to change this later when adjusting for smaller screen layout
+		<div className="flex min-h-[400px] w-full flex-col lg:min-h-[620px]">
 			<div className="mb-8 flex flex-row items-stretch justify-end gap-2">
 				{/* search button*/}
 				<button
@@ -81,7 +80,9 @@ export default function EventGridClient({ allEvents }: EventGridProps) {
 					<button
 						onClick={() => handleTabSwitch("upcoming")}
 						className={`px-6 py-2 transition-colors ${
-							activeTab === "upcoming" ? "bg-acm-darker-blue text-white" : "bg-white text-acm-darker-blue hover:bg-acm-darker-blue/10"
+							activeTab === "upcoming"
+								? "bg-acm-darker-blue text-white"
+								: "bg-white text-acm-darker-blue hover:bg-acm-darker-blue/10"
 						}`}
 					>
 						Upcoming
@@ -89,7 +90,9 @@ export default function EventGridClient({ allEvents }: EventGridProps) {
 					<button
 						onClick={() => handleTabSwitch("past")}
 						className={`px-6 py-2 transition-colors ${
-							activeTab === "past" ? "bg-acm-darker-blue text-white" : "bg-white text-acm-darker-blue hover:bg-acm-darker-blue/10"
+							activeTab === "past"
+								? "bg-acm-darker-blue text-white"
+								: "bg-white text-acm-darker-blue hover:bg-acm-darker-blue/10"
 						}`}
 					>
 						Past
@@ -103,33 +106,34 @@ export default function EventGridClient({ allEvents }: EventGridProps) {
 				</div>
 			) : (
 				<div className="flex w-full flex-col items-center">
-					<div className="flex w-full items-stretch gap-2 sm:gap-1">
-						{/* Left Arrow */}
+					<div className="relative flex w-full items-center">
+						{/* left arrow */}
 						<button
 							onClick={() => scrollToPage(currentPage - 1)}
 							disabled={currentPage === 0}
-							className="m-2 flex w-16 shrink-0 cursor-pointer items-center justify-center bg-white text-acm-darker-blue transition-opacity duration-300 disabled:pointer-events-none disabled:opacity-0"
+							className="absolute -left-10 z-10 flex cursor-pointer items-center justify-center bg-transparent text-acm-darker-blue transition-opacity duration-300 disabled:pointer-events-none disabled:opacity-0"
 						>
 							<ChevronLeft strokeWidth={2.5} size={50} />
 						</button>
 
-						{/* event grid carousel */}
+						{/* event carousel */}
 						<div
 							ref={carouselRef}
 							onScroll={handleScroll}
-							className="flex w-full flex-1 snap-x snap-mandatory overflow-x-auto no-scrollbar"
+							className="flex w-full flex-1 snap-x snap-mandatory gap-6 overflow-x-auto no-scrollbar"
 						>
 							{pages.map((pageEvents, pageIndex) => (
 								<div
 									key={pageIndex}
-									className="w-full shrink-0 snap-center pb-4"
+									className="w-full shrink-0 snap-center"
 								>
-									<div className="grid w-full grid-cols-1 justify-items-center gap-6 sm:grid-cols-2 lg:grid-cols-3">
+									<div className="grid min-h-[450px] w-full grid-cols-1 content-start justify-items-center gap-6 sm:grid-cols-2 lg:grid-cols-3">
 										{pageEvents.map((event) => (
 											<EventCard
 												key={event.id}
 												event={event}
-												onClick={() => setSelectedEvent(event)
+												onClick={() =>
+													onEventClick(event)
 												}
 											/>
 										))}
@@ -138,26 +142,28 @@ export default function EventGridClient({ allEvents }: EventGridProps) {
 							))}
 						</div>
 
-						{/* Right Arrow */}
+						{/* right arrow */}
 						<button
 							onClick={() => scrollToPage(currentPage + 1)}
 							disabled={currentPage === pages.length - 1}
-							className="m-2 flex w-16 shrink-0 cursor-pointer items-center justify-center bg-white text-acm-darker-blue transition-opacity duration-300 disabled:pointer-events-none disabled:opacity-0"
+							className="absolute -right-10 z-10 flex cursor-pointer items-center justify-center bg-transparent text-acm-darker-blue transition-opacity duration-300 disabled:pointer-events-none disabled:opacity-0"
 						>
 							<ChevronRight strokeWidth={2.5} size={50} />
 						</button>
 					</div>
 
 					{/* page dots */}
+					{/* TODO: limit amount of dots on the screen - look @ ig for ref (has max 5, slides with cards at ends*/}
 					{pages.length > 1 && (
-						<div className="mt-8 flex justify-center gap-2">
+						<div className="mt-2 flex justify-center gap-2">
 							{pages.map((_, idx) => (
 								<button
 									key={idx}
 									onClick={() => scrollToPage(idx)}
-									aria-label={`Go to page ${idx + 1}`}
-									className={`h-2.5 w-2.5 rounded-full transition-all duration-300 ${
-										currentPage === idx ? "bg-acm-darker-blue" : "bg-acm-darker-blue/30 hover:bg-acm-darker-blue/60"
+									className={`h-1.5 w-1.5 rounded-full transition-all duration-300 ${
+										currentPage === idx
+											? "bg-acm-darker-blue"
+											: "bg-acm-darker-blue/30 hover:bg-acm-darker-blue/60"
 									}`}
 								/>
 							))}
@@ -165,10 +171,6 @@ export default function EventGridClient({ allEvents }: EventGridProps) {
 					)}
 				</div>
 			)}
-			<EventPopup
-				event={selectedEvent}
-				onClose={() => setSelectedEvent(null)}
-			/>
 		</div>
 	);
 }

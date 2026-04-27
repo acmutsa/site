@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { EventType } from "@/components/events/types";
 import EventTag from "@/components/events/EventTag";
-import { Calendar, MapPin, Play} from "lucide-react";
+import { Calendar, MapPin, Play, X } from "lucide-react";
 
 interface EventPopupProps {
 	event: EventType | null;
@@ -12,7 +12,7 @@ interface EventPopupProps {
 // TODO: add transition to popup open/close - use same animation as navbar?
 // TODO: able to go to next or previous event in popup without closing and reopening? button/swipe
 
-//TODO: be able to scroll through page if title is too long - add fade at top and bottom when scrollable
+// TODO: be able to drag to next page too - swiper.js?
 export default function EventPopup({ event, onClose }: EventPopupProps) {
 	// horizontal scrolling
 	const horiScrollRef = useRef<HTMLDivElement>(null);
@@ -89,11 +89,11 @@ export default function EventPopup({ event, onClose }: EventPopupProps) {
 				onClick={(e) => e.stopPropagation()}
 			>
 				<button
-					onClick={onClose}
-					className="absolute right-4 top-2 z-10 font-calsans text-2xl font-bold text-acm-darker-blue/50 transition-colors hover:text-acm-darker-blue"
-				>
-					✕
-				</button>
+                    onClick={onClose}
+                    className="absolute right-4 top-2 z-10 font-calsans text-2xl font-bold text-acm-darker-blue/50 transition-colors hover:text-acm-darker-blue"
+                >
+                    <X strokeWidth={3} size={28} />
+                </button>
 
 				<div className="flex h-full w-full items-center justify-center overflow-hidden bg-gray-400">
 					{event.imageUrl ? (
@@ -154,7 +154,6 @@ export default function EventPopup({ event, onClose }: EventPopupProps) {
 								</h2>
 							</div>
 							{/* events tags */}
-							{/* TODO: ask if suborg and event type tags should be separate (2 diff rows) or combined (1 row & scroll, suborg or type first?) */}
 							{/* TODO: make suborg tag clickable & take you to suborg page*/}
 							<div className="relative mb-6 font-calsans">
 								<div
@@ -205,7 +204,7 @@ export default function EventPopup({ event, onClose }: EventPopupProps) {
 					<div className="mt-4 flex w-full shrink-0 gap-4">
 						<button className="flex h-12 w-14 shrink-0 items-center justify-center rounded-md bg-acm-darker-blue text-white transition-all hover:brightness-75 ">
 							{/* stream button */}
-							{/* TODO:  links to stream/yt - def a way to direectly link to stream or vod*/}
+							{/* TODO:  links to stream/yt - def a way to directly link to stream or vod*/}
 							<Play
 								strokeWidth={2.5}
 								size={20}
