@@ -1,33 +1,61 @@
 import React, { useEffect, useRef, useState } from "react";
 import { EventType } from "@/components/events/types";
 import EventTag from "@/components/events/EventTag";
-import { Calendar, MapPin, Play, X } from "lucide-react";
+import {
+	Calendar,
+	MapPin,
+	Play,
+	X,
+	ChevronLeft,
+	ChevronRight,
+} from "lucide-react";
 
 interface EventPopupProps {
 	event: EventType | null;
 	onClose: () => void;
+	onNext: () => void;
+	onPrev: () => void;
+	hasNext: boolean;
+	hasPrev: boolean;
 }
 
-// TODO: able to go to next or previous event in popup without closing and reopening? button/swipe
-
 // TODO: be able to drag to next page too - swiper.js?
-export default function EventPopup({ event, onClose }: EventPopupProps) {
+export default function EventPopup({
+	event,
+	onClose,
+	onNext,
+	onPrev,
+	hasNext,
+	hasPrev,
+}: EventPopupProps) {
 	// for animation
 	const [isOpen, setIsOpen] = useState(false);
 	const [displayEvent, setDisplayEvent] = useState<EventType | null>(null);
 	const [showNoMediaMsg, setShowNoMediaMsg] = useState(false);
 
 	useEffect(() => {
-        if (event) {
-            setDisplayEvent(event);
-            setShowNoMediaMsg(false);
-            setTimeout(() => setIsOpen(true), 10);
-        } else {
-            setIsOpen(false);
-            const timer = setTimeout(() => setDisplayEvent(null), 200);
-            return () => clearTimeout(timer);
-        }
-    }, [event]);
+		if (event) {
+			setDisplayEvent(event);
+			setShowNoMediaMsg(false);
+			setTimeout(() => setIsOpen(true), 10);
+		} else {
+			setIsOpen(false);
+			const timer = setTimeout(() => setDisplayEvent(null), 200);
+			return () => clearTimeout(timer);
+		}
+	}, [event]);
+
+	// keyboard navigation
+	useEffect(() => {
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (!isOpen) return;
+			if (e.key === "ArrowRight" && hasNext) onNext();
+			if (e.key === "ArrowLeft" && hasPrev) onPrev();
+			if (e.key === "Escape") onClose();
+		};
+		window.addEventListener("keydown", handleKeyDown);
+		return () => window.removeEventListener("keydown", handleKeyDown);
+	}, [isOpen, hasNext, hasPrev, onNext, onPrev, onClose]);
 
 	// horizontal scrolling
 	const horiScrollRef = useRef<HTMLDivElement>(null);
@@ -96,12 +124,12 @@ export default function EventPopup({ event, onClose }: EventPopupProps) {
 	if (!displayEvent) return null;
 
 	return (
-		<div
-			className={`fixed inset-0 z-50 flex items-center justify-center bg-black/20 p-4 backdrop-blur-sm transition-opacity duration-200 ease-in-out ${
-				isOpen ? "opacity-100" : "opacity-0"
-			}`}
-			onClick={onClose}
-		>
+        <div
+            className={`fixed inset-0 z-50 flex items-center justify-center bg-black/20 p-4 backdrop-blur-sm transition-opacity duration-200 ease-in-out ${
+                isOpen ? "opacity-100" : "opacity-0"
+            }`}
+            onClick={onClose}
+        >
 			<div
 				className={`relative grid max-h-[85vh] w-[95vw] max-w-5xl grid-cols-1 overflow-hidden rounded-2xl bg-white shadow-2xl transition-all duration-200 ease-in-out md:h-[600px] md:grid-cols-2 ${
 					isOpen
@@ -223,56 +251,72 @@ export default function EventPopup({ event, onClose }: EventPopupProps) {
 						/>
 					</div>
 
-					<div className="mt-4 flex w-full shrink-0 gap-4">
-                        
-                        {/* stream button */}
-                        <div className="relative flex shrink-0">
-                            {displayEvent.streamUrl ? (
-                                <a
-                                    href={displayEvent.streamUrl}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="flex h-12 w-14 shrink-0 items-center justify-center rounded-md bg-acm-darker-blue text-white transition-all hover:brightness-75"
-                                    aria-label="Watch Event Stream or VOD"
-                                >
-                                    <Play strokeWidth={2.5} size={20} className="shrink-0" />
-                                </a>
-                            ) : (
-                                <button
-                                    onClick={() => {
-                                        setShowNoMediaMsg(true);
-                                        setTimeout(() => setShowNoMediaMsg(false), 3000);
-                                    }}
-                                    className="flex h-12 w-14 shrink-0 items-center justify-center rounded-md bg-acm-darker-blue/50 text-white transition-all hover:bg-acm-darker-blue/70"
-                                >
-                                    <Play strokeWidth={2.5} size={20} className="shrink-0 opacity-60" />
-                                </button>
-                            )}
+					<div className="mt-4 flex w-full shrink-0 flex-wrap gap-4 sm:flex-nowrap">
+						<div className="flex w-full flex-1 gap-4">
+							{/* stream button */}
+							<div className="relative flex shrink-0">
+								{displayEvent.streamUrl ? (
+									<a
+										href={displayEvent.streamUrl}
+										target="_blank"
+										rel="noopener noreferrer"
+										className="flex h-12 w-14 shrink-0 items-center justify-center rounded-md bg-acm-darker-blue text-white transition-all hover:brightness-75"
+										aria-label="Watch Event Stream or VOD"
+									>
+										<Play
+											strokeWidth={2.5}
+											size={20}
+											className="shrink-0"
+										/>
+									</a>
+								) : (
+									<button
+										onClick={() => {
+											setShowNoMediaMsg(true);
+											setTimeout(
+												() => setShowNoMediaMsg(false),
+												3000,
+											);
+										}}
+										className="flex h-12 w-14 shrink-0 items-center justify-center rounded-md bg-acm-darker-blue/50 text-white transition-all hover:bg-acm-darker-blue/70"
+									>
+										<Play
+											strokeWidth={2.5}
+											size={20}
+											className="shrink-0 opacity-60"
+										/>
+									</button>
+								)}
 
-                            {/* tooltip popup */}
-                            <div
-                                className={`pointer-events-none absolute bottom-full left-0 mb-3 w-max rounded-md bg-acm-darker-blue px-3 py-2 text-xs font-bold text-white shadow-lg transition-all duration-200 ease-out ${
-                                    showNoMediaMsg
-                                        ? "translate-y-0 opacity-100"
-                                        : "translate-y-2 opacity-0"
-                                }`}
-                            >
-                                No {displayEvent.status === "past" ? "VOD" : "stream"} available for this event.
-                                <div className="absolute left-6 top-full -mt-0.5 border-4 border-transparent border-t-acm-darker-blue" />
-                            </div>
-                        </div>
+								{/* tooltip popup */}
+								<div
+									className={`pointer-events-none absolute bottom-full left-0 mb-3 w-max rounded-md bg-acm-darker-blue px-3 py-2 text-xs font-bold text-white shadow-lg transition-all duration-200 ease-out ${
+										showNoMediaMsg
+											? "translate-y-0 opacity-100"
+											: "translate-y-2 opacity-0"
+									}`}
+								>
+									No{" "}
+									{displayEvent.status === "past"
+										? "VOD"
+										: "stream"}{" "}
+									available for this event.
+									<div className="absolute left-6 top-full -mt-0.5 border-4 border-transparent border-t-acm-darker-blue" />
+								</div>
+							</div>
 
-						{/* remind button */}
-						{/* TODO: link to event in membership portal? or add to google calendar? ask later */}
-						<button className="flex-1 rounded-md bg-acm-darker-blue px-6 py-2 font-bold text-white transition-all hover:brightness-75">
-							Remind Me
-						</button>
+							{/* remind button */}
+							{/* TODO: link to event in membership portal? or add to google calendar? ask later */}
+							<button className="flex-1 rounded-md bg-acm-darker-blue px-2 py-2 font-bold text-white transition-all hover:brightness-75 sm:px-6">
+								Remind Me
+							</button>
 
-						{/* check in button */}
-						{/* TODO: link to event in membership portal */}
-						<button className="flex-1 rounded-md border-2 border-acm-darker-blue px-6 py-2 font-bold text-acm-darker-blue transition-colors hover:bg-acm-darker-blue/10">
-							Check In
-						</button>
+							{/* check in button */}
+							{/* TODO: link to event in membership portal */}
+							<button className="flex-1 rounded-md border-2 border-acm-darker-blue px-2 py-2 font-bold text-acm-darker-blue transition-colors hover:bg-acm-darker-blue/10 sm:px-6">
+								Check In
+							</button>
+						</div>
 					</div>
 				</div>
 			</div>
