@@ -2,9 +2,20 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import EventCard from "@/components/events/EventCard";
-import { EventType, EVENT_TAGS, EventTag as EventTagType } from "@/components/events/types";
+import {
+	EventType,
+	EVENT_TAGS,
+	EventTag as EventTagType,
+} from "@/components/events/types";
 import EventTag from "@/components/events/EventTag";
-import { ChevronLeft, ChevronRight,Search, ListFilter, X, RotateCcw } from "lucide-react";
+import {
+	ChevronLeft,
+	ChevronRight,
+	Search,
+	ListFilter,
+	X,
+	RotateCcw,
+} from "lucide-react";
 
 interface FilterDropdownProps {
 	availableSuborgs: string[];
@@ -302,7 +313,7 @@ export default function EventGridClient({
 
 	return (
 		// might have to change this later when adjusting for smaller screen layout
-		<div className="flex min-h-[400px] w-full flex-col lg:min-h-[620px]">
+		<div className="flex min-h-[400px] w-full flex-col lg:h-[620px]">
 			<div className="mb-8 flex flex-row items-stretch justify-end gap-2">
 				{/* search button */}
 				<div
@@ -386,12 +397,12 @@ export default function EventGridClient({
 			</div>
 
 			{filteredEvents.length === 0 ? (
-				<div className="flex h-64 min-h-[800px] w-full items-center justify-center rounded-2xl border-2 border-dashed border-acm-darker-blue/30 font-mono text-2xl font-semibold text-acm-darker-blue">
-					No events found.
-				</div>
-			) : (
-				<div className="flex w-full flex-col items-center">
-					<div className="relative flex w-full items-center">
+                <div className="flex w-full flex-1 items-center justify-center rounded-2xl border-2 border-dashed border-acm-darker-blue/30 font-mono text-2xl font-semibold text-acm-darker-blue">
+                    No events found.
+                </div>
+            ) : (
+				<div className="flex w-full flex-1 flex-col items-center overflow-hidden">
+                    <div className="relative flex w-full flex-1 min-h-0 items-start">
 						{/* event carousel */}
 						<div
 							ref={carouselRef}
@@ -403,7 +414,7 @@ export default function EventGridClient({
 									key={pageIndex}
 									className="w-full shrink-0 snap-center"
 								>
-									<div className="grid min-h-[450px] w-full grid-cols-1 content-start justify-items-center gap-6 sm:grid-cols-2 lg:grid-cols-3">
+									<div className="grid w-full grid-cols-1 content-start justify-items-center gap-6 sm:grid-cols-2 lg:grid-cols-3">
 										{pageEvents.map((event) => (
 											<EventCard
 												key={event.id}
@@ -419,74 +430,98 @@ export default function EventGridClient({
 						</div>
 					</div>
 
-					{pages.length > 1 && (
-						<div className="mt-6 flex items-center justify-center gap-4">
-							{/* left arrow */}
-							<button
-								onClick={() => scrollToPage(currentPage - 1)}
-								disabled={currentPage === 0}
-								className="flex cursor-pointer items-center justify-center text-acm-darker-blue transition-opacity duration-300 hover:opacity-70 disabled:pointer-events-none disabled:opacity-0"
-							>
-								<ChevronLeft strokeWidth={3} size={20} />
-							</button>
-
-							{/* page dots  */}
-							<div className="flex h-4 items-center justify-center">
-								{pages.map((_, idx) => {
-									let dotClasses = "w-1.5 mx-1 opacity-100 scale-100";
-
-									if (pages.length > 5) {
-										if (currentPage <= 2) {
-											// start
-											if (idx > 4)
-												dotClasses = "w-0 mx-0 opacity-0 scale-0 pointer-events-none";
-											else if (idx === 4)
-												dotClasses = "w-1.5 mx-1 opacity-100 scale-[0.6]";
-										} else if (
-											currentPage >=
-											pages.length - 3
-										) {
-											// end
-											if (idx < pages.length - 5)
-												dotClasses = "w-0 mx-0 opacity-0 scale-0 pointer-events-none";
-											else if (idx === pages.length - 5)
-												dotClasses = "w-1.5 mx-1 opacity-100 scale-[0.6]";
-										} else {
-											// middle
-											if (Math.abs(idx - currentPage) > 2)
-												dotClasses =
-													"w-0 mx-0 opacity-0 scale-0 pointer-events-none";
-											else if (
-												Math.abs(idx - currentPage) === 2
-											)
-												dotClasses = "w-1.5 mx-1 opacity-100 scale-[0.6]";
-										}
+					{/* grid navigation (page dots & arrows)*/}
+					<div className="flex w-full shrink-0 items-end justify-center gap-4 pb-2 pt-8">
+						{pages.length > 1 && (
+							<>
+								{/* left arrow */}
+								<button
+									onClick={() =>
+										scrollToPage(currentPage - 1)
 									}
+									disabled={currentPage === 0}
+									className="flex cursor-pointer items-center justify-center text-acm-darker-blue transition-opacity duration-300 hover:opacity-70 disabled:pointer-events-none disabled:opacity-0"
+								>
+									<ChevronLeft strokeWidth={3} size={20} />
+								</button>
 
-									return (
-										<button
-                                            key={idx}
-                                            onClick={() => scrollToPage(idx)}
-                                            className={`h-1.5 rounded-full transition-all duration-300 ease-out ${dotClasses} ${
-                                                currentPage === idx
-                                                    ? "bg-acm-darker-blue"
-                                                    : "bg-acm-darker-blue/30 hover:bg-acm-darker-blue/60"
-                                            }`}
-                                        />
-									);
-								})}
-							</div>
+								{/* page dots */}
+								<div className="flex h-4 items-center justify-center">
+									{pages.map((_, idx) => {
+										let dotClasses =
+											"w-1.5 mx-1 opacity-100 scale-100";
 
-							{/* right arrow */}
-							<button
-								onClick={() => scrollToPage(currentPage + 1)}
-								disabled={currentPage === pages.length - 1}
-								className="flex cursor-pointer items-center justify-center text-acm-darker-blue transition-opacity duration-300 hover:opacity-70 disabled:pointer-events-none disabled:opacity-0"
-							>
-								<ChevronRight strokeWidth={3} size={20} />
-							</button>
-						</div>
-					)}
+										if (pages.length > 5) {
+											if (currentPage <= 2) {
+												// start
+												if (idx > 4)
+													dotClasses =
+														"w-0 mx-0 opacity-0 scale-0 pointer-events-none";
+												else if (idx === 4)
+													dotClasses =
+														"w-1.5 mx-1 opacity-100 scale-[0.6]";
+											} else if (
+												currentPage >=
+												pages.length - 3
+											) {
+												// end
+												if (idx < pages.length - 5)
+													dotClasses =
+														"w-0 mx-0 opacity-0 scale-0 pointer-events-none";
+												else if (
+													idx ===
+													pages.length - 5
+												)
+													dotClasses =
+														"w-1.5 mx-1 opacity-100 scale-[0.6]";
+											} else {
+												// middle
+												if (
+													Math.abs(
+														idx - currentPage,
+													) > 2
+												)
+													dotClasses =
+														"w-0 mx-0 opacity-0 scale-0 pointer-events-none";
+												else if (
+													Math.abs(
+														idx - currentPage,
+													) === 2
+												)
+													dotClasses =
+														"w-1.5 mx-1 opacity-100 scale-[0.6]";
+											}
+										}
+
+										return (
+											<button
+												key={idx}
+												onClick={() =>
+													scrollToPage(idx)
+												}
+												className={`h-1.5 rounded-full transition-all duration-300 ease-out ${dotClasses} ${
+													currentPage === idx
+														? "bg-acm-darker-blue"
+														: "bg-acm-darker-blue/30 hover:bg-acm-darker-blue/60"
+												}`}
+											/>
+										);
+									})}
+								</div>
+
+								{/* right arrow */}
+								<button
+									onClick={() =>
+										scrollToPage(currentPage + 1)
+									}
+									disabled={currentPage === pages.length - 1}
+									className="flex cursor-pointer items-center justify-center text-acm-darker-blue transition-opacity duration-300 hover:opacity-70 disabled:pointer-events-none disabled:opacity-0"
+								>
+									<ChevronRight strokeWidth={3} size={20} />
+								</button>
+							</>
+						)}
+					</div>
 				</div>
 			)}
 		</div>
