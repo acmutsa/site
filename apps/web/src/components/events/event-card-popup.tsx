@@ -8,7 +8,6 @@ interface EventPopupProps {
 	onClose: () => void;
 }
 
-// TODO: link play button to yt or directy to event vod/stream
 // TODO: able to go to next or previous event in popup without closing and reopening? button/swipe
 
 // TODO: be able to drag to next page too - swiper.js?
@@ -16,10 +15,12 @@ export default function EventPopup({ event, onClose }: EventPopupProps) {
 	// for animation
 	const [isOpen, setIsOpen] = useState(false);
 	const [displayEvent, setDisplayEvent] = useState<EventType | null>(null);
+	const [showNoMediaMsg, setShowNoMediaMsg] = useState(false);
 
 	useEffect(() => {
         if (event) {
             setDisplayEvent(event);
+            setShowNoMediaMsg(false);
             setTimeout(() => setIsOpen(true), 10);
         } else {
             setIsOpen(false);
@@ -223,15 +224,43 @@ export default function EventPopup({ event, onClose }: EventPopupProps) {
 					</div>
 
 					<div className="mt-4 flex w-full shrink-0 gap-4">
-						<button className="flex h-12 w-14 shrink-0 items-center justify-center rounded-md bg-acm-darker-blue text-white transition-all hover:brightness-75 ">
-							{/* stream button */}
-							{/* TODO:  links to stream/yt - def a way to directly link to stream or vod*/}
-							<Play
-								strokeWidth={2.5}
-								size={20}
-								className="shrink-0"
-							/>
-						</button>
+                        
+                        {/* stream button */}
+                        <div className="relative flex shrink-0">
+                            {displayEvent.streamUrl ? (
+                                <a
+                                    href={displayEvent.streamUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex h-12 w-14 shrink-0 items-center justify-center rounded-md bg-acm-darker-blue text-white transition-all hover:brightness-75"
+                                    aria-label="Watch Event Stream or VOD"
+                                >
+                                    <Play strokeWidth={2.5} size={20} className="shrink-0" />
+                                </a>
+                            ) : (
+                                <button
+                                    onClick={() => {
+                                        setShowNoMediaMsg(true);
+                                        setTimeout(() => setShowNoMediaMsg(false), 3000);
+                                    }}
+                                    className="flex h-12 w-14 shrink-0 items-center justify-center rounded-md bg-acm-darker-blue/50 text-white transition-all hover:bg-acm-darker-blue/70"
+                                >
+                                    <Play strokeWidth={2.5} size={20} className="shrink-0 opacity-60" />
+                                </button>
+                            )}
+
+                            {/* tooltip popup */}
+                            <div
+                                className={`pointer-events-none absolute bottom-full left-0 mb-3 w-max rounded-md bg-acm-darker-blue px-3 py-2 text-xs font-bold text-white shadow-lg transition-all duration-200 ease-out ${
+                                    showNoMediaMsg
+                                        ? "translate-y-0 opacity-100"
+                                        : "translate-y-2 opacity-0"
+                                }`}
+                            >
+                                No {displayEvent.status === "past" ? "VOD" : "stream"} available for this event.
+                                <div className="absolute left-6 top-full -mt-0.5 border-4 border-transparent border-t-acm-darker-blue" />
+                            </div>
+                        </div>
 
 						{/* remind button */}
 						{/* TODO: link to event in membership portal? or add to google calendar? ask later */}

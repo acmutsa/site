@@ -63,4 +63,5 @@ export interface EventType {
     description?: string;
     imageUrl?: string;
     tags?: EventTag[];
+    streamUrl?: string;
 }
