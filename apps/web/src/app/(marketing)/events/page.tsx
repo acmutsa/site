@@ -5,7 +5,6 @@ import EventCalendar from "@/components/events/EventCalendar";
 import EventsClientWrapper from "@/components/events/events-client-wrapper";
 
 // TODO: maybe add ONGOING sticker for events that are currently happening?
-// TODO: make filtering system using tags and be able to search for events w/ search bar
 // FIXEME: edit spacing between all the stuff
 
 // TODO: fix stuff for phone layout

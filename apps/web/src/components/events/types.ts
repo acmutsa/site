@@ -3,7 +3,8 @@ import { SUBORGS } from "@/site.config";
 export interface EventTag {
     label: string;
     color: string;
-    icon?: string;
+    icon?: React.ReactNode;
+    href?: string;
 }
 
 export const EVENT_TAGS = {

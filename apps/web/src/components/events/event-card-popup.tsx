@@ -10,6 +10,15 @@ import {
 	ChevronRight,
 } from "lucide-react";
 
+// FIXME: cic, rowdy hacks links not working
+const SUBORG_LINKS: Record<string, string> = {
+    "ACM W": "/suborgs/acmw",
+    "Rowdy Creators": "/suborgs/rowdycreators",
+    "Coding In Color": "/suborgs/codingincolor",
+    "ICPC": "/suborgs/acmicpc",
+    "Rowdy Hacks": "/suborgs/rowdyhacks",
+};
+
 interface EventPopupProps {
 	event: EventType | null;
 	onClose: () => void;
@@ -124,12 +133,12 @@ export default function EventPopup({
 	if (!displayEvent) return null;
 
 	return (
-        <div
-            className={`fixed inset-0 z-50 flex items-center justify-center bg-black/20 p-4 backdrop-blur-sm transition-opacity duration-200 ease-in-out ${
-                isOpen ? "opacity-100" : "opacity-0"
-            }`}
-            onClick={onClose}
-        >
+		<div
+			className={`fixed inset-0 z-50 flex items-center justify-center bg-black/20 p-4 backdrop-blur-sm transition-opacity duration-200 ease-in-out ${
+				isOpen ? "opacity-100" : "opacity-0"
+			}`}
+			onClick={onClose}
+		>
 			<div
 				className={`relative grid max-h-[85vh] w-[95vw] max-w-5xl grid-cols-1 overflow-hidden rounded-2xl bg-white shadow-2xl transition-all duration-200 ease-in-out md:h-[600px] md:grid-cols-2 ${
 					isOpen
@@ -204,7 +213,6 @@ export default function EventPopup({
 								</h2>
 							</div>
 							{/* events tags */}
-							{/* TODO: make suborg tag clickable & take you to suborg page*/}
 							<div className="relative mb-6 font-calsans">
 								<div
 									ref={horiScrollRef}
@@ -217,6 +225,7 @@ export default function EventPopup({
 											text={tag.label}
 											color={tag.color}
 											icon={tag.icon}
+											href={SUBORG_LINKS[tag.label]}
 										/>
 									))}
 								</div>
