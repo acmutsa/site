@@ -179,9 +179,6 @@ interface EventGridProps {
 	onEventClick: (event: EventType) => void;
 }
 
-// TODO: be able to swipe/drag to next page?
-// TODO: user can swipe through all events instead of clicking pages
-//      swiper.js???
 export default function EventGridClient({
 	allEvents,
 	onEventClick,

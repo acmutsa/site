@@ -2,7 +2,6 @@ import React from "react";
 import { EventType } from "@/components/events/types";
 import { Calendar, MapPin } from "lucide-react";
 
-// TODO: might have to add links
 interface EventCardProps {
 	event: EventType;
 	onClick: () => void;
