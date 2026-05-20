@@ -2,9 +2,9 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import EventCard from "@/components/events/EventCard";
-import {EventType, EVENT_TAGS, EventTag as EventTagType} from "@/components/events/types";
+import { EventType, EVENT_TAGS, EventTag as EventTagType } from "@/components/events/types";
 import EventTag from "@/components/events/EventTag";
-import { ChevronLeft, ChevronRight, Search, ListFilter, X, RotateCcw} from "lucide-react";
+import { ChevronLeft, ChevronRight,Search, ListFilter, X, RotateCcw } from "lucide-react";
 
 interface FilterDropdownProps {
 	availableSuborgs: string[];
@@ -168,7 +168,6 @@ interface EventGridProps {
 	onEventClick: (event: EventType) => void;
 }
 
-// TODO: the the search and filter buttons actually do something
 // TODO: be able to swipe/drag to next page?
 // TODO: user can swipe through all events instead of clicking pages
 //      swiper.js???
@@ -393,15 +392,6 @@ export default function EventGridClient({
 			) : (
 				<div className="flex w-full flex-col items-center">
 					<div className="relative flex w-full items-center">
-						{/* left arrow */}
-						<button
-							onClick={() => scrollToPage(currentPage - 1)}
-							disabled={currentPage === 0}
-							className="absolute -left-10 z-10 flex cursor-pointer items-center justify-center bg-transparent text-acm-darker-blue transition-opacity duration-300 disabled:pointer-events-none disabled:opacity-0"
-						>
-							<ChevronLeft strokeWidth={2.5} size={50} />
-						</button>
-
 						{/* event carousel */}
 						<div
 							ref={carouselRef}
@@ -427,32 +417,74 @@ export default function EventGridClient({
 								</div>
 							))}
 						</div>
-
-						{/* right arrow */}
-						<button
-							onClick={() => scrollToPage(currentPage + 1)}
-							disabled={currentPage === pages.length - 1}
-							className="absolute -right-10 z-10 flex cursor-pointer items-center justify-center bg-transparent text-acm-darker-blue transition-opacity duration-300 disabled:pointer-events-none disabled:opacity-0"
-						>
-							<ChevronRight strokeWidth={2.5} size={50} />
-						</button>
 					</div>
 
-					{/* page dots */}
-					{/* TODO: limit amount of dots on the screen - look @ ig for ref (has max 5, slides with cards at ends*/}
 					{pages.length > 1 && (
-						<div className="mt-2 flex justify-center gap-2">
-							{pages.map((_, idx) => (
-								<button
-									key={idx}
-									onClick={() => scrollToPage(idx)}
-									className={`h-1.5 w-1.5 rounded-full transition-all duration-300 ${
-										currentPage === idx
-											? "bg-acm-darker-blue"
-											: "bg-acm-darker-blue/30 hover:bg-acm-darker-blue/60"
-									}`}
-								/>
-							))}
+						<div className="mt-6 flex items-center justify-center gap-4">
+							{/* left arrow */}
+							<button
+								onClick={() => scrollToPage(currentPage - 1)}
+								disabled={currentPage === 0}
+								className="flex cursor-pointer items-center justify-center text-acm-darker-blue transition-opacity duration-300 hover:opacity-70 disabled:pointer-events-none disabled:opacity-0"
+							>
+								<ChevronLeft strokeWidth={3} size={20} />
+							</button>
+
+							{/* page dots  */}
+							<div className="flex h-4 items-center justify-center">
+								{pages.map((_, idx) => {
+									let dotClasses = "w-1.5 mx-1 opacity-100 scale-100";
+
+									if (pages.length > 5) {
+										if (currentPage <= 2) {
+											// start
+											if (idx > 4)
+												dotClasses = "w-0 mx-0 opacity-0 scale-0 pointer-events-none";
+											else if (idx === 4)
+												dotClasses = "w-1.5 mx-1 opacity-100 scale-[0.6]";
+										} else if (
+											currentPage >=
+											pages.length - 3
+										) {
+											// end
+											if (idx < pages.length - 5)
+												dotClasses = "w-0 mx-0 opacity-0 scale-0 pointer-events-none";
+											else if (idx === pages.length - 5)
+												dotClasses = "w-1.5 mx-1 opacity-100 scale-[0.6]";
+										} else {
+											// middle
+											if (Math.abs(idx - currentPage) > 2)
+												dotClasses =
+													"w-0 mx-0 opacity-0 scale-0 pointer-events-none";
+											else if (
+												Math.abs(idx - currentPage) === 2
+											)
+												dotClasses = "w-1.5 mx-1 opacity-100 scale-[0.6]";
+										}
+									}
+
+									return (
+										<button
+                                            key={idx}
+                                            onClick={() => scrollToPage(idx)}
+                                            className={`h-1.5 rounded-full transition-all duration-300 ease-out ${dotClasses} ${
+                                                currentPage === idx
+                                                    ? "bg-acm-darker-blue"
+                                                    : "bg-acm-darker-blue/30 hover:bg-acm-darker-blue/60"
+                                            }`}
+                                        />
+									);
+								})}
+							</div>
+
+							{/* right arrow */}
+							<button
+								onClick={() => scrollToPage(currentPage + 1)}
+								disabled={currentPage === pages.length - 1}
+								className="flex cursor-pointer items-center justify-center text-acm-darker-blue transition-opacity duration-300 hover:opacity-70 disabled:pointer-events-none disabled:opacity-0"
+							>
+								<ChevronRight strokeWidth={3} size={20} />
+							</button>
 						</div>
 					)}
 				</div>

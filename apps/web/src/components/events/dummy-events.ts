@@ -180,10 +180,111 @@ export const DUMMY_EVENTS: EventType[] = [
         imageUrl: "/img/photos/dinochess.jpg",
         tags: [EVENT_TAGS.CIC, EVENT_TAGS.WORKSHOP]
     }, 
+    //testing page dots
+    { 
+        id: 20, 
+        title: "CiC Workshop 3" + "long title ".repeat(10), 
+        date: "2026-04-30T17:00:00-05:00", 
+        location: "NPB", 
+        status: "upcoming",
+        imageUrl: "/img/photos/dinochess.jpg",
+        tags: [EVENT_TAGS.CIC, EVENT_TAGS.WORKSHOP]
+    }, 
+    { 
+        id: 21, 
+        title: "CiC Workshop 3" + "long title ".repeat(10), 
+        date: "2026-04-30T17:00:00-05:00", 
+        location: "NPB", 
+        status: "upcoming",
+        imageUrl: "/img/photos/dinochess.jpg",
+        tags: [EVENT_TAGS.CIC, EVENT_TAGS.WORKSHOP]
+    }, 
+    { 
+        id: 22, 
+        title: "CiC Workshop 3" + "long title ".repeat(10), 
+        date: "2026-04-30T17:00:00-05:00", 
+        location: "NPB", 
+        status: "upcoming",
+        imageUrl: "/img/photos/dinochess.jpg",
+        tags: [EVENT_TAGS.CIC, EVENT_TAGS.WORKSHOP]
+    }, 
+    { 
+        id: 23, 
+        title: "CiC Workshop 3" + "long title ".repeat(10), 
+        date: "2026-04-30T17:00:00-05:00", 
+        location: "NPB", 
+        status: "upcoming",
+        imageUrl: "/img/photos/dinochess.jpg",
+        tags: [EVENT_TAGS.CIC, EVENT_TAGS.WORKSHOP]
+    }, 
+    { 
+        id: 24, 
+        title: "CiC Workshop 3" + "long title ".repeat(10), 
+        date: "2026-04-30T17:00:00-05:00", 
+        location: "NPB", 
+        status: "upcoming",
+        imageUrl: "/img/photos/dinochess.jpg",
+        tags: [EVENT_TAGS.CIC, EVENT_TAGS.WORKSHOP]
+    }, 
+    { 
+        id: 25, 
+        title: "CiC Workshop 3" + "long title ".repeat(10), 
+        date: "2026-04-30T17:00:00-05:00", 
+        location: "NPB", 
+        status: "upcoming",
+        imageUrl: "/img/photos/dinochess.jpg",
+        tags: [EVENT_TAGS.CIC, EVENT_TAGS.WORKSHOP]
+    }, 
+    { 
+        id: 26, 
+        title: "CiC Workshop 3" + "long title ".repeat(10), 
+        date: "2026-04-30T17:00:00-05:00", 
+        location: "NPB", 
+        status: "upcoming",
+        imageUrl: "/img/photos/dinochess.jpg",
+        tags: [EVENT_TAGS.CIC, EVENT_TAGS.WORKSHOP]
+    }, 
+
+    { 
+        id: 27, 
+        title: "CiC Workshop 3" + "long title ".repeat(10), 
+        date: "2026-05-20T17:00:00-05:00", 
+        location: "NPB", 
+        status: "upcoming",
+        imageUrl: "/img/photos/dinochess.jpg",
+        tags: [EVENT_TAGS.CIC, EVENT_TAGS.WORKSHOP]
+    }, 
+    { 
+        id: 28, 
+        title: "CiC Workshop 3" + "long title ".repeat(10), 
+        date: "2026-05-19T17:00:00-05:00", 
+        location: "NPB", 
+        status: "upcoming",
+        imageUrl: "/img/photos/dinochess.jpg",
+        tags: [EVENT_TAGS.CIC, EVENT_TAGS.WORKSHOP]
+    }, 
+    { 
+        id: 29, 
+        title: "CiC Workshop 3" + "long title ".repeat(10), 
+        date: "2026-05-30T17:00:00-05:00", 
+        location: "NPB", 
+        status: "upcoming",
+        imageUrl: "/img/photos/dinochess.jpg",
+        tags: [EVENT_TAGS.CIC, EVENT_TAGS.WORKSHOP]
+    }, 
+    { 
+        id: 30, 
+        title: "CiC Workshop 3" + "long title ".repeat(10), 
+        date: "2026-05-22T17:00:00-05:00", 
+        location: "NPB", 
+        status: "upcoming",
+        imageUrl: "/img/photos/dinochess.jpg",
+        tags: [EVENT_TAGS.CIC, EVENT_TAGS.WORKSHOP]
+    }, 
 
     // past events testing
     { 
-        id: 20, 
+        id: 31, 
         title: "Rowdy CyberCon", 
         date: "2026-04-11T16:00:00-05:00", 
         location: "SP1", 
@@ -195,7 +296,7 @@ export const DUMMY_EVENTS: EventType[] = [
             EVENT_TAGS.HACKATHON, EVENT_TAGS.CB]
     },
     { 
-        id: 21, 
+        id: 32, 
         title: "Rec Field Social", 
         date: "2026-04-03T17:00:00-05:00", 
         location: "Field 2", 
