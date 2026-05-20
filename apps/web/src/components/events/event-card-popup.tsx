@@ -9,11 +9,25 @@ interface EventPopupProps {
 }
 
 // TODO: link play button to yt or directy to event vod/stream
-// TODO: add transition to popup open/close - use same animation as navbar?
 // TODO: able to go to next or previous event in popup without closing and reopening? button/swipe
 
 // TODO: be able to drag to next page too - swiper.js?
 export default function EventPopup({ event, onClose }: EventPopupProps) {
+	// for animation
+	const [isOpen, setIsOpen] = useState(false);
+	const [displayEvent, setDisplayEvent] = useState<EventType | null>(null);
+
+	useEffect(() => {
+        if (event) {
+            setDisplayEvent(event);
+            setTimeout(() => setIsOpen(true), 10);
+        } else {
+            setIsOpen(false);
+            const timer = setTimeout(() => setDisplayEvent(null), 200);
+            return () => clearTimeout(timer);
+        }
+    }, [event]);
+
 	// horizontal scrolling
 	const horiScrollRef = useRef<HTMLDivElement>(null);
 	const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -48,7 +62,8 @@ export default function EventPopup({ event, onClose }: EventPopupProps) {
 
 	// prevent background scrolling when popup is open
 	useEffect(() => {
-		if (event) {
+		// background stays locked during the exit animation
+		if (displayEvent) {
 			document.body.style.overflow = "hidden";
 
 			if (horiScrollRef.current) horiScrollRef.current.scrollLeft = 0;
@@ -70,36 +85,42 @@ export default function EventPopup({ event, onClose }: EventPopupProps) {
 
 		return () => {
 			document.body.style.overflow = "unset";
-			
+
 			// for cleanup
 			window.removeEventListener("resize", handleHoriScroll);
 			window.removeEventListener("resize", handleVertScroll);
 		};
-	}, [event]);
+	}, [displayEvent]);
 
-	if (!event) return null;
+	if (!displayEvent) return null;
 
 	return (
 		<div
-			className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 p-4 backdrop-blur-sm"
+			className={`fixed inset-0 z-50 flex items-center justify-center bg-black/20 p-4 backdrop-blur-sm transition-opacity duration-200 ease-in-out ${
+				isOpen ? "opacity-100" : "opacity-0"
+			}`}
 			onClick={onClose}
 		>
 			<div
-				className="relative grid max-h-[85vh] w-[95vw] max-w-5xl grid-cols-1 overflow-hidden rounded-2xl bg-white shadow-2xl md:h-[600px] md:grid-cols-2"
+				className={`relative grid max-h-[85vh] w-[95vw] max-w-5xl grid-cols-1 overflow-hidden rounded-2xl bg-white shadow-2xl transition-all duration-200 ease-in-out md:h-[600px] md:grid-cols-2 ${
+					isOpen
+						? "translate-y-0 opacity-100"
+						: "translate-y-8 opacity-0"
+				}`}
 				onClick={(e) => e.stopPropagation()}
 			>
 				<button
-                    onClick={onClose}
-                    className="absolute right-4 top-2 z-10 font-calsans text-2xl font-bold text-acm-darker-blue/50 transition-colors hover:text-acm-darker-blue"
-                >
-                    <X strokeWidth={3} size={28} />
-                </button>
+					onClick={onClose}
+					className="absolute right-4 top-2 z-10 font-calsans text-2xl font-bold text-acm-darker-blue/50 transition-colors hover:text-acm-darker-blue"
+				>
+					<X strokeWidth={3} size={28} />
+				</button>
 
 				<div className="flex h-full w-full items-center justify-center overflow-hidden bg-gray-400">
-					{event.imageUrl ? (
+					{displayEvent.imageUrl ? (
 						<img
-							src={event.imageUrl}
-							alt={event.title}
+							src={displayEvent.imageUrl}
+							alt={displayEvent.title}
 							className="h-full w-full object-cover"
 						/>
 					) : (
@@ -118,7 +139,7 @@ export default function EventPopup({ event, onClose }: EventPopupProps) {
 						>
 							{/* event title */}
 							<h2 className="mb-2 break-words font-calsans text-4xl font-bold text-acm-darker-blue">
-								{event.title}
+								{displayEvent.title}
 							</h2>
 
 							{/* date */}
@@ -130,8 +151,8 @@ export default function EventPopup({ event, onClose }: EventPopupProps) {
 										size={24}
 										className="shrink-0"
 									/>
-									{event.date
-										? new Date(event.date)
+									{displayEvent.date
+										? new Date(displayEvent.date)
 												.toLocaleString("en-US", {
 													timeZone: "America/Chicago",
 													month: "short",
@@ -150,7 +171,7 @@ export default function EventPopup({ event, onClose }: EventPopupProps) {
 										size={24}
 										className="shrink-0"
 									/>
-									{event.location || "TBD"}
+									{displayEvent.location || "TBD"}
 								</h2>
 							</div>
 							{/* events tags */}
@@ -161,7 +182,7 @@ export default function EventPopup({ event, onClose }: EventPopupProps) {
 									onScroll={handleHoriScroll}
 									className="flex flex-nowrap gap-2 overflow-x-auto pb-2 pr-12 no-scrollbar"
 								>
-									{event.tags?.map((tag, index) => (
+									{displayEvent.tags?.map((tag, index) => (
 										<EventTag
 											key={index}
 											text={tag.label}
@@ -186,7 +207,7 @@ export default function EventPopup({ event, onClose }: EventPopupProps) {
 								Description
 							</h2>
 							<p className="whitespace-pre-wrap font-mono text-sm">
-								{event.description ||
+								{displayEvent.description ||
 									"No description provided for this event."}
 							</p>
 						</div>

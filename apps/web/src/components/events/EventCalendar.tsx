@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { EventType } from "@/components/events/types";
 
-// TODO: animations
 // TODO: button to go back to current day?
 // TODO: idk if i want the blur and blue behind the popup - ask
 
@@ -22,10 +21,23 @@ export default function EventCalendar({
 	const [currentDate, setCurrentDate] = useState(new Date());
 
 	const [popupCell, setPopupCell] = useState<any | null>(null);
+	const [isPopupOpen, setIsPopupOpen] = useState(false);
+	const [displayCell, setDisplayCell] = useState<any | null>(null);
 
 	useEffect(() => {
 		setIsMounted(true);
 	}, []);
+
+	useEffect(() => {
+		if (popupCell) {
+			setDisplayCell(popupCell);
+			setTimeout(() => setIsPopupOpen(true), 10);
+		} else {
+			setIsPopupOpen(false);
+			const timer = setTimeout(() => setDisplayCell(null), 150);
+			return () => clearTimeout(timer);
+		}
+	}, [popupCell]);
 
 	if (!isMounted) {
 		return (
@@ -96,22 +108,31 @@ export default function EventCalendar({
 	return (
 		<div className="relative flex h-full min-h-0 w-full flex-col rounded-2xl bg-acm-darker-blue bg-[url('/img/landing/noise.png')] bg-center p-4 sm:p-6">
 			{/* more events popup */}
-			{popupCell && (
+			{displayCell && (
 				<div
-					className="absolute inset-0 z-20 flex items-center justify-center rounded-2xl bg-acm-darker-blue/30 p-4 backdrop-blur-sm sm:p-6"
+					className={`absolute inset-0 z-20 flex items-center justify-center rounded-2xl bg-acm-darker-blue/30 p-4 backdrop-blur-sm transition-opacity duration-150 ease-in-out sm:p-6 ${
+						isPopupOpen ? "opacity-100" : "opacity-0"
+					}`}
 					onClick={() => setPopupCell(null)}
 				>
 					<div
-						className="flex max-h-full w-full max-w-sm flex-col overflow-hidden rounded-xl bg-white shadow-2xl"
+						className={`flex max-h-full w-full max-w-sm flex-col overflow-hidden rounded-xl bg-white shadow-2xl transition-all duration-150 ease-in-out ${
+							isPopupOpen
+								? "translate-y-0 opacity-100"
+								: "translate-y-4 opacity-0"
+						}`}
 						onClick={(e) => e.stopPropagation()}
 					>
 						{/* popup header */}
 						<div className="relative flex items-center px-4 pb-0 pt-3">
 							<h3 className="pr-8 font-calsans text-lg font-bold text-acm-darker-blue">
-								{popupCell.dateObj.toLocaleDateString("en-US", {
-									month: "short",
-									day: "numeric",
-								})}
+								{displayCell.dateObj.toLocaleDateString(
+									"en-US",
+									{
+										month: "short",
+										day: "numeric",
+									},
+								)}
 							</h3>
 							<button
 								onClick={() => setPopupCell(null)}
@@ -123,11 +144,12 @@ export default function EventCalendar({
 
 						{/* popup events */}
 						<div className="flex flex-1 flex-col gap-2 overflow-y-auto p-4 no-scrollbar">
-							{popupCell.events.map((event: any) => {
-                                // calculate if event has already past
+							{displayCell.events.map((event: any) => {
+								// calculate if event has already past
 								const today = new Date();
 								today.setHours(0, 0, 0, 0);
-								const isCellInPast = popupCell.dateObj < today;
+								const isCellInPast =
+									displayCell.dateObj < today;
 
 								return (
 									<button
@@ -214,7 +236,7 @@ function CalendarCell({
 		? cell.events.slice(0, 1)
 		: cell.events;
 
-    // calculate if event has already past
+	// calculate if event has already past
 	const today = new Date();
 	today.setHours(0, 0, 0, 0);
 	const isCellInPast = cell.dateObj < today;
